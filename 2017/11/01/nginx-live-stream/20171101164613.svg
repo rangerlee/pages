@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- 由 Microsoft Visio, SVG Export 生成 rtmp.svg RTMP -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events"
+		xmlns:v="http://schemas.microsoft.com/visio/2003/SVGExtensions/" width="7.48031in" height="3.93701in"
+		viewBox="0 0 538.583 283.465" xml:space="preserve" color-interpolation-filters="sRGB" class="st11">
+	<v:documentProperties v:langID="2052" v:metric="true" v:viewMarkup="false">
+		<v:userDefs>
+			<v:ud v:nameU="msvNoAutoConnect" v:val="VT0(0):26"/>
+		</v:userDefs>
+	</v:documentProperties>
+
+	<style type="text/css">
+	<![CDATA[
+		.st1 {visibility:visible}
+		.st2 {fill:#a5a5a5;fill-opacity:0.6;filter:url(#filter_2);stroke:#a5a5a5;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.6}
+		.st3 {fill:url(#ptrn5-7);shape-rendering:crispEdges;stroke:#feffff;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.6;stroke-width:0.75}
+		.st4 {fill:#000000;font-family:Eras Light ITC;font-size:1.16666em;font-weight:bold}
+		.st5 {font-family:黑体;font-size:1em}
+		.st6 {marker-start:url(#mrkr13-31);stroke:#ffc000;stroke-linecap:round;stroke-linejoin:round;stroke-width:2.25}
+		.st7 {fill:#ffc000;fill-opacity:1;stroke:#ffc000;stroke-opacity:1;stroke-width:0.47169811320755}
+		.st8 {fill:#ffffff;stroke:none;stroke-linecap:butt;stroke-width:7.2}
+		.st9 {fill:#47bb7e;font-family:Eras Light ITC;font-size:1.16666em;font-weight:bold}
+		.st10 {fill:#deeff5;stroke:#62c7dc;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.6;stroke-width:0.75}
+		.st11 {fill:none;fill-rule:evenodd;font-size:12px;overflow:visible;stroke-linecap:square;stroke-miterlimit:3}
+	]]>
+	</style>
+
+	<defs id="Patterns_And_Gradients">
+		<pattern id="ptrn5-7" v:fillPattern="5" v:foreground="#80cfbf" v:background="#97d4c8" patternUnits="userSpaceOnUse"
+				width="6" height="6" viewBox="0 0 64 64">
+			<image x="0" y="0" width="64" height="64" image-rendering="optimizeSpeed"
+					xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABASURBVChTY2g8v///xEtH/0+/cgIDg8QZQAQ+RQwgAp8isAIQxqUIrgCEsSlCUQDC6IowFIAwsiKwL3Ar2v8fAGLgyrGb5ueYAAAAAElFTkSuQmCC"/>
+		</pattern>
+	</defs>
+	<defs id="Markers">
+		<g id="lend13">
+			<path d="M 3 1 L 0 0 L 3 -1 L 3 1 " style="stroke:none"/>
+		</g>
+		<marker id="mrkr13-31" class="st7" v:arrowType="13" v:arrowSize="2" v:setback="6.28" refX="6.28" orient="auto"
+				markerUnits="strokeWidth" overflow="visible">
+			<use xlink:href="#lend13" transform="scale(2.12) "/>
+		</marker>
+	</defs>
+	<defs id="Filters">
+		<filter id="filter_2">
+			<feGaussianBlur stdDeviation="2"/>
+		</filter>
+	</defs>
+	<g v:mID="4" v:index="2" v:groupContext="foregroundPage">
+		<v:userDefs>
+			<v:ud v:nameU="msvThemeOrder" v:val="VT0(0):26"/>
+		</v:userDefs>
+		<title>RTMP</title>
+		<v:pageProperties v:drawingScale="39.3701" v:pageScale="19.685" v:drawingUnits="6" v:shadowOffsetX="8.50394"
+				v:shadowOffsetY="-8.50394"/>
+		<v:layer v:name="流程图" v:index="0"/>
+		<v:layer v:name="连接线" v:index="1"/>
+		<g id="shape1-1" v:mID="1" v:groupContext="shape" v:layerMember="0" transform="translate(191.161,-113.819)">
+			<title>流程.57</title>
+			<desc>NGINX-RTMP集群</desc>
+			<v:custProps>
+				<v:cp v:nameU="Cost" v:lbl="成本" v:prompt="" v:type="7" v:format="@" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="2052" v:cal="0"/>
+				<v:cp v:nameU="ProcessNumber" v:lbl="进程编号" v:prompt="" v:type="2" v:format="" v:sortKey="" v:invis="false"
+						v:ask="false" v:langID="2052" v:cal="0"/>
+				<v:cp v:nameU="Owner" v:lbl="所有者" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="2052" v:cal="0"/>
+				<v:cp v:nameU="Function" v:lbl="函数" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="2052" v:cal="0" v:val="VT4()"/>
+				<v:cp v:nameU="StartDate" v:lbl="开始日期" v:prompt="" v:type="5" v:format="" v:sortKey="" v:invis="false"
+						v:ask="false" v:langID="2052" v:cal="0"/>
+				<v:cp v:nameU="EndDate" v:lbl="结束日期" v:prompt="" v:type="5" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="2052" v:cal="0"/>
+				<v:cp v:nameU="Status" v:lbl="状态" v:prompt="" v:type="4" v:format=";未开始;进行中;已完成;已推迟;正在等待输入" v:sortKey=""
+						v:invis="false" v:ask="false" v:langID="2052" v:cal="0" v:val="VT4()"/>
+			</v:custProps>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+				<v:ud v:nameU="DefaultWidth" v:prompt="" v:val="VT0(0.98425196850394):24"/>
+				<v:ud v:nameU="DefaultHeight" v:prompt="" v:val="VT0(0.59055118110236):24"/>
+				<v:ud v:nameU="ResizeTxtHeight" v:prompt="" v:val="VT0(0.59055118110236):24"/>
+				<v:ud v:nameU="ResizeTxtHeight" v:prompt="" v:val="VT0(0.66929133858268):24"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(2,2,2,2)" v:tabSpace="42.5197"/>
+			<v:textRect cx="72.3425" cy="253.858" width="144.69" height="59.2126"/>
+			<g id="shadow1-2" v:groupContext="shadow" v:shadowOffsetX="1.22561E-16" v:shadowOffsetY="-2.00157" v:shadowType="1"
+					transform="matrix(1,0,0,1,0,2.00157)" class="st1">
+				<rect x="0" y="224.252" width="144.685" height="59.2126" class="st2"/>
+			</g>
+			<rect x="0" y="224.252" width="144.685" height="59.2126" class="st3"/>
+			<text x="19.78" y="258.55" class="st4" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>NGINX-RTMP<tspan
+						class="st5">集群</tspan></text>		</g>
+		<g id="shape2-10" v:mID="2" v:groupContext="shape" v:layerMember="0" transform="translate(379.724,-8.70077)">
+			<title>流程.58</title>
+			<desc>PC浏览器</desc>
+			<v:custProps>
+				<v:cp v:nameU="Cost" v:lbl="成本" v:prompt="" v:type="7" v:format="@" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="2052" v:cal="0"/>
+				<v:cp v:nameU="ProcessNumber" v:lbl="进程编号" v:prompt="" v:type="2" v:format="" v:sortKey="" v:invis="false"
+						v:ask="false" v:langID="2052" v:cal="0"/>
+				<v:cp v:nameU="Owner" v:lbl="所有者" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="2052" v:cal="0"/>
+				<v:cp v:nameU="Function" v:lbl="函数" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="2052" v:cal="0" v:val="VT4()"/>
+				<v:cp v:nameU="StartDate" v:lbl="开始日期" v:prompt="" v:type="5" v:format="" v:sortKey="" v:invis="false"
+						v:ask="false" v:langID="2052" v:cal="0"/>
+				<v:cp v:nameU="EndDate" v:lbl="结束日期" v:prompt="" v:type="5" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="2052" v:cal="0"/>
+				<v:cp v:nameU="Status" v:lbl="状态" v:prompt="" v:type="4" v:format=";未开始;进行中;已完成;已推迟;正在等待输入" v:sortKey=""
+						v:invis="false" v:ask="false" v:langID="2052" v:cal="0" v:val="VT4()"/>
+			</v:custProps>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+				<v:ud v:nameU="DefaultWidth" v:prompt="" v:val="VT0(0.98425196850394):24"/>
+				<v:ud v:nameU="DefaultHeight" v:prompt="" v:val="VT0(0.59055118110236):24"/>
+				<v:ud v:nameU="ResizeTxtHeight" v:prompt="" v:val="VT0(0.59055118110236):24"/>
+				<v:ud v:nameU="ResizeTxtHeight" v:prompt="" v:val="VT0(0.66929133858268):24"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(2,2,2,2)" v:tabSpace="42.5197"/>
+			<v:textRect cx="72.3425" cy="253.858" width="144.69" height="59.2126"/>
+			<g id="shadow2-11" v:groupContext="shadow" v:shadowOffsetX="1.22561E-16" v:shadowOffsetY="-2.00157" v:shadowType="1"
+					transform="matrix(1,0,0,1,0,2.00157)" class="st1">
+				<rect x="0" y="224.252" width="144.685" height="59.2126" class="st2"/>
+			</g>
+			<rect x="0" y="224.252" width="144.685" height="59.2126" class="st3"/>
+			<text x="43.47" y="258.55" class="st4" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>PC<tspan class="st5">浏览器</tspan></text>		</g>
+		<g id="shape3-18" v:mID="3" v:groupContext="shape" v:layerMember="0" transform="translate(14.1732,-8.70077)">
+			<title>流程.59</title>
+			<desc>Android浏览器</desc>
+			<v:custProps>
+				<v:cp v:nameU="Cost" v:lbl="成本" v:prompt="" v:type="7" v:format="@" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="2052" v:cal="0"/>
+				<v:cp v:nameU="ProcessNumber" v:lbl="进程编号" v:prompt="" v:type="2" v:format="" v:sortKey="" v:invis="false"
+						v:ask="false" v:langID="2052" v:cal="0"/>
+				<v:cp v:nameU="Owner" v:lbl="所有者" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="2052" v:cal="0"/>
+				<v:cp v:nameU="Function" v:lbl="函数" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="2052" v:cal="0" v:val="VT4()"/>
+				<v:cp v:nameU="StartDate" v:lbl="开始日期" v:prompt="" v:type="5" v:format="" v:sortKey="" v:invis="false"
+						v:ask="false" v:langID="2052" v:cal="0"/>
+				<v:cp v:nameU="EndDate" v:lbl="结束日期" v:prompt="" v:type="5" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="2052" v:cal="0"/>
+				<v:cp v:nameU="Status" v:lbl="状态" v:prompt="" v:type="4" v:format=";未开始;进行中;已完成;已推迟;正在等待输入" v:sortKey=""
+						v:invis="false" v:ask="false" v:langID="2052" v:cal="0" v:val="VT4()"/>
+			</v:custProps>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+				<v:ud v:nameU="DefaultWidth" v:prompt="" v:val="VT0(0.98425196850394):24"/>
+				<v:ud v:nameU="DefaultHeight" v:prompt="" v:val="VT0(0.59055118110236):24"/>
+				<v:ud v:nameU="ResizeTxtHeight" v:prompt="" v:val="VT0(0.59055118110236):24"/>
+				<v:ud v:nameU="ResizeTxtHeight" v:prompt="" v:val="VT0(0.66929133858268):24"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(2,2,2,2)" v:tabSpace="42.5197"/>
+			<v:textRect cx="72.3425" cy="253.858" width="144.69" height="59.2126"/>
+			<g id="shadow3-19" v:groupContext="shadow" v:shadowOffsetX="1.22561E-16" v:shadowOffsetY="-2.00157" v:shadowType="1"
+					transform="matrix(1,0,0,1,0,2.00157)" class="st1">
+				<rect x="0" y="224.252" width="144.685" height="59.2126" class="st2"/>
+			</g>
+			<rect x="0" y="224.252" width="144.685" height="59.2126" class="st3"/>
+			<text x="27.4" y="258.55" class="st4" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>Android<tspan
+						class="st5">浏览器</tspan></text>		</g>
+		<g id="shape6-26" v:mID="6" v:groupContext="shape" v:layerMember="1" transform="translate(256.417,-173.031)">
+			<title>动态连接线.62</title>
+			<desc>RTMP</desc>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="7.08661" cy="262.205" width="43.79" height="24.8035"/>
+			<path d="M7.09 269.33 L7.09 269.15 C7.09 259.14 7.09 247.82 7.09 240.94" class="st6"/>
+			<rect v:rectContext="textBkgnd" x="-9.05274" y="253.805" width="32.2787" height="16.8" class="st8"/>
+			<text x="-9.05" y="266.4" class="st9" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>RTMP</text>		</g>
+		<g id="shape8-34" v:mID="8" v:groupContext="shape" v:layerMember="0" transform="translate(191.161,-215.551)">
+			<title>流程.65</title>
+			<desc>RTMP推流</desc>
+			<v:custProps>
+				<v:cp v:nameU="Cost" v:lbl="成本" v:prompt="" v:type="7" v:format="@" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="2052" v:cal="0"/>
+				<v:cp v:nameU="ProcessNumber" v:lbl="进程编号" v:prompt="" v:type="2" v:format="" v:sortKey="" v:invis="false"
+						v:ask="false" v:langID="2052" v:cal="0"/>
+				<v:cp v:nameU="Owner" v:lbl="所有者" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="2052" v:cal="0"/>
+				<v:cp v:nameU="Function" v:lbl="函数" v:prompt="" v:type="0" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="2052" v:cal="0" v:val="VT4()"/>
+				<v:cp v:nameU="StartDate" v:lbl="开始日期" v:prompt="" v:type="5" v:format="" v:sortKey="" v:invis="false"
+						v:ask="false" v:langID="2052" v:cal="0"/>
+				<v:cp v:nameU="EndDate" v:lbl="结束日期" v:prompt="" v:type="5" v:format="" v:sortKey="" v:invis="false" v:ask="false"
+						v:langID="2052" v:cal="0"/>
+				<v:cp v:nameU="Status" v:lbl="状态" v:prompt="" v:type="4" v:format=";未开始;进行中;已完成;已推迟;正在等待输入" v:sortKey=""
+						v:invis="false" v:ask="false" v:langID="2052" v:cal="0" v:val="VT4()"/>
+			</v:custProps>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:prompt="" v:val="VT0(15):26"/>
+				<v:ud v:nameU="DefaultWidth" v:prompt="" v:val="VT0(0.98425196850394):24"/>
+				<v:ud v:nameU="DefaultHeight" v:prompt="" v:val="VT0(0.59055118110236):24"/>
+				<v:ud v:nameU="ResizeTxtHeight" v:prompt="" v:val="VT0(0.59055118110236):24"/>
+				<v:ud v:nameU="ResizeTxtHeight" v:prompt="" v:val="VT0(0.66929133858268):24"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(2,2,2,2)" v:tabSpace="42.5197"/>
+			<v:textRect cx="72.3425" cy="253.858" width="144.69" height="59.2126"/>
+			<g id="shadow8-35" v:groupContext="shadow" v:shadowOffsetX="1.22561E-16" v:shadowOffsetY="-2.00157" v:shadowType="1"
+					transform="matrix(1,0,0,1,0,2.00157)" class="st1">
+				<rect x="0" y="224.252" width="144.685" height="59.2126" class="st2"/>
+			</g>
+			<rect x="0" y="224.252" width="144.685" height="59.2126" class="st10"/>
+			<text x="42.15" y="258.55" class="st4" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>RTMP<tspan
+						class="st5">推流</tspan></text>		</g>
+		<g id="shape9-41" v:mID="9" v:groupContext="shape" v:layerMember="1" transform="translate(452.067,-67.9134)">
+			<title>动态连接线.66</title>
+			<desc>RTMP</desc>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="-34.5913" cy="216.192" width="43.79" height="24.8035"/>
+			<path d="M-0.25 269.34 L-0.25 269.16 C-1.07 252.76 -4.54 234.58 -19.38 223.77 C-41.1 207.95 -87.17 207.95 -116.22 207.95"
+					class="st6"/>
+			<rect v:rectContext="textBkgnd" x="-50.7307" y="207.793" width="32.2787" height="16.8" class="st8"/>
+			<text x="-50.73" y="220.39" class="st9" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>RTMP</text>		</g>
+		<g id="shape10-48" v:mID="10" v:groupContext="shape" v:layerMember="1" transform="translate(86.5157,-67.9134)">
+			<title>动态连接线.67</title>
+			<desc>HLS</desc>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="28.4849" cy="217.247" width="35" height="24.8035"/>
+			<path d="M0.23 269.34 L0.23 269.16 C0.98 252.64 4.19 234.22 17.92 223.39 C37.51 207.95 78.48 207.95 104.65 207.95"
+					class="st6"/>
+			<rect v:rectContext="textBkgnd" x="17.3221" y="208.847" width="22.3259" height="16.8" class="st8"/>
+			<text x="17.32" y="221.45" class="st9" v:langID="2052"><v:paragraph v:horizAlign="1"/><v:tabList/>HLS</text>		</g>
+	</g>
+</svg>

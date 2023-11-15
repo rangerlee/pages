@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>CMake构建32位程序 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="CMake用来跨平台构建非常方便，特别是开源软件，跨平台的体验基本一致。但是偶尔需要构建32位程序版本时候，很多人就不知道该怎么操作了。
+GUI界面操作实际上GUI界面平常用来构建非常方便，但是想要在这个界面上生成32位程序却没有找到配置项目。基本上程序只识别了编译器，比如VS2019，但是并没有选择32或者64位的地方。所以此种方法不通。
+命令行操作平常使用命令行基本没有设置什么参数，这个地方大">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="CMake构建32位程序 | xilixili.net">
+    <meta name="twitter:description" content="CMake用来跨平台构建非常方便，特别是开源软件，跨平台的体验基本一致。但是偶尔需要构建32位程序版本时候，很多人就不知道该怎么操作了。
+GUI界面操作实际上GUI界面平常用来构建非常方便，但是想要在这个界面上生成32位程序却没有找到配置项目。基本上程序只识别了编译器，比如VS2019，但是并没有选择32或者64位的地方。所以此种方法不通。
+命令行操作平常使用命令行基本没有设置什么参数，这个地方大">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="CMake构建32位程序 | xilixili.net">
+    <meta property="og:description" content="CMake用来跨平台构建非常方便，特别是开源软件，跨平台的体验基本一致。但是偶尔需要构建32位程序版本时候，很多人就不知道该怎么操作了。
+GUI界面操作实际上GUI界面平常用来构建非常方便，但是想要在这个界面上生成32位程序却没有找到配置项目。基本上程序只识别了编译器，比如VS2019，但是并没有选择32或者64位的地方。所以此种方法不通。
+命令行操作平常使用命令行基本没有设置什么参数，这个地方大">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2022/11/23/cmake-build-x86-for-windows/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2022-11-23T12:30:00.000Z" class="post-list__meta--date date">2022-11-23</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">CMake构建32位程序</h1>
+  </header>
+
+  <section class="post">
+    <p>CMake用来跨平台构建非常方便，特别是开源软件，跨平台的体验基本一致。但是偶尔需要构建32位程序版本时候，很多人就不知道该怎么操作了。</p>
+<h3 id="GUI界面操作"><a href="#GUI界面操作" class="headerlink" title="GUI界面操作"></a>GUI界面操作</h3><p>实际上GUI界面平常用来构建非常方便，但是想要在这个界面上生成32位程序却没有找到配置项目。<br>基本上程序只识别了编译器，比如VS2019，但是并没有选择32或者64位的地方。所以此种方法不通。</p>
+<h3 id="命令行操作"><a href="#命令行操作" class="headerlink" title="命令行操作"></a>命令行操作</h3><p>平常使用命令行基本没有设置什么参数，这个地方大家应该都知道使用 <code>-G</code> 参数生成工程文件，比如NMake或者VS解决方案。<br>如果只是简单的这么用，生成VS解决方案，打开只有x64一个选项，当然如果查看 <code>-G</code> 可以生成的类型，貌似有个 ARCH 设置，但其实仔细阅读后面的说明部分，这个地方只能使用 <code>ARM</code> 或者 <code>Win64</code>，并没有32位选项</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Generators</span><br><span class="line">  Visual Studio 17 2022        = Generates Visual Studio 2022 project files.</span><br><span class="line">                                 Use -A option to specify architecture.</span><br><span class="line">* Visual Studio 16 2019        = Generates Visual Studio 2019 project files.</span><br><span class="line">                                 Use -A option to specify architecture.</span><br><span class="line">  Visual Studio 15 2017 [arch] = Generates Visual Studio 2017 project files.</span><br><span class="line">                                 Optional [arch] can be &quot;Win64&quot; or &quot;ARM&quot;.</span><br><span class="line">  Visual Studio 14 2015 [arch] = Generates Visual Studio 2015 project files.</span><br><span class="line">                                 Optional [arch] can be &quot;Win64&quot; or &quot;ARM&quot;.</span><br><span class="line">  Visual Studio 12 2013 [arch] = Generates Visual Studio 2013 project files.</span><br><span class="line">                                 Optional [arch] can be &quot;Win64&quot; or &quot;ARM&quot;.</span><br><span class="line">  Visual Studio 11 2012 [arch] = Generates Visual Studio 2012 project files.</span><br><span class="line">                                 Optional [arch] can be &quot;Win64&quot; or &quot;ARM&quot;.</span><br><span class="line">  Visual Studio 10 2010 [arch] = Generates Visual Studio 2010 project files.</span><br><span class="line">                                 Optional [arch] can be &quot;Win64&quot; or &quot;IA64&quot;.</span><br><span class="line">  Visual Studio 9 2008 [arch]  = Generates Visual Studio 2008 project files.</span><br><span class="line">                                 Optional [arch] can be &quot;Win64&quot; or &quot;IA64&quot;.</span><br></pre></td></tr></table></figure>
+<p>其实这个地方还有个 <code>-A</code> 参数类指定平台，其说明如下</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-A &lt;platform-name&gt;           = Specify platform name if supported by</span><br><span class="line">                                 generator.</span><br></pre></td></tr></table></figure>
+<p>有了这个参数，就可以生成32位的工程了，比如</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cmake . -G "Visual Studio 16 2019" -A Win32</span><br></pre></td></tr></table></figure>
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2023/10/31/win10-clean/" title="Win10最简单高效的垃圾清理方式">Win10最简单高效的垃圾清理方式</a></h2>
+                <p class="excerpt">
+                
+                Windows系统最让人头疼的就是清理垃圾的问题了，要是自己平时不注意的话，很快C盘就满了，导致整个系统变慢。通常我们会安装类似360之类的软件来清理，但其实Win10系统已经自带了非常方便的垃圾清理，而且还自带了杀毒等功能，本次我们就只针对清理方面说一下方法。
+更改软件缓存位置通常的垃圾都是软件的
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2023-10-31T03:30:00.000Z" class="post-list__meta--date date">2023-10-31</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2023/10/31/win10-clean/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2022/11/10/fix-vscode-tab-format/" title="修改VSCODE的TAB为空格">修改VSCODE的TAB为空格</a></h2>
+                <p class="excerpt">
+                
+                Visual Studio Code 是非常好用的代码编辑器，包括常用的编程语言。但是其设置相对其他IDE稍微复杂了一些，今天就遇到了格式化后代码使用了TAB缩进，而不是我之前设置的空格模式，毕竟空格模式在其他IDE下最终显示效果是不变的， 有些IDE的TAB设置的是8个空格哦。
+修改VSCODE的
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2022-11-10T01:30:00.000Z" class="post-list__meta--date date">2022-11-10</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2022/11/10/fix-vscode-tab-format/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

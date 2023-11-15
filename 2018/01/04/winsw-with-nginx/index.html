@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>探究WinSW封装Nginx服务及日志清理 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="如前述，我们项目中目前还在Win32平台，切换到了Nginx架构的RTMP服务器。当然也是长时间不规范的直接双击运行的，虽说Nginx的架构保证进程活着问题不大，但是无法应对突然的停电，停电之后无人去操作启动，造成了无人觉察的故障，这也是一个极大的风险。
+技术选型当然我们的目标是把nginx做成一个服务，不像Linux下那么方便。基本上就两种方法，自己写一个监控服务，另外一种就是使用第三方工具做成">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="探究WinSW封装Nginx服务及日志清理 | xilixili.net">
+    <meta name="twitter:description" content="如前述，我们项目中目前还在Win32平台，切换到了Nginx架构的RTMP服务器。当然也是长时间不规范的直接双击运行的，虽说Nginx的架构保证进程活着问题不大，但是无法应对突然的停电，停电之后无人去操作启动，造成了无人觉察的故障，这也是一个极大的风险。
+技术选型当然我们的目标是把nginx做成一个服务，不像Linux下那么方便。基本上就两种方法，自己写一个监控服务，另外一种就是使用第三方工具做成">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="探究WinSW封装Nginx服务及日志清理 | xilixili.net">
+    <meta property="og:description" content="如前述，我们项目中目前还在Win32平台，切换到了Nginx架构的RTMP服务器。当然也是长时间不规范的直接双击运行的，虽说Nginx的架构保证进程活着问题不大，但是无法应对突然的停电，停电之后无人去操作启动，造成了无人觉察的故障，这也是一个极大的风险。
+技术选型当然我们的目标是把nginx做成一个服务，不像Linux下那么方便。基本上就两种方法，自己写一个监控服务，另外一种就是使用第三方工具做成">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2018/01/04/winsw-with-nginx/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2018-01-04T03:44:00.000Z" class="post-list__meta--date date">2018-01-04</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">探究WinSW封装Nginx服务及日志清理</h1>
+  </header>
+
+  <section class="post">
+    <p>如前述，我们项目中目前还在Win32平台，切换到了Nginx架构的RTMP服务器。当然也是长时间不规范的直接双击运行的，虽说Nginx的架构保证进程活着问题不大，但是无法应对突然的停电，停电之后无人去操作启动，造成了无人觉察的故障，这也是一个极大的风险。</p>
+<h3 id="技术选型"><a href="#技术选型" class="headerlink" title="技术选型"></a>技术选型</h3><p>当然我们的目标是把nginx做成一个服务，不像Linux下那么方便。基本上就两种方法，自己写一个监控服务，另外一种就是使用第三方工具做成系统服务，这其中第三方服务基本不太会监控Nginx的死活，只会保证系统开机自启Nginx（当然也有直接放到启动菜单或者注册表中的办法，我们暂还是用比较规范的方法）。</p>
+<p>自己开发的话有一定工作量，况且Nginx的稳定性问题不大，因此不太有必要自研。网络上比较流行的方法是采用Windows Service Wrapper工具(WinSW)进行包装，也有很多其他软件，不过这个软件相对简单易用，而且普遍反映相对其他软件功能没有问题。</p>
+<p>此开源项目的地址是：<a href="https://github.com/kohsuke/winsw" target="_blank" rel="noopener">https://github.com/kohsuke/winsw</a></p>
+<p>2.0之后的版本提供了.net 2.0和.net 4.0两个版本的下载，根据实际情况下载。</p>
+<h3 id="WinSW配置"><a href="#WinSW配置" class="headerlink" title="WinSW配置"></a>WinSW配置</h3><p>WinSW的使用相对比较简单，基本步骤如下</p>
+<ol>
+<li><p>首先建议将下载的exe改名，比如我们给Nginx包装的服务，那改名为<code>nginx-service.exe</code>。</p>
+</li>
+<li><p>然后创建同名的xml配置文件，如<code>nginx-service.xml</code>，比如Nginx可配置如下</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">service</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">id</span>&gt;</span>nginx<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>Nginx Media Service<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">description</span>&gt;</span>Nginx Based Media Streaming Server<span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">executable</span>&gt;</span>nginx.exe<span class="tag">&lt;/<span class="name">executable</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">logpath</span>&gt;</span>./logs<span class="tag">&lt;/<span class="name">logpath</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">logmode</span>&gt;</span>roll<span class="tag">&lt;/<span class="name">logmode</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;<span class="name">stopexecutable</span>&gt;</span>nginx.exe<span class="tag">&lt;/<span class="name">stopexecutable</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">stopargument</span>&gt;</span>-s<span class="tag">&lt;/<span class="name">stopargument</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">stopargument</span>&gt;</span>stop<span class="tag">&lt;/<span class="name">stopargument</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">service</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>XML文件的详细配置教程见官方文档 <a href="https://github.com/kohsuke/winsw/blob/master/doc/xmlConfigFile.md" target="_blank" rel="noopener">xmlConfigFile.md</a></p>
+</li>
+<li><p>安装，使用管理员权限的CMD，输入安装命令</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nginx-service.exe install</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动，在CMD输入启动命令，或者在系统services.msc图形界面启动</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nginx-service.exe start</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>其中，该命令可使用 start | stop | install | uninstall 等，对应启动、停止、安装、卸载等</p>
+<h3 id="Nginx日志清理"><a href="#Nginx日志清理" class="headerlink" title="Nginx日志清理"></a>Nginx日志清理</h3><p>不说Linux下很方便的清理方式，只谈Windows。如果你仔细观察，会发现Nginx生成的日志文件不会自动分割，比如按时间或者按大小，这样长此以往，文件会非常大。观察现网的日志已经五百多兆了，急需清理，通过 /stat 统计页面查看，长期都有五六十个推流端在推流，当然总推流时长不会很长。</p>
+<p>大部分网上的办法都是重启Nginx服务，我觉得不可接收，有些更好的方案是转移文件，然后reload。</p>
+<p>我们来试试reload的效果，修改配置文件中比如日志的名称，然后<code>nginx -s reload</code>，你会发现没有权限！为什么没有权限，通过任务管理器可以看到Nginx的权限是SYSTEM，可以想到系统服务都是SYSTEM权限的，想操作还得用这个权限，正常情况下我们是不能获取到SYSTEM权限，根据网上办法也不靠谱，但是既然WInSW搞出来了SYSTEM权限， 类似的，我们再制作个NginxReloadService，就执行reload操作即可解决权限，简单暴力，那么再探究下日志问题。</p>
+<p>如前，然后再测试，基本OK，如果你运气好点，你会发现更严重的问题，Nignx的进程有三个，而且通过 /stat 查不到正在进行的推流统计，当然也没办法播放了。应该是Nginx在reload的时候，Nginx重新创建了一个新的worker进程来提供服务并采用了新配置，老的worker进程在现有服务完成后会退出，为了验证，停止了推流，这个进程很快关闭。</p>
+<p>这么看来，reload方式的主要问题是不实时，在rtmp这种长连接的情况下不太可用。重启大法好啊，难道就只剩这一个办法了么。</p>
+<h3 id="完美的方案"><a href="#完美的方案" class="headerlink" title="完美的方案"></a>完美的方案</h3><p>观察和思考良久，发现网上比较好的博客在介绍Linux下日志分割的时候，并不是重启进程啥的，用的是信号SIGUSR1，也就是让Nignx重新打开日志文件。这给了我们启示，说明Nginx是支持受命令控制重新打开日志文件的，当然Windows下是没有这个信号的，仔细查阅下发现这个信号其实等同与<code>nginx -s reopen</code>，对就是reopen这个一直被忽略的命令。再来试试效果，手动Move文件之后，然后reopen，文件生成了，进程PID根本就没变，看来reopen是个完美的方案。</p>
+<p>结合前述问题，最终通过WinSW再封装一个reopen的操作的服务(可以保证SYSTEM权限)，剩下的就是定时任务了(注意运行账户改为SYSTEM)，基本上完美解决日志分割问题，并且没有特别的副作用。</p>
+<p>Nginx Logrote Service 配置样例</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">service</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">id</span>&gt;</span>nginx-logrote<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>Nginx Logrote Service<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">description</span>&gt;</span>Logrote Service for Nginx Based Media Streaming Server<span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">executable</span>&gt;</span>nginx-logrote-service.bat<span class="tag">&lt;/<span class="name">executable</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;<span class="name">startmode</span>&gt;</span>Manual<span class="tag">&lt;/<span class="name">startmode</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">logpath</span>&gt;</span>./logs<span class="tag">&lt;/<span class="name">logpath</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">logmode</span>&gt;</span>roll<span class="tag">&lt;/<span class="name">logmode</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">service</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>Nginx Logrote Service 批处理文件样例</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">@ECHO OFF</span><br><span class="line">CD logs</span><br><span class="line"></span><br><span class="line"><span class="keyword">FOR</span> /f <span class="string">"delims="</span> %%i <span class="keyword">IN</span> (<span class="string">'DIR /a-d /b access.log'</span>) <span class="keyword">DO</span> (</span><br><span class="line"> <span class="keyword">IF</span> %%~zi gtr <span class="number">10485760</span> (</span><br><span class="line">	MOVE /Y %%i %%i.bak</span><br><span class="line"> )</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">FOR</span> /f <span class="string">"delims="</span> %%i <span class="keyword">IN</span> (<span class="string">'DIR /a-d /b error.log'</span>) <span class="keyword">DO</span> (</span><br><span class="line"> <span class="keyword">IF</span> %%~zi gtr <span class="number">10485760</span> (</span><br><span class="line">	MOVE /Y %%i %%i.bak</span><br><span class="line"> )</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">CD ..</span><br><span class="line">nginx -s reopen</span><br></pre></td></tr></table></figure>
+<p>PS：网上的方法真是误人子弟啊，一个高质量的博客显得是多么重要！</p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2018/02/26/webrtc-with-28181-live/" title="通过28181与WebRTC直播摄像头">通过28181与WebRTC直播摄像头</a></h2>
+                <p class="excerpt">
+                
+                前文描述了WebRTC视频直播技术，后续应用到系统中，版本已经做出来了并封装了JS的SDK，实时性效果还是非常令人惊喜的，针对部分调整和问题进行记录。
+视频源项目使用的是海康摄像头，我打算取消本地服务器，直接让摄像头通过GB28181协议进行推流。为了让所有用户可以观看，将服务部署在公网，当然这里需
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2018-02-26T07:46:00.000Z" class="post-list__meta--date date">2018-02-26</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2018/02/26/webrtc-with-28181-live/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2017/12/26/resource-release-with-setconsolectrlhandler/" title="SetConsoleCtrlHandler实现资源释放">SetConsoleCtrlHandler实现资源释放</a></h2>
+                <p class="excerpt">
+                
+                今天决定对程序产生的不完整的临时文件进行下优化，当然这些临时文件是非预期的，在程序中都进行了处理，但是在某些情况下确实是发生了。
+现象分析首先可以确认的是这些临时文件都是程序在退出时候未处理生成的。当然程序全部是正常退出的，并没有异常崩溃，但是退出的方法有多种，比如Ctrl+C按键，比如直接点击控制
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-12-26T08:26:00.000Z" class="post-list__meta--date date">2017-12-26</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2017/12/26/resource-release-with-setconsolectrlhandler/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

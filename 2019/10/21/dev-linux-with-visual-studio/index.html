@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>使用VS开发Linux程序 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="VisualStudio的新版本已经开始支持远程编译调试Linux了，我安装了VS2017，尝试在Windows上写了一个Linux服务程序，非常方便。
+基本原理能支持Linux开发的也只是在最新的版本中才行，好像应该是2015起。当然在安装VS的时候必须勾选跨平台下的Linux，没有安装的打开安装器可以添加补充上。
+在创建项目的时候，需要选择一个Linux服务器，一般都是通过SSH连接的，然后V">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="使用VS开发Linux程序 | xilixili.net">
+    <meta name="twitter:description" content="VisualStudio的新版本已经开始支持远程编译调试Linux了，我安装了VS2017，尝试在Windows上写了一个Linux服务程序，非常方便。
+基本原理能支持Linux开发的也只是在最新的版本中才行，好像应该是2015起。当然在安装VS的时候必须勾选跨平台下的Linux，没有安装的打开安装器可以添加补充上。
+在创建项目的时候，需要选择一个Linux服务器，一般都是通过SSH连接的，然后V">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="使用VS开发Linux程序 | xilixili.net">
+    <meta property="og:description" content="VisualStudio的新版本已经开始支持远程编译调试Linux了，我安装了VS2017，尝试在Windows上写了一个Linux服务程序，非常方便。
+基本原理能支持Linux开发的也只是在最新的版本中才行，好像应该是2015起。当然在安装VS的时候必须勾选跨平台下的Linux，没有安装的打开安装器可以添加补充上。
+在创建项目的时候，需要选择一个Linux服务器，一般都是通过SSH连接的，然后V">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2019/10/21/dev-linux-with-visual-studio/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2019-10-21T09:45:00.000Z" class="post-list__meta--date date">2019-10-21</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">使用VS开发Linux程序</h1>
+  </header>
+
+  <section class="post">
+    <p>VisualStudio的新版本已经开始支持远程编译调试Linux了，我安装了VS2017，尝试在Windows上写了一个Linux服务程序，非常方便。</p>
+<h3 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h3><p>能支持Linux开发的也只是在最新的版本中才行，好像应该是2015起。当然在安装VS的时候必须勾选跨平台下的Linux，没有安装的打开安装器可以添加补充上。</p>
+<p>在创建项目的时候，需要选择一个Linux服务器，一般都是通过SSH连接的，然后VS会在SSH登录成功后的目录下创建一个 <code>projects</code> 目录，创建的工程目录全部在此目录下，在编译的时候通过将工程文件拷贝到Linux服务器上，然后通过执行GCC命令来编译。</p>
+<p>这里要吐槽的是</p>
+<ul>
+<li>文件必须添加到工程</li>
+<li>没有使用编译脚本</li>
+</ul>
+<p>先说第一点，在windows平台上，要编译的CPP文件肯定是要加入到工程里的，但是H文件却可以不需要，在使用Linux编译的时候，VS是按照工程结构拷贝文件的，没加入到工程组织里面的，是不会拷贝过去的导致无法编译成功。然后是第二点，VS在前面某个版本都支持了CMake了，为何不使用其作为编译脚本呢，而是单独同Windows上一样的配置，个人感觉脚本方式更好，因为不是所有人都使用VS进行开发。</p>
+<p>调试使用的是 <code>gdb-server</code> 没啥好说的。</p>
+<h3 id="智能提示"><a href="#智能提示" class="headerlink" title="智能提示"></a>智能提示</h3><p>如果只是简单远程编译，我记得很早就有类似工具了。VS强大的在于其智能提示功能，那么在使用Linux项目的时候是否也能智能提示呢，答案是肯定的。<br>在我们添加了Linux服务器后，VS就会在后台把该Linux服务器上默认位置下的编译需要的头文件全部进行本地缓存，并通过扫描实现智能提示，使用起来和本地操作并无二致。</p>
+<p>C++程序肯定要添加一堆非系统库或者自定义库，VS是否能支持扫描呢，通过测试，发现在项目中添加了远程目录后，VS会将该目录同样进行下载缓存，确实是非常强大。</p>
+<blockquote>
+<p>当服务器端头文件变更等，需要在连接管理器刷新缓存，这需要手动操作。或者重启IDE，因为当IDE重启的时候也会重新刷新。</p>
+</blockquote>
+<h3 id="代码调试"><a href="#代码调试" class="headerlink" title="代码调试"></a>代码调试</h3><p>使用VS调试Linux程序也非常方便，和Windows下一致，虽然使用的是GDB，但是在IDE下操作依然是VC的快捷键进行调试，同时也完全支持查看内存以及在鼠标悬停在变量上的时候查看变量的值，要不是调试按钮上写的远程地址，否则真的很难发现是在调试Linux程序。</p>
+<h3 id="使用感受"><a href="#使用感受" class="headerlink" title="使用感受"></a>使用感受</h3><p>使用起来确实非常强大，不愧为宇宙第一IDE，非常值得开发Linux的同学试试。<br>不过在调试的时候尽量选择网络访问非常快的服务器，要不然调试的时候，各种数据会出现的非常慢，特别影响效率。</p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2019/10/23/parse-hikvision-camera-ps-stream-supplement/" title="从海康28181的PS流解析H264的补充">从海康28181的PS流解析H264的补充</a></h2>
+                <p class="excerpt">
+                
+                前文 《简单解析海康PS流获取H264》 针对海康摄像头的PS流解析做了简单处理，基本逻辑是正确的，但最近几个摄像头出现了一些奇怪的问题，需要针对相关现象进行查询。
+RTP传输层项目中为了可靠处理且因其他原因使用了TCP来传输28181的RTP数据，根据 rfc4571 记录，使用TCP传输的时候只
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2019-10-23T05:53:00.000Z" class="post-list__meta--date date">2019-10-23</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/10/23/parse-hikvision-camera-ps-stream-supplement/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2019/09/17/linux-config-vsftpd/" title="Linux配置添加FTP用户">Linux配置添加FTP用户</a></h2>
+                <p class="excerpt">
+                
+                Linux下最常用的FTP软件是vsftpd，使用起来非常简单，功能也很强大，以下记录下最简单的使用配置方法。
+服务安装vsftpd是常用软件，因此一般安装也不用费时费力的去源码安装，直接在仓库中进行安装即可，比如在红帽系的发行版上，直接通过YUM安装，如
+yum install vsftpd
+系统
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2019-09-17T01:26:00.000Z" class="post-list__meta--date date">2019-09-17</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/09/17/linux-config-vsftpd/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

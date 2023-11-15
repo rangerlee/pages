@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>NGINX支持中文目录索引(Win32) | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="Windows平台上在使用Nginx的时候无法支持中文路径，哪怕是直接访问一个中文路径，也无法访问到，访问文件是404，访问目录是500。
+解决方案思考正常情况下先访问一个内部有中文文件或目录的目录，Nginx会显示为乱码(调整网页编码能正确)，而且其中的链接是直接编码的，什么意思，就是这个链接是GBK字符集的URL编码，所以肯定是访问不了的了。不过即使手动将链接改为UTF-8字符集的URL编码，">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="NGINX支持中文目录索引(Win32) | xilixili.net">
+    <meta name="twitter:description" content="Windows平台上在使用Nginx的时候无法支持中文路径，哪怕是直接访问一个中文路径，也无法访问到，访问文件是404，访问目录是500。
+解决方案思考正常情况下先访问一个内部有中文文件或目录的目录，Nginx会显示为乱码(调整网页编码能正确)，而且其中的链接是直接编码的，什么意思，就是这个链接是GBK字符集的URL编码，所以肯定是访问不了的了。不过即使手动将链接改为UTF-8字符集的URL编码，">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="NGINX支持中文目录索引(Win32) | xilixili.net">
+    <meta property="og:description" content="Windows平台上在使用Nginx的时候无法支持中文路径，哪怕是直接访问一个中文路径，也无法访问到，访问文件是404，访问目录是500。
+解决方案思考正常情况下先访问一个内部有中文文件或目录的目录，Nginx会显示为乱码(调整网页编码能正确)，而且其中的链接是直接编码的，什么意思，就是这个链接是GBK字符集的URL编码，所以肯定是访问不了的了。不过即使手动将链接改为UTF-8字符集的URL编码，">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2020/01/02/win32-nginx-autoindex-support-chinese/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2020-01-02T01:10:00.000Z" class="post-list__meta--date date">2020-01-02</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">NGINX支持中文目录索引(Win32)</h1>
+  </header>
+
+  <section class="post">
+    <p>Windows平台上在使用Nginx的时候无法支持中文路径，哪怕是直接访问一个中文路径，也无法访问到，访问文件是404，访问目录是500。</p>
+<h3 id="解决方案思考"><a href="#解决方案思考" class="headerlink" title="解决方案思考"></a>解决方案思考</h3><p>正常情况下先访问一个内部有中文文件或目录的目录，Nginx会显示为乱码(调整网页编码能正确)，而且其中的链接是直接编码的，什么意思，就是这个链接是GBK字符集的URL编码，所以肯定是访问不了的了。不过即使手动将链接改为UTF-8字符集的URL编码，也依然访问不了。</p>
+<p>基于上面的一些现象和实际情况分析，基本可获得以下结论</p>
+<ul>
+<li>输出必须是UTF-8编码的网页，特别是URL链接</li>
+<li>内部本地系统是GBK编码，必须把请求路径最终转换成本地字符编码</li>
+</ul>
+<p>当然，在Linux等系统上搞定字符集很简单，Win32就很难了，基本没有成功的可能性，不过网络上提供了一些解决该问题的方法，比如添加 <code>charset gbk,utf-8;</code>，确实是页面能显示中文了，但是并不能下载，原因同上。</p>
+<h3 id="修改源码实现"><a href="#修改源码实现" class="headerlink" title="修改源码实现"></a>修改源码实现</h3><p>思索再三，发现还是只能去修改源码了，既然是字符集的对应关系，那么就是需要将本地和UTF-8字符集进行转换，增加这么一层逻辑不就可以了么。其中目录浏览功能是个文件遍历功能，这个咱很熟悉，在Win上就是 <code>FindFirstFile</code> 系列函数，看源码，在 <code>http\modules\ngx_http_autoindex_modele.c</code> 文件中 <code>ngx_http_autoindex_handler</code> 函数中有详细的逻辑，基本是2个函数 <code>ngx_open_dir</code> 和 <code>ngx_read_dir</code> ，看实现确实和我们想象的是一致的。</p>
+<p>首先看一下具体的定义吧，其中外部统一的定义结构体是 <code>ngx_dir_t</code></p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    HANDLE                          dir;</span><br><span class="line">    WIN32_FIND_DATA                 finddata;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">unsigned</span>                        valid_info:<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">unsigned</span>                        type:<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">unsigned</span>                        ready:<span class="number">1</span>;</span><br><span class="line">&#125; <span class="keyword">ngx_dir_t</span>;</span><br></pre></td></tr></table></figure>
+<p>里面使用的是ANSI版本的API，如果依然要使用该版本的API，那么就需要修改输入和输出了，也就是在 <code>ngx_open_dir</code> 函数内把字符集从UTF-8转为本地字符集，然后在 <code>ngx_read_dir</code> 函数里面再将字符集转成UTF-8，转什么字符集呢，从源码中可以看到，主要是 <code>WIN32_FIND_DATA</code> 结构体里面的 <code>cFileName</code>，不过在Windows上转换字符集非常麻烦，竟然没有一步到位的，比如要将本地转UTF-8的步骤是先把本地转UTF-16，然后再转UTF-8，需要2步，此处我打算使用宽字符版进行。</p>
+<p>首先，在 <code>ngx_dir_t</code> 类型中增加一个宽字符版本的结构体</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">WIN32_FIND_DATAW                finddataw;</span><br></pre></td></tr></table></figure>
+<p>为什么是增加呢，而不是直接修改呢，因为在输出的时候还需要转换！</p>
+<p>然后在 <code>ngx_open_dir</code> 里面实现，大概如下</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">ngx_int_t</span></span><br><span class="line">ngx_open_dir(<span class="keyword">ngx_str_t</span> *name, <span class="keyword">ngx_dir_t</span> *dir)</span><br><span class="line">&#123;</span><br><span class="line">    u_short utf16[NGX_UTF16_BUFLEN] = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">    ngx_cpystrn(name-&gt;data + name-&gt;len, NGX_DIR_MASK, NGX_DIR_MASK_LEN + <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">size_t</span> len = name-&gt;len + NGX_DIR_MASK_LEN + <span class="number">1</span>;</span><br><span class="line">    u_short* u = ngx_utf8_to_utf16(utf16, name-&gt;data, &amp;len);</span><br><span class="line"></span><br><span class="line">    dir-&gt;dir = FindFirstFileW((<span class="keyword">const</span> <span class="keyword">wchar_t</span> *)utf16, &amp;dir-&gt;finddataw);</span><br><span class="line">    ngx_win32_find_data_w2a(&amp;dir-&gt;finddataw, &amp;dir-&gt;finddata);</span><br><span class="line">    name-&gt;data[name-&gt;len] = <span class="string">'\0'</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (dir-&gt;dir == INVALID_HANDLE_VALUE) &#123;</span><br><span class="line">        <span class="keyword">return</span> NGX_ERROR;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    dir-&gt;valid_info = <span class="number">1</span>;</span><br><span class="line">    dir-&gt;ready = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> NGX_OK;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后在 <code>ngx_read_dir</code> 里面实现，如下</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">ngx_int_t</span></span><br><span class="line">ngx_read_dir(<span class="keyword">ngx_dir_t</span> *dir)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (dir-&gt;ready) &#123;</span><br><span class="line">        dir-&gt;ready = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">return</span> NGX_OK;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (FindNextFileW(dir-&gt;dir, &amp;dir-&gt;finddataw) != <span class="number">0</span>) &#123;</span><br><span class="line">        dir-&gt;type = <span class="number">1</span>;</span><br><span class="line">        ngx_win32_find_data_w2a(&amp;dir-&gt;finddataw, &amp;dir-&gt;finddata);</span><br><span class="line">        <span class="keyword">return</span> NGX_OK;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> NGX_ERROR;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>基本想法就是使用宽字符版的API，然后将结果转为多字节版，这个转换函数实现如下</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">ngx_win32_find_data_w2a</span><span class="params">(WIN32_FIND_DATAW* w, WIN32_FIND_DATAA* a)</span> </span>&#123;</span><br><span class="line">    a-&gt;dwFileAttributes = w-&gt;dwFileAttributes;</span><br><span class="line">    a-&gt;dwReserved0 = w-&gt;dwReserved0;</span><br><span class="line">    a-&gt;dwReserved1 = w-&gt;dwReserved1;</span><br><span class="line">    a-&gt;ftCreationTime = w-&gt;ftCreationTime;</span><br><span class="line">    a-&gt;ftLastAccessTime = w-&gt;ftLastAccessTime;</span><br><span class="line">    a-&gt;ftLastWriteTime = w-&gt;ftLastWriteTime;</span><br><span class="line">    a-&gt;nFileSizeHigh = w-&gt;nFileSizeHigh;</span><br><span class="line">    a-&gt;nFileSizeLow = w-&gt;nFileSizeLow;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//memset(a-&gt;cAlternateFileName, 0, 14);</span></span><br><span class="line">    <span class="comment">//WideCharToMultiByte(CP_UTF8, 0, w-&gt;cAlternateFileName, -1, a-&gt;cAlternateFileName, 14, NULL, NULL);</span></span><br><span class="line">    <span class="built_in">memset</span>(a-&gt;cFileName, <span class="number">0</span>, MAX_PATH);</span><br><span class="line">    WideCharToMultiByte(CP_UTF8, <span class="number">0</span>, w-&gt;cFileName, <span class="number">-1</span>, a-&gt;cFileName, MAX_PATH, <span class="literal">NULL</span>, <span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="显示字符集调整"><a href="#显示字符集调整" class="headerlink" title="显示字符集调整"></a>显示字符集调整</h3><p>上面的修改基本搞定了目录浏览功能，但是还有个小问题，浏览器并没有自动的使用UTF-8，每次都要手动在浏览器上选择字符编码，很麻烦，因为我们已经确定了字符集，只需要在代码写死即可。</p>
+<p>在文件 <code>http\modules\ngx_http_autoindex_modele.c</code> 文件实现如下</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">ngx_buf_t</span> *</span><br><span class="line">ngx_http_autoindex_html(<span class="keyword">ngx_http_request_t</span> *r, <span class="keyword">ngx_array_t</span> *entries)</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">static</span> u_char  header[] =</span><br><span class="line">        <span class="string">"&lt;/title&gt;&lt;/head&gt;"</span> CRLF</span><br><span class="line">        <span class="string">"&lt;meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\"&gt;"</span>  CRLF</span><br><span class="line">        <span class="string">"&lt;body bgcolor=\"white\"&gt;"</span> CRLF</span><br><span class="line">        <span class="string">"&lt;h1&gt;Index of "</span></span><br><span class="line">    ;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>就是简单增加了一个 <code>&lt;meta&gt;</code> 标记。</p>
+<h3 id="下载试用"><a href="#下载试用" class="headerlink" title="下载试用"></a>下载试用</h3><p>本来不想放的，不过总有人图省事，不想自己编译的话，就直接拿我编译的试用吧</p>
+<p><a href="https://pan.baidu.com/s/1I1fWvW7wVOB7pEmoVoj_xA" target="_blank" rel="noopener">NGINX 1.9.11</a> 32位,VC2017编译 <a href="https://pan.baidu.com/s/1I1fWvW7wVOB7pEmoVoj_xA" target="_blank" rel="noopener">https://pan.baidu.com/s/1I1fWvW7wVOB7pEmoVoj_xA</a></p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2020/02/13/python-disable-pip-install-user-site-package/" title="禁用PIP安装到用户目录">禁用PIP安装到用户目录</a></h2>
+                <p class="excerpt">
+                
+                当前使用的 CentOS 7 系统上， 在某些脚本中自动安装一些软件竟然安装到root的用户的目录下了，其他用户根本用不了，因此针对该现象进行了分析。
+问题基本分析正常情况下软件包是安装到系统目录下的，也就是安装目录下的  site-packages 目录，但是不知道为啥会安装到用户目录，不管什么情
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2020-02-13T05:48:00.000Z" class="post-list__meta--date date">2020-02-13</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2020/02/13/python-disable-pip-install-user-site-package/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2019/11/29/install-soci-development-for-visual-studio/" title="VC编译安装SOCI(SQLITE后端)">VC编译安装SOCI(SQLITE后端)</a></h2>
+                <p class="excerpt">
+                
+                SOCI 是C++中为数不多的非常方便访问数据库的工具，Poco.Data 库基本也是参考了该库实现，SOCI 在 Linux 各个版本均有开发包，VisualStudio 上还需要自己编译。
+以下为 SOCI 库添加 sqlite 后端为例的编译方法。
+编译前需求
+sqlite 开发包
+参考前文的
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2019-11-29T06:02:00.000Z" class="post-list__meta--date date">2019-11-29</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/11/29/install-soci-development-for-visual-studio/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

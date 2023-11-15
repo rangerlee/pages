@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>FISCOBCOS~自建CA及实现认证 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="最近在调试区块链，开始调研了很多区块链平台，包括百度京东的，最终还是觉得微众银行的FISCO BCOS最好用。至于各个平台的差异，大家可自行百度对比。顺便说一句，FISCO BCOS(以下称FB)的社区还不错，官方支持nice！
+关于FISCO BCOS自建区块链，基本比较合适的方式是联盟链。因为使用公链存着信息泄露，私链又没有信用背书，因此诞生了在有限范围内使用的区块链架构，即联盟链。
+联盟链是">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="FISCOBCOS~自建CA及实现认证 | xilixili.net">
+    <meta name="twitter:description" content="最近在调试区块链，开始调研了很多区块链平台，包括百度京东的，最终还是觉得微众银行的FISCO BCOS最好用。至于各个平台的差异，大家可自行百度对比。顺便说一句，FISCO BCOS(以下称FB)的社区还不错，官方支持nice！
+关于FISCO BCOS自建区块链，基本比较合适的方式是联盟链。因为使用公链存着信息泄露，私链又没有信用背书，因此诞生了在有限范围内使用的区块链架构，即联盟链。
+联盟链是">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="FISCOBCOS~自建CA及实现认证 | xilixili.net">
+    <meta property="og:description" content="最近在调试区块链，开始调研了很多区块链平台，包括百度京东的，最终还是觉得微众银行的FISCO BCOS最好用。至于各个平台的差异，大家可自行百度对比。顺便说一句，FISCO BCOS(以下称FB)的社区还不错，官方支持nice！
+关于FISCO BCOS自建区块链，基本比较合适的方式是联盟链。因为使用公链存着信息泄露，私链又没有信用背书，因此诞生了在有限范围内使用的区块链架构，即联盟链。
+联盟链是">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2020/04/27/blockchain-fisco-bcos-ca/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2020-04-27T13:55:00.000Z" class="post-list__meta--date date">2020-04-27</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">FISCOBCOS~自建CA及实现认证</h1>
+  </header>
+
+  <section class="post">
+    <p>最近在调试区块链，开始调研了很多区块链平台，包括百度京东的，最终还是觉得微众银行的FISCO BCOS最好用。至于各个平台的差异，大家可自行百度对比。顺便说一句，FISCO BCOS(以下称FB)的社区还不错，官方支持nice！</p>
+<h3 id="关于FISCO-BCOS"><a href="#关于FISCO-BCOS" class="headerlink" title="关于FISCO BCOS"></a>关于FISCO BCOS</h3><p>自建区块链，基本比较合适的方式是联盟链。因为使用公链存着信息泄露，私链又没有信用背书，因此诞生了在有限范围内使用的区块链架构，即联盟链。</p>
+<p>联盟链是设置了准入规则的区块链，而FB在此处是使用了证书认证的模式进行的验证，因此在搭建区块链之前，首先要明确角色，搭建原始的CA认证体系，对准入的伙伴进行证书认证。</p>
+<blockquote>
+<p>官方部署有一键部署方式，可作为快速体验的方式，但不适合真实环境部署。</p>
+</blockquote>
+<h3 id="本地自建CA"><a href="#本地自建CA" class="headerlink" title="本地自建CA"></a>本地自建CA</h3><p>联盟链是多个机构组成的区块链，既然联盟肯定要有一个具体的角色充当CA管理者，至于如何管理，由联盟的组织进行商讨决定。CA认证等涉及到密码学相关知识，必须要使用相应的工具，一般使用标准的OpenSSL即可，在Linux等平台上该工具为标配，建议所有操作均在Linux平台上进行。</p>
+<ul>
+<li><p>为CA创建私钥</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">openssl genrsa -out ca.key 2048</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用CA的私钥进行自认证签名</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">openssl req -new -x509 -days 36500 -subj <span class="string">"/CN=CA/O=fisco-bcos/OU=chain"</span> -key ca.key -out ca.crt</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>操作完成之后，会生成CA的证书文件，上面的命令中有些参数根据实际进行协商，比如</p>
+<ul>
+<li>O 为联盟链组织名称</li>
+<li>OU 为联盟链单元，比如设置为角色值</li>
+<li>CN 为组织名称，如各个机构的名称</li>
+</ul>
+<h3 id="签名下发联盟角色证书"><a href="#签名下发联盟角色证书" class="headerlink" title="签名下发联盟角色证书"></a>签名下发联盟角色证书</h3><p>当获取到各个组织角色提交过来的证书请求文件之后，CA便可以对该请求文件进行正式的签名生成组织的证书。</p>
+<p>其方法如下，如联盟角色提交的证书请求文件为 <code>agency.csr</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">openssl x509 -req -days 3650 -sha256 -CA ca.crt -CAkey ca.key -CAcreateserial -<span class="keyword">in</span> agency.csr -out agency.crt -extensions v4_req -extfile cert.cnf</span><br></pre></td></tr></table></figure>
+<p>其中 <code>-days</code> 参数为认证期限，超过该期限需要续签。</p>
+<p>然后将生成的 <code>agency.crt</code> 和 <code>ca.crt</code> 下发给该组织即可。</p>
+<h3 id="联盟角色生成证书"><a href="#联盟角色生成证书" class="headerlink" title="联盟角色生成证书"></a>联盟角色生成证书</h3><p>各个联盟组织成员需要接入联盟链区块链，那么首先就必须在联盟获得认证证书，使用证书方可部署接入区块链。上面已经演示了如何进行CA认证，但是各个组织的如何操作呢</p>
+<ul>
+<li><p>首先组织需要为自己创建私钥</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">openssl genrsa -out ca.key 2048</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>然后使用私钥生成证书请求文件</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">openssl req -new -sha256 -subj <span class="string">"/CN=baoxun/O=fisco-bcos/OU=agency"</span> -key agency.key -config cert.cnf -out agency.csr</span><br></pre></td></tr></table></figure>
+<p>同样的，建议证书内容协商统一，另外 cert.cnf 文件可从CA处获取，以保持统一。</p>
+</li>
+<li><p>执行完上面的命令后，会生成证书请求文件 agency.csr，将该文件发给CA，CA签名认证后会下发 agency.crt 和 ca.crt 证书。</p>
+</li>
+</ul>
+<h3 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h3><p>上面使用的 <code>cert.cnf</code> 模板如下</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[ca]</span></span><br><span class="line"><span class="attr">default_ca</span>=default_ca</span><br><span class="line"><span class="section">[default_ca]</span></span><br><span class="line"><span class="attr">default_days</span> = <span class="number">365</span></span><br><span class="line"><span class="attr">default_md</span> = sha256</span><br><span class="line"></span><br><span class="line"><span class="section">[req]</span></span><br><span class="line"><span class="attr">distinguished_name</span> = req_distinguished_name</span><br><span class="line"><span class="attr">req_extensions</span> = v3_req</span><br><span class="line"><span class="section">[req_distinguished_name]</span></span><br><span class="line"><span class="attr">countryName</span> = CN</span><br><span class="line"><span class="attr">countryName_default</span> = CN</span><br><span class="line"><span class="attr">stateOrProvinceName</span> = State or Province Name (full name)</span><br><span class="line"><span class="attr">stateOrProvinceName_default</span> =GuangDong</span><br><span class="line"><span class="attr">localityName</span> = Locality Name (eg, city)</span><br><span class="line"><span class="attr">localityName_default</span> = ShenZhen</span><br><span class="line"><span class="attr">organizationalUnitName</span> = Organizational Unit Name (eg, section)</span><br><span class="line"><span class="attr">organizationalUnitName_default</span> = fisco-bcos</span><br><span class="line"><span class="attr">commonName</span> =  Organizational  commonName (eg, fisco-bcos)</span><br><span class="line"><span class="attr">commonName_default</span> = fisco-bcos</span><br><span class="line"><span class="attr">commonName_max</span> = <span class="number">64</span></span><br><span class="line"></span><br><span class="line"><span class="section">[ v3_req ]</span></span><br><span class="line"><span class="attr">basicConstraints</span> = CA:<span class="literal">FALSE</span></span><br><span class="line"><span class="attr">keyUsage</span> = nonRepudiation, digitalSignature, keyEncipherment</span><br><span class="line"></span><br><span class="line"><span class="section">[ v4_req ]</span></span><br><span class="line"><span class="attr">basicConstraints</span> = CA:<span class="literal">TRUE</span></span><br></pre></td></tr></table></figure>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2020/04/30/blockchain-fisco-bcos-deploy/" title="FISCOBCOS~联盟链部署">FISCOBCOS~联盟链部署</a></h2>
+                <p class="excerpt">
+                
+                续前文，开始进行区块链部署。
+部署前准备首先清楚联盟链，是需要多家机构组成联盟，因此在部署上稍微有区别。其中 FISCO BCOS 支持多群组概念，也就是意思说，多个组织组成多个联盟，而且联盟中可以允许共同的组织节点。
+FISCO BCOS 部署需要 Linux 平台，建议使用 CentOS 7 平
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2020-04-30T06:10:00.000Z" class="post-list__meta--date date">2020-04-30</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2020/04/30/blockchain-fisco-bcos-deploy/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2020/02/13/python-disable-pip-install-user-site-package/" title="禁用PIP安装到用户目录">禁用PIP安装到用户目录</a></h2>
+                <p class="excerpt">
+                
+                当前使用的 CentOS 7 系统上， 在某些脚本中自动安装一些软件竟然安装到root的用户的目录下了，其他用户根本用不了，因此针对该现象进行了分析。
+问题基本分析正常情况下软件包是安装到系统目录下的，也就是安装目录下的  site-packages 目录，但是不知道为啥会安装到用户目录，不管什么情
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2020-02-13T05:48:00.000Z" class="post-list__meta--date date">2020-02-13</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2020/02/13/python-disable-pip-install-user-site-package/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

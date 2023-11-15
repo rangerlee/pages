@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>精确控制海康摄像头PTZ | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="项目中需要定时抓取摄像头不同角度的视频图像，也就是要精确控制海康摄像头PTZ旋转指定的角度，比如像我们的需求应该是90°，旋转完成之后刷屏，然后继续旋转。这种需求第一个想到的就是控制预置点，这个也是一个非常不错的方法，因为可以对真实情况进行调整，但是由于摄像头数据太大，一个个调整不太现实。
+PTZ旋转实现海康的PTZ控制比较简单， 但是要精确控制PTZ到指定的位置，好像没那么容易。查看海康的API">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="精确控制海康摄像头PTZ | xilixili.net">
+    <meta name="twitter:description" content="项目中需要定时抓取摄像头不同角度的视频图像，也就是要精确控制海康摄像头PTZ旋转指定的角度，比如像我们的需求应该是90°，旋转完成之后刷屏，然后继续旋转。这种需求第一个想到的就是控制预置点，这个也是一个非常不错的方法，因为可以对真实情况进行调整，但是由于摄像头数据太大，一个个调整不太现实。
+PTZ旋转实现海康的PTZ控制比较简单， 但是要精确控制PTZ到指定的位置，好像没那么容易。查看海康的API">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="精确控制海康摄像头PTZ | xilixili.net">
+    <meta property="og:description" content="项目中需要定时抓取摄像头不同角度的视频图像，也就是要精确控制海康摄像头PTZ旋转指定的角度，比如像我们的需求应该是90°，旋转完成之后刷屏，然后继续旋转。这种需求第一个想到的就是控制预置点，这个也是一个非常不错的方法，因为可以对真实情况进行调整，但是由于摄像头数据太大，一个个调整不太现实。
+PTZ旋转实现海康的PTZ控制比较简单， 但是要精确控制PTZ到指定的位置，好像没那么容易。查看海康的API">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2020/05/12/hik-camera-ptz-rotation/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2020-05-12T09:38:00.000Z" class="post-list__meta--date date">2020-05-12</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">精确控制海康摄像头PTZ</h1>
+  </header>
+
+  <section class="post">
+    <p>项目中需要定时抓取摄像头不同角度的视频图像，也就是要精确控制海康摄像头PTZ旋转指定的角度，比如像我们的需求应该是90°，旋转完成之后刷屏，然后继续旋转。这种需求第一个想到的就是控制预置点，这个也是一个非常不错的方法，因为可以对真实情况进行调整，但是由于摄像头数据太大，一个个调整不太现实。</p>
+<h3 id="PTZ旋转实现"><a href="#PTZ旋转实现" class="headerlink" title="PTZ旋转实现"></a>PTZ旋转实现</h3><p>海康的PTZ控制比较简单， 但是要精确控制PTZ到指定的位置，好像没那么容易。查看海康的API文档可以获得另外一种思路，既然要精确控制，我们只需要提供精确的位置给API即可。那么接下来只需要获取到当前位置，然后为水平数值增加90°的数值就可用计算出目标位置的值。</p>
+<p>获取当前位置使用 <code>NET_DVR_GetDVRConfig</code> 即可，其中使用参数 <code>NET_DVR_GET_PTZPOS</code>，获取结构体如下</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">struct&#123;  </span><br><span class="line">    WORD     wAction;</span><br><span class="line">    WORD     wPanPos;</span><br><span class="line">    WORD     wTiltPos;</span><br><span class="line">    WORD     wZoomPos;</span><br><span class="line">&#125;NET_DVR_PTZPOS, *LPNET_DVR_PTZPOS;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><code>wAction</code>  操作类型，仅在设置时有效。</p>
+<ul>
+<li>1-定位PTZ参数，2-定位P参数，3-定位T参数，4-定位Z参数，5-定位PT参数  </li>
+</ul>
+</li>
+<li><p><code>wPanPos</code>  P参数（水平参数）  </p>
+</li>
+<li><p><code>wTiltPos</code>  T参数（垂直参数)</p>
+</li>
+<li><p><code>wZoomPos</code>  Z参数（变倍参数） </p>
+</li>
+</ul>
+<blockquote>
+<p>实际显示的PTZ值是获取到的十六进制值的十分之一，如获取的水平参数P的值是0x1750，实际显示的P值为175度；获取到的垂直参数T的值是0x0789，实际显示的T值为78.9度；获取到的变倍参数Z的值是0x1100，实际显示的Z值为110倍。</p>
+</blockquote>
+<p>获取成功之后，就可以通过接口设置真实的值了，当然首先要加上我们需要旋转度数并计算。设置参数使用 <code>NET_DVR_SetDVRConfig</code> 的 <code>NET_DVR_SET_PTZPOS</code> 参数设置即可，一般需要2秒左右旋转到位，可以等待2秒或者实时获取当前位置进行对比是否旋转到位。</p>
+<p>然后就可以抓屏了。</p>
+<h3 id="参数值计算方法"><a href="#参数值计算方法" class="headerlink" title="参数值计算方法"></a>参数值计算方法</h3><p>因为涉及到数据转换，此处共享数值转换代码接口</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">DWORD HexToDec(DWORD wHex) &#123;</span><br><span class="line">	<span class="keyword">return</span> (wHex / <span class="number">4096</span>) * <span class="number">1000</span> + ((wHex % <span class="number">4096</span>) / <span class="number">256</span>) * <span class="number">100</span> + </span><br><span class="line">	        ((wHex % <span class="number">256</span>) / <span class="number">16</span>) * <span class="number">10</span> + (wHex % <span class="number">16</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">DWORD DecToHex(DWORD wDec) &#123;</span><br><span class="line">	<span class="keyword">return</span> (wDec / <span class="number">1000</span>) * <span class="number">4096</span> + (wDec / <span class="number">100</span> % <span class="number">10</span>) * <span class="number">256</span> + </span><br><span class="line">	        (wDec / <span class="number">10</span> % <span class="number">10</span>) * <span class="number">16</span> + wDec % <span class="number">10</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>比如我旋转90°的方法如下，注意取余，毕竟360°就归零了。</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">DWORD dwRet = <span class="number">0</span>;</span><br><span class="line">NET_DVR_PTZPOS pos;</span><br><span class="line">NET_DVR_GetDVRConfig(handle, NET_DVR_GET_PTZPOS, channel, &amp;pos, sizeof(NET_DVR_PTZPOS), &amp;dwRet);</span><br><span class="line">	</span><br><span class="line">int p = HexToDec(pos.wPanPos);</span><br><span class="line">int p90 = DecToHex((p + <span class="number">900</span>) % <span class="number">3600</span>); //+<span class="number">90</span></span><br><span class="line"></span><br><span class="line">pos.wPanPos = p;</span><br><span class="line">...</span><br><span class="line">NET_DVR_SetDVRConfig(handle, NET_DVR_SET_PTZPOS, channel, &amp;pos, sizeof(NET_DVR_PTZPOS));</span><br></pre></td></tr></table></figure>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2020/05/14/blockchain-fisco-bcos-dynamic-group/" title="FISCOBCOS~2.4动态群组试用">FISCOBCOS~2.4动态群组试用</a></h2>
+                <p class="excerpt">
+                
+                续前文，近期 FISCO BCOS 2.4  版本发布了，最核心的特性是动态群组管理，这个功能免去了手动部署新群组的过程，极大的方便了群组管理。
+新版本部署FISCO BCOS 2.4 版本部署前一版本基本没有区别，注意 2.3 版本部署的时候配置文件稍有变化（依然兼容以前配置）。按照以前的部署方法
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2020-05-14T02:50:00.000Z" class="post-list__meta--date date">2020-05-14</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2020/05/14/blockchain-fisco-bcos-dynamic-group/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2020/04/30/blockchain-fisco-bcos-deploy/" title="FISCOBCOS~联盟链部署">FISCOBCOS~联盟链部署</a></h2>
+                <p class="excerpt">
+                
+                续前文，开始进行区块链部署。
+部署前准备首先清楚联盟链，是需要多家机构组成联盟，因此在部署上稍微有区别。其中 FISCO BCOS 支持多群组概念，也就是意思说，多个组织组成多个联盟，而且联盟中可以允许共同的组织节点。
+FISCO BCOS 部署需要 Linux 平台，建议使用 CentOS 7 平
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2020-04-30T06:10:00.000Z" class="post-list__meta--date date">2020-04-30</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2020/04/30/blockchain-fisco-bcos-deploy/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

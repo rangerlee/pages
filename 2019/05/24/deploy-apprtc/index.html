@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>部署AppRTC服务 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="AppRTC是WebRTC视频通话的服务程序，一般可以将其作为参考实现，搭建AppRTC服务受限于很多条件，并不是太容易。在参考了官方操作和大量的博客之后，根据自己操作实践排除了很多网络博客上的错误方法，终于部署成功了一套环境。测试环境为阿里云的CentOS 7服务器，带公网IP和域名。
+部署前的必要条件部署前，首先要明确的是必要的依赖环境，必须满足以下需求：
+
+公网服务器，如果非公网就只能在局域">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="部署AppRTC服务 | xilixili.net">
+    <meta name="twitter:description" content="AppRTC是WebRTC视频通话的服务程序，一般可以将其作为参考实现，搭建AppRTC服务受限于很多条件，并不是太容易。在参考了官方操作和大量的博客之后，根据自己操作实践排除了很多网络博客上的错误方法，终于部署成功了一套环境。测试环境为阿里云的CentOS 7服务器，带公网IP和域名。
+部署前的必要条件部署前，首先要明确的是必要的依赖环境，必须满足以下需求：
+
+公网服务器，如果非公网就只能在局域">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="部署AppRTC服务 | xilixili.net">
+    <meta property="og:description" content="AppRTC是WebRTC视频通话的服务程序，一般可以将其作为参考实现，搭建AppRTC服务受限于很多条件，并不是太容易。在参考了官方操作和大量的博客之后，根据自己操作实践排除了很多网络博客上的错误方法，终于部署成功了一套环境。测试环境为阿里云的CentOS 7服务器，带公网IP和域名。
+部署前的必要条件部署前，首先要明确的是必要的依赖环境，必须满足以下需求：
+
+公网服务器，如果非公网就只能在局域">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2019/05/24/deploy-apprtc/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2019-05-24T01:01:00.000Z" class="post-list__meta--date date">2019-05-24</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">部署AppRTC服务</h1>
+  </header>
+
+  <section class="post">
+    <p>AppRTC是WebRTC视频通话的服务程序，一般可以将其作为参考实现，搭建AppRTC服务受限于很多条件，并不是太容易。在参考了官方操作和大量的博客之后，根据自己操作实践排除了很多网络博客上的错误方法，终于部署成功了一套环境。测试环境为阿里云的CentOS 7服务器，带公网IP和域名。</p>
+<h3 id="部署前的必要条件"><a href="#部署前的必要条件" class="headerlink" title="部署前的必要条件"></a>部署前的必要条件</h3><p>部署前，首先要明确的是必要的依赖环境，必须满足以下需求：</p>
+<ul>
+<li>公网服务器，如果非公网就只能在局域网玩玩了，此处暂不讨论局域网</li>
+<li>SSL证书，因为WebRTC必须在HTTPS环境下使用，因此通信WebSocket也必须支持</li>
+</ul>
+<p>如果没有证书，但是有域名的话，可以去申请免费的证书，具体百度 <a href="https://letsencrypt.org" target="_blank" rel="noopener">Let’s Encrypt</a>。本博客使用了Caddy服务器，此服务器可自行自动申请其证书，其证书存放在<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">/var/lib/caddy/acme/acme-v02.api.letsencrypt.org/sites/</span><br></pre></td></tr></table></figure></p>
+<p>下，按站点域名存放，假设本次部署使用的 <em>example.com</em> 域名，对应 <em>8.8.8.8</em>，其证书存放在<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">/var/lib/caddy/acme/acme-v02.api.letsencrypt.org/sites/example.com/</span><br></pre></td></tr></table></figure></p>
+<p>下，包含公钥文件 <code>example.com.cert</code> 和私钥文件 <code>example.com.key</code> 文件。</p>
+<blockquote>
+<p>上面的 example.com 和 8.8.8.8 是域名和对应的IP，此处为举例，抹去了我的真实的地址。</p>
+</blockquote>
+<h3 id="安装编译环境"><a href="#安装编译环境" class="headerlink" title="安装编译环境"></a>安装编译环境</h3><p>除了必要条件外，编译安装相关源码也需要一些编译环境，已知目前最终部署的程序为</p>
+<ul>
+<li><strong>apprtc</strong>  GAE的Python和NodeJS开发的房间服务器</li>
+<li><strong>collider</strong>  golang开发的信令服务器</li>
+<li><strong>coturn</strong>  c语言开发的stun/turn服务器</li>
+</ul>
+<h4 id="系统基础环境安装"><a href="#系统基础环境安装" class="headerlink" title="系统基础环境安装"></a>系统基础环境安装</h4><p>因为上面的依赖以及后续使用发现，系统需要安装的依赖环境如下（已经安装了跳过）</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">yum install python   #要求2.7版本</span><br><span class="line">curl -sL https://rpm.nodesource.com/setup_10.x | bash - #安装比较高的10版本</span><br><span class="line">npm -g install grunt-cli #grunt工具</span><br><span class="line">yum install gcc-c++ make  #C/C++编译器等</span><br><span class="line">yum install golang #golang编译器</span><br><span class="line">yum install java-1.8.0-openjdk  #安装JDK，我选择了1.8版本</span><br><span class="line">yum install libevent-devel #编译coturn需要</span><br><span class="line">yum install git #可以下载Github源码</span><br><span class="line">yum install sqlite-devel #编译coturn需要</span><br></pre></td></tr></table></figure>
+<h4 id="GAE环境安装"><a href="#GAE环境安装" class="headerlink" title="GAE环境安装"></a>GAE环境安装</h4><p>准确的讲需要安装的是 <a href="https://cloud.google.com/appengine/downloads#Google_App_Engine_SDK_for_Python" target="_blank" rel="noopener">Google app engine SDK for Python</a>，但是因为众所周知的原因，我们并不能直接访问，但是我从其他地方获知了一个比较老的下载地址，可以离线安装，而且是可以下载的</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wget https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-188.0.1-linux-x86_64.tar.gz</span><br></pre></td></tr></table></figure>
+<p>虽然这个是Google Cloud SDK，但是我发现确实是可以用，并且可以更新，估计是现在进行了整合吧</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">tar xzvf google-cloud-sdk-188.0.1-linux-x86_64.tar.gz</span><br><span class="line">./google-cloud-sdk/bin/gcloud components update</span><br></pre></td></tr></table></figure>
+<p>这其中因为 AppRTC 是用GAE的Python开发的，依赖<code>Python 2.7</code>环境。据说现在支持了3.7版本了，因为不能上官网，不确定。</p>
+<h3 id="编译构建版本"><a href="#编译构建版本" class="headerlink" title="编译构建版本"></a>编译构建版本</h3><h4 id="编译coturn"><a href="#编译coturn" class="headerlink" title="编译coturn"></a>编译coturn</h4><p>因为coturn是必须依赖的组件，我们优先处理这个，这个软件并不在仓库中，其依赖的libevent的版本与仓库中的一致，并不需要单独编译，因此只需要下载编译这个软件即可</p>
+<p>因为这个软件中带了RPM的构建脚本，因此我这里打算进行RPM包的构建，首先安装RPM构建工具</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">yum install rpm-build</span><br></pre></td></tr></table></figure>
+<p>开始下载源码进行编译构建安装包</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wget https://github.com/coturn/coturn/archive/4.5.1.1.tar.gz</span><br><span class="line">mkdir -p ~/rpmbuild/SOURCES</span><br><span class="line">mv 4.5.1.1.tar.gz -p ~/rpmbuild/SOURCES/turnserver-4.5.1.1.tar.gz</span><br><span class="line">rpmbuild -ta ~/rpmbuild/SOURCES/turnserver-4.5.1.1.tar.gz</span><br></pre></td></tr></table></figure>
+<p>等构建成功后，会在 <code>~/rpmbuild/RPMS/x86_64</code> 目录下发现好几个安装包，只需要安装 turnserver 即可</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">rpm -ivh ~/rpmbuild/RPMS/x86_64/turnserver-4.5.1.1-0.el7.x86_64.rpm</span><br></pre></td></tr></table></figure>
+<p>如果怕编译麻烦的，可在本站下载编译好的包进行安装</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">rpm -ivh https://cdn.xilixili.net/linux/turnserver-4.5.1.1-0.el7.x86_64.rpm</span><br></pre></td></tr></table></figure>
+<p>至于配置，我们后面再讲。</p>
+<h4 id="编译collider"><a href="#编译collider" class="headerlink" title="编译collider"></a>编译collider</h4><p>Collider是Go开发的服务，依赖websocket，依然不能访问其地址。因此只能下载镜像安装，此处以将Go的环境设置的当前用户目录下的go目录为例说明。另外Collider的代码在AppRTC之中，因此此处就直接下载AppRTC的源码了，后续不需要下载了。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">export GOPATH=$HOME/go</span><br><span class="line">mkdir -p ~/go/src</span><br><span class="line">git clone https://github.com/apprtc/apprtc</span><br><span class="line">ln -s `pwd`/apprtc/src/collider/collider $GOPATH/src</span><br><span class="line">ln -s `pwd`/apprtc/src/collider/collidermain $GOPATH/src</span><br><span class="line">ln -s `pwd`/apprtc/src/collider/collidertest $GOPATH/src</span><br><span class="line">mkdir -p $GOPATH/src/golang.org/x</span><br><span class="line">cd $GOPATH/src/golang.org/x</span><br><span class="line">git clone https://github.com/golang/net.git</span><br><span class="line">go get collidermain</span><br><span class="line">go install collidermain</span><br></pre></td></tr></table></figure>
+<p>至此，程序编译好并且安装到了 <code>$GOPATH/bin</code> 下面。</p>
+<h3 id="配置启动服务"><a href="#配置启动服务" class="headerlink" title="配置启动服务"></a>配置启动服务</h3><p>注意，下面所有提供网络的服务，要注意防火墙配置，特别是UDP端口，测试平台关闭了防火墙。</p>
+<h4 id="配置启动coturn"><a href="#配置启动coturn" class="headerlink" title="配置启动coturn"></a>配置启动coturn</h4><p>首先需要生成签名证书</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdir /cert</span><br><span class="line">openssl req -x509 -newkey  rsa:2048 -keyout /cert/turn_server_pkey.pem -out /cert/turn_server_cert.pem -days 99999 -nodes</span><br></pre></td></tr></table></figure>
+<p>然后再生成用户，以 apprtc 为例</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">turnadmin -k -u apprtc -p apprtc</span><br></pre></td></tr></table></figure>
+<p>执行之后会生成一个key，记住这个key，马上要用到。编辑 <code>/etc/turnserver/turnserver.conf</code> 文件，这个文件大部分的功能都默认是注释的，因此基本找到出处进行修改，大概如下</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="attr">listening-ip</span>=<span class="number">8.8</span>.<span class="number">8.8</span></span><br><span class="line"><span class="attr">listening-port</span>=<span class="number">3478</span></span><br><span class="line"><span class="attr">relay-ip</span>=<span class="number">8.8</span>.<span class="number">8.8</span></span><br><span class="line"><span class="attr">tls-listening-port</span>=<span class="number">5349</span></span><br><span class="line"><span class="attr">external-ip</span>=<span class="number">8.8</span>.<span class="number">8.8</span></span><br><span class="line">Verbose</span><br><span class="line">fingerprint</span><br><span class="line">lt-cred-mech</span><br><span class="line">use-auth-secret</span><br><span class="line"><span class="attr">static-auth-secret</span>=apprtc</span><br><span class="line"><span class="attr">user</span>=apprtc:<span class="number">0</span>x949534a397bcf2e88470c86ad3749d9c（替换成上面的key）</span><br><span class="line"><span class="attr">user</span>=apprtc:apprtc</span><br><span class="line"><span class="attr">cert</span>=/cert/turn_server_cert.pem</span><br><span class="line"><span class="attr">pkey</span>=/cert/turn_server_pkey.pem</span><br></pre></td></tr></table></figure>
+<p>保存之后，启动服务</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">systemctl enable turnserver</span><br><span class="line">systemctl start turnserver</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意，很多教程说要配置 TRUN REST API，即自己需要实现个REST API服务，让AppRTC进行查询获取，通过分析和测试，发现第一这个服务必须是POST请求的，具体格式参考标准，第二是并不需要这个API也能正常使用，因此请不要折腾REST API了。</p>
+</blockquote>
+<h4 id="启动Collider服务"><a href="#启动Collider服务" class="headerlink" title="启动Collider服务"></a>启动Collider服务</h4><p>暂时以测试为主，后续可为此程序编写添加个systemd服务。</p>
+<p>此服务需要对外提供WSS服务，因此需要证书，将之前的域名证书拷贝过去即可</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd /var/lib/caddy/acme/acme-v02.api.letsencrypt.org/sites/example.com/</span><br><span class="line">cp example.com.cert cert.pem</span><br><span class="line">cp example.com.key key.pem</span><br><span class="line">chmod 755 /cert/*</span><br></pre></td></tr></table></figure>
+<p>然后通过下面的命令启动服务</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">./collidermain -port=8089 -tls=true -room-server="http://example.com:8080"</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意，我们设置的这个服务的端口是8089端口，AppRTC默认的HTTP端口是8080，HTTPS端口是8081，但是实际测试中发现AppRTC在使用HTTPS的时，会经常SSL异常，未查明原因。</p>
+</blockquote>
+<h4 id="配置启动AppRTC"><a href="#配置启动AppRTC" class="headerlink" title="配置启动AppRTC"></a>配置启动AppRTC</h4><p>配置AppRTC的配置文件 <code>~/apprtc/src/app_engine/constants.py</code> 文件如下(仅列出修改项)</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ICE_SERVER_OVERRIDE  = [</span><br><span class="line">   &#123;</span><br><span class="line">     <span class="string">"urls"</span>: [</span><br><span class="line">       <span class="string">"turn:8.8.8.8:3478?transport=udp"</span>,</span><br><span class="line">       <span class="string">"turn:8.8.8.8:3478?transport=tcp"</span></span><br><span class="line">     ],</span><br><span class="line">     <span class="string">"username"</span>: <span class="string">"apprtc"</span>,</span><br><span class="line">     <span class="string">"credential"</span>: <span class="string">"0x949534a397bcf2e88470c86ad3749d9c"</span> <span class="comment">#替换成上面的key</span></span><br><span class="line">   &#125;,</span><br><span class="line">   &#123;</span><br><span class="line">     <span class="string">"urls"</span>: [</span><br><span class="line">       <span class="string">"stun:8.8.8.8:3478"</span></span><br><span class="line">     ]</span><br><span class="line">   &#125;</span><br><span class="line"> ]</span><br><span class="line"></span><br><span class="line">ICE_SERVER_BASE_URL = <span class="string">''</span></span><br><span class="line">ICE_SERVER_URL_TEMPLATE = <span class="string">''</span></span><br><span class="line">ICE_SERVER_API_KEY = os.environ.get(<span class="string">'ICE_SERVER_API_KEY'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Dictionary keys in the collider instance info constant.</span></span><br><span class="line">WSS_INSTANCE_HOST_KEY = <span class="string">'example.com:8089'</span></span><br><span class="line">WSS_INSTANCE_NAME_KEY = <span class="string">'vm_name'</span></span><br><span class="line">WSS_INSTANCE_ZONE_KEY = <span class="string">'zone'</span></span><br><span class="line">WSS_INSTANCES = [&#123;</span><br><span class="line">    WSS_INSTANCE_HOST_KEY: <span class="string">'example.com:8089'</span>,</span><br><span class="line">    WSS_INSTANCE_NAME_KEY: <span class="string">'wsserver-std'</span>,</span><br><span class="line">    WSS_INSTANCE_ZONE_KEY: <span class="string">'us-central1-a'</span></span><br><span class="line">&#125;]</span><br></pre></td></tr></table></figure>
+<p>上面的配置已经可以保证使用了，且在命令行指定SSL证书后，就能提供服务了，但是由于之前提到了SSL异常问题，即使在切换到HTTP之后并使用nginx代理后，出现了URL不匹配的错误，因此还不能直接使用，为了解决上面的问题，我修改了代码，首先配置 <code>~/apprtc/src/app_engine/constants.py</code> 修改</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">REDIRECT_URL = <span class="string">'https://example.com:9090'</span></span><br></pre></td></tr></table></figure>
+<p>这里假设nginx代理的地址是 <code>example.com:9090</code> ，然后修改该目录下的 <code>apprtc.py</code> 文件，大概在300行左右，修改其中room_link的赋值为</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">room_link = constants.REDIRECT_URL + <span class="string">'/r/'</span> + room_id</span><br></pre></td></tr></table></figure>
+<p>然后编译代码并运行代码，命令如下</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd ~/apprtc</span><br><span class="line">grunt build</span><br><span class="line">cd ~</span><br><span class="line">google-cloud-sdk/bin/dev_appserver.py --host example.com ~/apprtc/out/app_engine/ --dev_appserver_log_level debug</span><br></pre></td></tr></table></figure>
+<p>会看到输出显示</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Starting module &quot;default&quot; running at: http://example.com:8080</span><br></pre></td></tr></table></figure>
+<p>也就是意味着服务提供的地址是 <a href="http://example.com:8080" target="_blank" rel="noopener">http://example.com:8080</a></p>
+<h4 id="安装配置nginx代理"><a href="#安装配置nginx代理" class="headerlink" title="安装配置nginx代理"></a>安装配置nginx代理</h4><p>如上，使用nginx代理https请求，端口为 9090，直接yum安装</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">yum install nginx</span><br></pre></td></tr></table></figure>
+<p>配置 <code>/etc/nginx/nginx.conf</code> 文件</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">#server &#123;</span><br><span class="line">#    listen       80 default_server;</span><br><span class="line">#    listen       [::]:80 default_server;</span><br><span class="line">#    server_name  _;</span><br><span class="line">#    root         /usr/share/nginx/html;</span><br><span class="line"></span><br><span class="line">#    # Load configuration files for the default server block.</span><br><span class="line">#    include /etc/nginx/default.d/*.conf;</span><br><span class="line"></span><br><span class="line">#    location / &#123;</span><br><span class="line">#    &#125;</span><br><span class="line"></span><br><span class="line">#    error_page 404 /404.html;</span><br><span class="line">#        location = /40x.html &#123;</span><br><span class="line">#    &#125;</span><br><span class="line"></span><br><span class="line">#    error_page 500 502 503 504 /50x.html;</span><br><span class="line">#        location = /50x.html &#123;</span><br><span class="line">#    &#125;</span><br><span class="line">#&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen 9090 ssl default_server;</span><br><span class="line">    server_name example.com;</span><br><span class="line">    ssl_certificate "/cert/cert.pem";</span><br><span class="line">    ssl_certificate_key "/cert/key.pem";</span><br><span class="line">    location /&#123;</span><br><span class="line">        proxy_pass http://example.com:8080;</span><br><span class="line">        proxy_set_header Host $host;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>配置默认注释了原来默认配置的80端口的配置，添加了一个9090的代理服务，配置之后启动服务</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">systemctl enable nginx</span><br><span class="line">systemctl start nginx</span><br></pre></td></tr></table></figure>
+<h3 id="体验测试"><a href="#体验测试" class="headerlink" title="体验测试"></a>体验测试</h3><p>通过 <a href="https://example.com:9090" target="_blank" rel="noopener">https://example.com:9090</a> 访问AppRTC服务</p>
+<p>再找另外一个用户同时打开浏览器，输入相同的号码并<strong>JOIN</strong>，即可实现视频通话。</p>
+<p>另外在目录下的<code>~/apprtc/src/web_app/html/params.html</code>网页中自定义了一些配置参数，可以在URL中自定义WebRTC的参数，比如打开高清摄像头、关闭音频等等，具体参考这个页面即可。</p>
+<p>采用默认配置测试后，个人使用感觉效果如下</p>
+<ul>
+<li>语音很清晰无噪音，两个用户使用手机外放离的很近的时候，可能是回声消除的原因会出噪音</li>
+<li>视频感觉效果一般般，带宽占用也不高，毕竟是P2P模式，但并不是特别清晰</li>
+<li>整体感觉和微信视频差不多，可能稍好一点</li>
+<li>并没有找到测试turn的环境，这个环境下的效果不清楚</li>
+</ul>
+<p>手机微信也可以的哦。</p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2019/06/18/android-studio-build-jni/" title="AndroidStudio编译JNI">AndroidStudio编译JNI</a></h2>
+                <p class="excerpt">
+                
+                以前使用其他IDE做JNI的时候还比较麻烦，特别是JNI和Java的操作是分开的，现在使用Android Studio做特别方便，还可以直接打包成 aar 格式对外提供。因为项目是对外提供开发包方式的，并不是自身App模式，因此打算直接创建一个简单的Android工程作为调用测试，再单独添加模块作为
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2019-06-18T07:03:00.000Z" class="post-list__meta--date date">2019-06-18</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/06/18/android-studio-build-jni/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2019/05/06/tensorflow-errors/" title="Tensorflow常见错误">Tensorflow常见错误</a></h2>
+                <p class="excerpt">
+                
+                最近重新安装了Tensorflow的训练环境，并不是一帆风顺，比起PyTorch的安装，Tensorflow还是问题多多，比如字符编码、PyCocoTools等，在此记录下安装和使用过程中的常见问题，但并不对安装过程进行详细记录
+无法加载Tensorflow在使用GPU版本情况下，目前我直接pip安
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2019-05-06T05:45:00.000Z" class="post-list__meta--date date">2019-05-06</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/05/06/tensorflow-errors/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

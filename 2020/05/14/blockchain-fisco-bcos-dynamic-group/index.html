@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>FISCOBCOS~2.4动态群组试用 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="续前文，近期 FISCO BCOS 2.4  版本发布了，最核心的特性是动态群组管理，这个功能免去了手动部署新群组的过程，极大的方便了群组管理。
+新版本部署FISCO BCOS 2.4 版本部署前一版本基本没有区别，注意 2.3 版本部署的时候配置文件稍有变化（依然兼容以前配置）。按照以前的部署方法部署即可，新配置参考 2.3 的配置即可。
+动态创建群组这个版本虽然增加了动态创建群组的功能，但是">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="FISCOBCOS~2.4动态群组试用 | xilixili.net">
+    <meta name="twitter:description" content="续前文，近期 FISCO BCOS 2.4  版本发布了，最核心的特性是动态群组管理，这个功能免去了手动部署新群组的过程，极大的方便了群组管理。
+新版本部署FISCO BCOS 2.4 版本部署前一版本基本没有区别，注意 2.3 版本部署的时候配置文件稍有变化（依然兼容以前配置）。按照以前的部署方法部署即可，新配置参考 2.3 的配置即可。
+动态创建群组这个版本虽然增加了动态创建群组的功能，但是">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="FISCOBCOS~2.4动态群组试用 | xilixili.net">
+    <meta property="og:description" content="续前文，近期 FISCO BCOS 2.4  版本发布了，最核心的特性是动态群组管理，这个功能免去了手动部署新群组的过程，极大的方便了群组管理。
+新版本部署FISCO BCOS 2.4 版本部署前一版本基本没有区别，注意 2.3 版本部署的时候配置文件稍有变化（依然兼容以前配置）。按照以前的部署方法部署即可，新配置参考 2.3 的配置即可。
+动态创建群组这个版本虽然增加了动态创建群组的功能，但是">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2020/05/14/blockchain-fisco-bcos-dynamic-group/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2020-05-14T02:50:00.000Z" class="post-list__meta--date date">2020-05-14</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">FISCOBCOS~2.4动态群组试用</h1>
+  </header>
+
+  <section class="post">
+    <p>续前文，近期 <code>FISCO BCOS 2.4</code>  版本发布了，最核心的特性是动态群组管理，这个功能免去了手动部署新群组的过程，极大的方便了群组管理。</p>
+<h3 id="新版本部署"><a href="#新版本部署" class="headerlink" title="新版本部署"></a>新版本部署</h3><p><code>FISCO BCOS 2.4</code> 版本部署前一版本基本没有区别，注意 <code>2.3</code> 版本部署的时候配置文件稍有变化（依然兼容以前配置）。按照以前的部署方法部署即可，新配置参考 <code>2.3</code> 的配置即可。</p>
+<h3 id="动态创建群组"><a href="#动态创建群组" class="headerlink" title="动态创建群组"></a>动态创建群组</h3><p>这个版本虽然增加了动态创建群组的功能，但是 <code>console</code> 却没有增加这个命令，不知道以后会不会加，因此只能通过 <code>JSONRPC</code> 进行操作了。</p>
+<blockquote>
+<p>此处动态创建群组要求节点已经存在</p>
+</blockquote>
+<p>首先需要收集参与新群组的节点，也就是各个节点的 <code>nodeid</code> ，然后手动通过命令行接口调用 <code>JSONRPC</code> 接口。然后确定一个群组初始时间戳，至此可通过下面的命令行创建（节点ID为本地测试ID，群组ID为2，请自行根据实际情况修改）</p>
+<p>创建群组接口定义参数如下</p>
+<ul>
+<li><code>groupID</code> : 群组ID</li>
+<li><code>params</code> :  创世块参数，其字段如下：<ul>
+<li><code>timestamp</code> : 创世块时间戳</li>
+<li><code>sealers</code> : 共识节点列表，要求所有所列共识节点间存在有效的P2P连接</li>
+<li><code>enable_free_storage</code> : 可选，是否启用 <code>free storage</code> 模式</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -X POST --data <span class="string">'&#123;"jsonrpc":"2.0","method":"generateGroup","params":[2, \</span></span><br><span class="line"><span class="string">&#123;"timestamp":"1585214879000","sealers":[\</span></span><br><span class="line"><span class="string">"e10463554264447728df03384c9e145de0ae0dd760b4d45129180a6647c8d2ed647fb28ab8fece8257cf90c5a677d16042a1563f9e2e882c6aaf4fb62b55be77",\</span></span><br><span class="line"><span class="string">"c6ee55bee5e22248332a5858bae8d54563eb4f61252f8652ff200d088e291563f216238152c93e2f9424c54c0cf22bd1f75ba6a5bb711a725ce2168a9114439a",\</span></span><br><span class="line"><span class="string">"ed1f5c0f7d85bf82fbdc9e17a070a073ad7cb6ac5a1c947c487f18e34bfd873f56ba13b884cd681deaba08dff4e84a4134c2defc1390dbe4bb5a52feac12f900",\</span></span><br><span class="line"><span class="string">"6a4ac90e67724158007f66fa77d4d96180e64ad53f7085e0f67adaa9114a6dbd027fc2deb9a7c85660f7d64eb99ba7f9230cfadf69442c0011cfdd5b9702923e"\</span></span><br><span class="line"><span class="string">]&#125;],"id":1&#125;'</span> http://127.0.0.1:8545</span><br></pre></td></tr></table></figure>
+<p>请注意时间戳格式，执行完成之后只是创建了而已，还未启用该群组，启用命令如下</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -X POST --data <span class="string">'&#123;"jsonrpc":"2.0","method":"startGroup","params":[2],"id":1&#125;'</span> http://127.0.0.1:8545</span><br></pre></td></tr></table></figure>
+<p>至此该群组已经启动。通过下面的接口可以查询当前的状态，同样要针对每个节点去查</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -X POST --data <span class="string">'&#123;"jsonrpc":"2.0","method":"queryGroupStatus","params":[2],"id":1&#125;'</span> http://127.0.0.1:8545</span><br></pre></td></tr></table></figure>
+<h4 id="操作注意"><a href="#操作注意" class="headerlink" title="操作注意"></a>操作注意</h4><p>这里需要特别说明的是，官方文档上对此没有特别的描述，但事实上这些命令需要在每个节点上都执行，可以通过上面的状态查询接口去各个节点查询，会发现只有执行了命令的节点是正常的，其他节点均是类似 <code>INEXISTENT</code> 群组不存在的返回。</p>
+<h3 id="群组其他操作"><a href="#群组其他操作" class="headerlink" title="群组其他操作"></a>群组其他操作</h3><p>动态群组操作，不仅包含创建相关，也包含了删除停住等操作，具体见</p>
+<p><a href="https://fisco-bcos-documentation.readthedocs.io/zh_CN/latest/docs/api.html#generategroup" target="_blank" rel="noopener">https://fisco-bcos-documentation.readthedocs.io/zh_CN/latest/docs/api.html</a></p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2020/05/18/yuv420p-merge/" title="拼接YUV420P图像">拼接YUV420P图像</a></h2>
+                <p class="excerpt">
+                
+                最近需要实现视频的左右拼接，从而可以实现2路摄像头的同时显示，调研使用了几种实现方式进行了对比。
+ffmpeg方式谈到视频方面的处理，肯定首选 ffmpeg，想要实现上面的功能，其实 ffmpeg 就能实现，使用其 filter 就可以，大概思路是：
+
+使用  pad 扩展出另外一个图像的空间
+使用
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2020-05-18T08:31:00.000Z" class="post-list__meta--date date">2020-05-18</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2020/05/18/yuv420p-merge/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2020/05/12/hik-camera-ptz-rotation/" title="精确控制海康摄像头PTZ">精确控制海康摄像头PTZ</a></h2>
+                <p class="excerpt">
+                
+                项目中需要定时抓取摄像头不同角度的视频图像，也就是要精确控制海康摄像头PTZ旋转指定的角度，比如像我们的需求应该是90°，旋转完成之后刷屏，然后继续旋转。这种需求第一个想到的就是控制预置点，这个也是一个非常不错的方法，因为可以对真实情况进行调整，但是由于摄像头数据太大，一个个调整不太现实。
+PTZ旋
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2020-05-12T09:38:00.000Z" class="post-list__meta--date date">2020-05-12</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2020/05/12/hik-camera-ptz-rotation/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

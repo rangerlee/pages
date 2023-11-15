@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>浏览器迷之UA | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="不光是网页前台，网页后台经常也会出于统计等目的进行用户信息进行统计，而用户的信息一般只可能标记在浏览器的身份信息里面，也就是User-Agent，但是当你仔细的查看各个浏览器的UA(User-Agent)时候，你会惊奇的发现其如此的混乱，这要从浏览器的发展历史说起。
+浏览器UA起源在万维网兴起之后，逐渐出现了一些万维网服务，包括网页服务，但那个时候基本出于小范围内的沟通使用，并且基本都是命令行界面">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="浏览器迷之UA | xilixili.net">
+    <meta name="twitter:description" content="不光是网页前台，网页后台经常也会出于统计等目的进行用户信息进行统计，而用户的信息一般只可能标记在浏览器的身份信息里面，也就是User-Agent，但是当你仔细的查看各个浏览器的UA(User-Agent)时候，你会惊奇的发现其如此的混乱，这要从浏览器的发展历史说起。
+浏览器UA起源在万维网兴起之后，逐渐出现了一些万维网服务，包括网页服务，但那个时候基本出于小范围内的沟通使用，并且基本都是命令行界面">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="浏览器迷之UA | xilixili.net">
+    <meta property="og:description" content="不光是网页前台，网页后台经常也会出于统计等目的进行用户信息进行统计，而用户的信息一般只可能标记在浏览器的身份信息里面，也就是User-Agent，但是当你仔细的查看各个浏览器的UA(User-Agent)时候，你会惊奇的发现其如此的混乱，这要从浏览器的发展历史说起。
+浏览器UA起源在万维网兴起之后，逐渐出现了一些万维网服务，包括网页服务，但那个时候基本出于小范围内的沟通使用，并且基本都是命令行界面">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2019/04/18/about-user-agent-in-broswer/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2019-04-18T02:02:00.000Z" class="post-list__meta--date date">2019-04-18</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/闲言/">闲言</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">浏览器迷之UA</h1>
+  </header>
+
+  <section class="post">
+    <p>不光是网页前台，网页后台经常也会出于统计等目的进行用户信息进行统计，而用户的信息一般只可能标记在浏览器的身份信息里面，也就是User-Agent，但是当你仔细的查看各个浏览器的UA(User-Agent)时候，你会惊奇的发现其如此的混乱，这要从浏览器的发展历史说起。</p>
+<h3 id="浏览器UA起源"><a href="#浏览器UA起源" class="headerlink" title="浏览器UA起源"></a>浏览器UA起源</h3><p>在万维网兴起之后，逐渐出现了一些万维网服务，包括网页服务，但那个时候基本出于小范围内的沟通使用，并且基本都是命令行界面的方式，直到一个叫做Mosaic的浏览器的出现。</p>
+<p>NASA Mosaic 是互联网上第一个获得普遍使用，并且能够显示图片的网页浏览器，由伊利诺伊大学发布，这个浏览器的发布，点燃了互联网的热潮。这个浏览器自称 </p>
+<p><code>NCSA_Mosaic/2.0(Windows 3.1)</code></p>
+<p>后来核心人物马克·安德森和其他人成立了公司，并且后来改名为网景，合力开发了 Netscape Naviagtor 试图打破 Mosaic 的垄断地位，并且其浏览器自称 Mozilla 据说是 Mosaic Killa 的缩写，这个浏览器最大的特点是支持了网页的frame框架，因此很快变的非常流行，于是很多提供frame的网站为了支持2个浏览器，就开始探测 User-Agent 加以区分，对不同的浏览器返回不同的网页页面。</p>
+<p>后来微软不满于现状，开发了自己的浏览器Internet Explorer，寄希望打破网景的垄断，也就是现在大家所熟知的IE，IE同样支持框架，但是它不是Mozilla，因此并不能从网站那获取到带框架的页面。微软很着急，但是他并不想等所有网站去支持IE浏览器，然后他想了一个绝妙的办法，就是去伪装。既然网站是根据 Mozilla 来返回带框架页面的，那我就伪装成 Mozilla 就可以了啊，然后IE就变成了</p>
+<p> <code>Mozilla/1.22(compatible; MSIE 2.0; Windows95)</code> </p>
+<p>这下微软爽了。但是一切混乱的根源由此开始了。</p>
+<p>由于大家所熟知的微软捆绑销售IE，很快爆发了第一次浏览器大战，结果网景最终以失败告终而退出历史舞台，微软终于垄断了浏览器市场，也正因此而不思进取，导致了日后的落伍。网景是失败了，但是这帮人又以 Mozilla 的名义把浏览器复活了，并且开源，其最大的特色是其新开发了一个很出色的渲染引擎，叫做 Gecko，并且对标准支持的也很好，自称</p>
+<p><code>Mozilla/5.0(Windows; U; Windows NT 5.0; en-US; rv:1.1) Gecko/20020826</code></p>
+<p>后来 Mozilla 慢慢演变成了 Firefox。这个浏览器性能出色，Gecko引擎渲染也不错，很快就开始攻城略地，因为开源，基于其开发的一众浏览器也出现了，并且大家都称为</p>
+<p><code>Mozilla/5.0(Windows; U; Windows NT 5.0; en-US; rv:1.7.2) Gecko/xxx XXX/xxx</code> </p>
+<p>类似的名称（最后是自己浏览器的名称），基本在火狐的基础上增加了自己的名称，基本上都能将自己装作是 Mozilla，引擎是 Gecko。很快为 Gecko 准备的页面代码出现了，因此针对 UA 的探测规则也变了，IE慢慢跟不上节奏了，但是Linux下的开发者很不爽，因为他们开发了 Konqueror 浏览器，引擎是KHTML，并且和Gecko一样的优秀，但是却无法获取到Gecko使用的页面，于是和微软一样，进行了伪装，类似</p>
+<p><code>Mozilla/5.0 (compatible; Konqueror/3.2; FreeBSD) (KHTML like Gecko)</code></p>
+<p>至此UA就更加的混乱了。 当然还有其他浏览器，比如Opera不光伪装自己，而且增加菜单直接让用户选择伪装成哪个浏览器。</p>
+<p>后来苹果入局了，苹果一如既往的从开源里面选择了一份代码进行开发，它选择了KHTML引擎开发了自己的Safari浏览器，并将创建了引擎的分支命名为WebKit，同样因为想要好的页面的原因，苹果的Safari浏览器自称</p>
+<p><code>Mozilla/5.0 (compatible;) AppleWebKit/85.7 (KHTML, like Gecko) Safari/85.5</code></p>
+<p>在KHTML的基础上直接增加了引擎名称和浏览器名称，导致UA越来越长，加剧了UA混乱的局面。</p>
+<p>微软又觉醒了，于是重新开发了新的版本的IE，这次命名为</p>
+<p><code>Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0)</code> </p>
+<p>终于提升了其渲染能力，但是谷歌也入局了，他也实现了自己的浏览器 Chrome（开源Chromium），并且也使用Webkit引擎（后来创建Blink分支），因此为了获得支持Safari的页面，它将自己伪装成Safari，</p>
+<p><code>Mozilla/5.0 (Windows U;) AppleWebKit/525 (KHTML like Gecko) Chrome/2 Safari/525</code></p>
+<p>也就是谷歌的Chrome伪装成Safari，Safari伪装成KHTML，KHTML伪装成Gecko，最终大家都是Mozilla，因此最终UA变的一团糟，当然一切的一切都归结于微软开了个头。</p>
+<p>然后现在很多基于Chromium的浏览器继续开发，可想而知这些浏览器的UA，继续在Chrome的基础上继续添加各自浏览器的名称，这样你应该能从UA中看到 <code>Mozilla</code> <code>AppleWebKit</code> <code>KHTML</code> <code>Gecko</code> <code>Chrome</code> <code>Safari</code> 以及更多的名称，差不多就是一个溯源的过程。</p>
+<p>后来微软又放弃了IE，新开发了Edge浏览器，不过很快又放弃了其内核，开始搞基于WebKit的版本，其UA可想而知，就是在Chrome的基础上，继续增加一个 <code>Edge/XXX</code> 的字样。</p>
+<p>现在Opera和微软的Edge已经全部基于WebKit 了，基本就只剩下WebKit和Firefox系列浏览器了，不知道以后的以后，UA会不会进行统一呢。</p>
+<h3 id="根据UA判断浏览器"><a href="#根据UA判断浏览器" class="headerlink" title="根据UA判断浏览器"></a>根据UA判断浏览器</h3><p>UA的混乱导致并不能很直观的获得浏览器的信息，但是因为浏览器的UA里面包含了浏览器的信息和操作系统的信息，确实可以从中进行查询，但是也不一定，特别是基于Chrome浏览器的浏览器，有可能不会把自己的信息放进去，比如360，现在完全跟Chrome的UA是一样的。</p>
+<p>判断浏览器的方法就是去获取其关键字，不过应该反向查找，先查找最外层的发行版，再逐渐溯源上去，一般可以先查Firefox浏览器，然后查IE系列，然后是Edge浏览器，最后再是各个基于Chorme的发行版（根据需要进行指定浏览器查找），继续往上就是Chrome和其他基于Chrome的浏览器，然后再是Safari浏览器，大概如此吧。</p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2019/04/19/modbus-analysis/" title="Modbus协议规范">Modbus协议规范</a></h2>
+                <p class="excerpt">
+                
+                MODBUS协议目前最常用的是Modbus RTU和Modbus TCP，分别对应串口和网络。二者核心是相同的，仅封包格式略有区别。以下以Modbus RTU 和 Modbus TCP为例总结。
+
+协议中所有的16bit及以上数值均按大端字节序存储
+
+通用帧定义本节主要讲的是Modbus RTU和M
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2019-04-19T06:58:00.000Z" class="post-list__meta--date date">2019-04-19</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/04/19/modbus-analysis/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2019/04/17/modbus-application/" title="Modbus协议应用的不足讨论">Modbus协议应用的不足讨论</a></h2>
+                <p class="excerpt">
+                
+                Modbus是工业设备的标准通信协议了，一般通过串口进行通信，为了适应现在互联网也支持通过网络传输的TCP版本，我司现在一般要求设备方提供TCP版本，毕竟部署方便，不过在现行的主从模式下，也并非能支持所有场景
+基本能力的不足Modbus/TCP 协议本身并不复杂，这里就不详解解释了，另开一篇讨论。这
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2019-04-17T07:48:00.000Z" class="post-list__meta--date date">2019-04-17</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/04/17/modbus-application/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

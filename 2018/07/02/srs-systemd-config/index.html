@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>CentOS7配置SRS服务及日志 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="最近将RTMP服务器转移到Linux平台下，同时也想使用下SRS服务器。但是SRS默认只提供了CentOS 6的RPM安装包，其他平台需自己编译，同时SRS也只提供了SysV方式的服务脚本，故在systemd架构下需要自己开发相对应的脚本，以下记录下本人在CentOS 7上安装配置SRS。
+编译SRS安装SRS按照官方的办法下载源码并编译即可，暂时别安装，如下
+
+由于github的代码clone的">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="CentOS7配置SRS服务及日志 | xilixili.net">
+    <meta name="twitter:description" content="最近将RTMP服务器转移到Linux平台下，同时也想使用下SRS服务器。但是SRS默认只提供了CentOS 6的RPM安装包，其他平台需自己编译，同时SRS也只提供了SysV方式的服务脚本，故在systemd架构下需要自己开发相对应的脚本，以下记录下本人在CentOS 7上安装配置SRS。
+编译SRS安装SRS按照官方的办法下载源码并编译即可，暂时别安装，如下
+
+由于github的代码clone的">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="CentOS7配置SRS服务及日志 | xilixili.net">
+    <meta property="og:description" content="最近将RTMP服务器转移到Linux平台下，同时也想使用下SRS服务器。但是SRS默认只提供了CentOS 6的RPM安装包，其他平台需自己编译，同时SRS也只提供了SysV方式的服务脚本，故在systemd架构下需要自己开发相对应的脚本，以下记录下本人在CentOS 7上安装配置SRS。
+编译SRS安装SRS按照官方的办法下载源码并编译即可，暂时别安装，如下
+
+由于github的代码clone的">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2018/07/02/srs-systemd-config/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2018-07-02T08:38:00.000Z" class="post-list__meta--date date">2018-07-02</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">CentOS7配置SRS服务及日志</h1>
+  </header>
+
+  <section class="post">
+    <p>最近将RTMP服务器转移到Linux平台下，同时也想使用下SRS服务器。但是SRS默认只提供了CentOS 6的RPM安装包，其他平台需自己编译，同时SRS也只提供了SysV方式的服务脚本，故在systemd架构下需要自己开发相对应的脚本，以下记录下本人在CentOS 7上安装配置SRS。</p>
+<h3 id="编译SRS"><a href="#编译SRS" class="headerlink" title="编译SRS"></a>编译SRS</h3><p>安装SRS按照官方的办法下载源码并编译即可，暂时别安装，如下</p>
+<blockquote>
+<p>由于github的代码clone的非常慢，改用了码云的镜像了</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://git.oschina.net/winlinvip/srs.oschina.git</span><br><span class="line"><span class="built_in">cd</span> srs.oschina/trunk</span><br><span class="line">./configure &amp;&amp; make</span><br></pre></td></tr></table></figure>
+<p>如果没有安装编译器，请使用YUM安装，如下</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install -y gcc gcc-c++ automake</span><br></pre></td></tr></table></figure>
+<p>至此SRS已经编译完成，可以使用了。</p>
+<h3 id="配置安装"><a href="#配置安装" class="headerlink" title="配置安装"></a>配置安装</h3><p>由于systemd有着sysv无法比拟的优势，虽然CentOS 7可以兼容，但是我打算采用systemd服务，因为不会直接进行 <code>make install</code> 安装。我打算安装到 <code>/opt/srs</code> 目录</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mkdir /opt/srs</span><br><span class="line">mkdir /opt/srs/bin</span><br><span class="line">mkdir /opt/srs/conf</span><br><span class="line">cp ./objs/srs /opt/srs/bin</span><br><span class="line">cp ./conf/srs.conf /opt/srs/conf</span><br></pre></td></tr></table></figure>
+<p>日志我打算暂时先放到 <code>/var/log</code> 目录，编辑 SRS 配置文件 <code>/opt/srs/conf/srs.conf</code></p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="attribute">listen</span>				<span class="number">1935</span>;</span><br><span class="line"><span class="attribute">max_connections</span>		 <span class="number">1024</span>;</span><br><span class="line"><span class="attribute">pid</span>					/opt/srs/srs.pid</span><br><span class="line">srs_log_tank		 file;</span><br><span class="line"><span class="attribute">srs_log_file</span>		 /var/log/srs.log</span><br><span class="line">daemon				 <span class="literal">on</span>;</span><br><span class="line"></span><br><span class="line"><span class="section">http_api</span> &#123;</span><br><span class="line">    <span class="attribute">enable</span>			<span class="literal">on</span>;</span><br><span class="line">    <span class="attribute">listen</span>			<span class="number">1985</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中HTTP API如果不需要可以注释掉。</p>
+<h3 id="服务开发"><a href="#服务开发" class="headerlink" title="服务开发"></a>服务开发</h3><p>systemd的服务文件在 <code>/lib/systemd/system</code> 下，命名基本都是 <code>xxx.service</code> ，新建一个 <code>srs.service</code> 文件，并输入以下内容</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[Unit]</span></span><br><span class="line"><span class="attr">Description</span>=SRS</span><br><span class="line"><span class="attr">Documentation</span>=https://github.com/ossrs/srs/wiki/v2_CN_Home</span><br><span class="line"><span class="attr">After</span>=network.target</span><br><span class="line"></span><br><span class="line"><span class="section">[Service]</span></span><br><span class="line"><span class="attr">Type</span>=forking</span><br><span class="line"><span class="attr">ExecStartPre</span>=/opt/srs/bin/srs -t -c /opt/srs/conf/srs.conf</span><br><span class="line"><span class="attr">ExecStart</span>=/opt/srs/bin/srs -c /opt/srs/conf/srs.conf</span><br><span class="line"><span class="attr">ExecStop</span>=/bin/kill -TERM <span class="variable">$MAINPID</span></span><br><span class="line"><span class="attr">ExecReload</span>=/bin/kill -<span class="number">1</span> <span class="variable">$MAINPID</span></span><br><span class="line"><span class="attr">Restart</span>=always</span><br><span class="line"></span><br><span class="line"><span class="section">[Install]</span></span><br><span class="line"><span class="attr">WantedBy</span>=multi-user.target</span><br></pre></td></tr></table></figure>
+<p>reload详见官方WIKI <a href="https://github.com/ossrs/srs/wiki/v1_CN_Reload" target="_blank" rel="noopener">https://github.com/ossrs/srs/wiki/v1_CN_Reload</a> </p>
+<p>开发完成之后，即可以启动服务并添加到开机启动</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl start srs.service</span><br><span class="line">systemctl <span class="built_in">enable</span> srs.service</span><br></pre></td></tr></table></figure>
+<p>上述命令可省略 <code>.service</code> ，如 <code>systemctl status srs</code></p>
+<h3 id="日志转储"><a href="#日志转储" class="headerlink" title="日志转储"></a>日志转储</h3><p>上面配置了SRS的日志记录方式为文件，还可以配置日志级别等。同时长时间运行，日志会非常大，因此需要进行日志分割转储。好在我们可以利用系统现有的日志转储分割机制进行，最简单的使用 <code>logrotate</code> 配合 <code>cron</code> 服务实现。</p>
+<p>创建并编辑文件 <code>/etc/logrotate.d/srs</code> </p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line">/var/log/srs.log &#123;</span><br><span class="line">    daily</span><br><span class="line">    copytruncate</span><br><span class="line">    nocompress</span><br><span class="line">    <span class="attribute">rotate</span> <span class="number">8</span></span><br><span class="line">    sharedscripts</span><br><span class="line">    postrotate</span><br><span class="line">    /bin/kill -<span class="number">1</span> `/bin/cat /opt/srs/srs.pid`</span><br><span class="line">    endscript</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有其他需求看查询相关配置。测试正确性可手动执行 <code>/usr/sbin/logrotate -vf /etc/logrotate.conf</code></p>
+<p>上述配置为每日转储，文件名会添加日期，类似于系统日志文件，最多转储8个文件。</p>
+<blockquote>
+<p>注意即使手动执行了转储，每日最多一回，原因是同名文件存在，可转移后再执行</p>
+</blockquote>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2018/08/20/ffmpeg-got-raw-h264/" title="用ffmpeg从MP4提取H264裸流">用ffmpeg从MP4提取H264裸流</a></h2>
+                <p class="excerpt">
+                
+                MP4的格式封装比较复杂，想取出来H264裸流比较麻烦，因此借助ffmpeg工具比较方便。通常一般都是使用ffmpeg进行编解码较多，但是当我们视频是H264编码时候，直接提取比较合适。
+提取H264H264编码的MP4文件，使用ffmpeg提取相对比较方便，直接使用ffmpeg标准的媒体文件读取流
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2018-08-20T08:51:00.000Z" class="post-list__meta--date date">2018-08-20</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2018/08/20/ffmpeg-got-raw-h264/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2018/06/19/ffmpeg-push-rtmp-for-camera/" title="FFMPEG推流摄像头">FFMPEG推流摄像头</a></h2>
+                <p class="excerpt">
+                
+                一般的直播网站都使用OBS推流，其实ffmpeg也可以推流，在无界面环境下就可以推流使用。本文以Windows下为例，简单介绍下使用ffmpeg工具推流的方法和步骤。
+下载安装下载地址：https://ffmpeg.zeranoe.com/builds/ 
+选择版本（默认即可），选择自己系统架构，L
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2018-06-19T08:40:00.000Z" class="post-list__meta--date date">2018-06-19</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2018/06/19/ffmpeg-push-rtmp-for-camera/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

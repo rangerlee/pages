@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>AndroidStudio编译JNI | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="以前使用其他IDE做JNI的时候还比较麻烦，特别是JNI和Java的操作是分开的，现在使用Android Studio做特别方便，还可以直接打包成 aar 格式对外提供。因为项目是对外提供开发包方式的，并不是自身App模式，因此打算直接创建一个简单的Android工程作为调用测试，再单独添加模块作为封装库。
+创建工程Android创建工程很简单，随便创建一个，然后基本项目目录就会出现 app 模块">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="AndroidStudio编译JNI | xilixili.net">
+    <meta name="twitter:description" content="以前使用其他IDE做JNI的时候还比较麻烦，特别是JNI和Java的操作是分开的，现在使用Android Studio做特别方便，还可以直接打包成 aar 格式对外提供。因为项目是对外提供开发包方式的，并不是自身App模式，因此打算直接创建一个简单的Android工程作为调用测试，再单独添加模块作为封装库。
+创建工程Android创建工程很简单，随便创建一个，然后基本项目目录就会出现 app 模块">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="AndroidStudio编译JNI | xilixili.net">
+    <meta property="og:description" content="以前使用其他IDE做JNI的时候还比较麻烦，特别是JNI和Java的操作是分开的，现在使用Android Studio做特别方便，还可以直接打包成 aar 格式对外提供。因为项目是对外提供开发包方式的，并不是自身App模式，因此打算直接创建一个简单的Android工程作为调用测试，再单独添加模块作为封装库。
+创建工程Android创建工程很简单，随便创建一个，然后基本项目目录就会出现 app 模块">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2019/06/18/android-studio-build-jni/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2019-06-18T07:03:00.000Z" class="post-list__meta--date date">2019-06-18</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">AndroidStudio编译JNI</h1>
+  </header>
+
+  <section class="post">
+    <p>以前使用其他IDE做JNI的时候还比较麻烦，特别是JNI和Java的操作是分开的，现在使用Android Studio做特别方便，还可以直接打包成 aar 格式对外提供。因为项目是对外提供开发包方式的，并不是自身App模式，因此打算直接创建一个简单的Android工程作为调用测试，再单独添加模块作为封装库。</p>
+<h3 id="创建工程"><a href="#创建工程" class="headerlink" title="创建工程"></a>创建工程</h3><p>Android创建工程很简单，随便创建一个，然后基本项目目录就会出现 <code>app</code> 模块作为App程序，我们需要再单独添加一个库模块，创建一个 <code>Android Library</code>，再次目录下会创建一个库的目录，然后项目的目录结构如下</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="bullet">- </span>app</span><br><span class="line"><span class="bullet">- </span>mylib</span><br><span class="line"><span class="bullet">- </span>gradle</span><br></pre></td></tr></table></figure>
+<h3 id="JNI接口定义"><a href="#JNI接口定义" class="headerlink" title="JNI接口定义"></a>JNI接口定义</h3><p>开发JNI首先必须要有一定的JNI开发知识。</p>
+<p>首先在库模块里面创建我们的接口类 ，然后添加接口，比如在文件 <code>Decoder.java</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.xx.mylib;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Decoder</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">long</span> <span class="title">decode</span><span class="params">(<span class="keyword">byte</span>[] code, <span class="keyword">char</span>[] id)</span></span>;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.loadLibrary(<span class="string">"DeCodec"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的例子中，<code>native</code> 是指C++实现的动态库需要提供的接口方法，然后后面是提供的库名称，比如上面的 <code>DeCodec</code> 对应的就是 <code>libDeCodec.so</code>，有Linux基础的同学会比较清楚。</p>
+<p>接下来就需要根据上面的接口生成对应的C的接口文件了，一般也可以手写，也可以使用 <code>javah</code> 生成，这里我们在 Android Studio 中添加一个生成工具，可以更快的生成。</p>
+<p>在 <strong>Settings</strong> - <strong>Tools</strong> - <strong>External Tools</strong> 添加一个工具，配置参照下图</p>
+<p><picture class="picture"><source type="image/webp" srcset="/2019/06/18/android-studio-build-jni/20190618153558119.png.webp"><img class="image" src="/2019/06/18/android-studio-build-jni/20190618153558119.png" alt=""></picture></p>
+<p>注意JDK的环境变量配置，否则可能直接找不到 javah 程序。</p>
+<p>配置完成之后，在java文件上右击，出现菜单，里面会出现 <strong>NDK</strong> - <strong>javah</strong> 菜单项，点击会生成对应的头文件，正常情况下的名称类似 <code>com_xx_decodec_Decoder.h</code>，目录在 <code>src/java</code> 同目录下的 <code>jni</code> 目录。</p>
+<h3 id="JNI接口开发"><a href="#JNI接口开发" class="headerlink" title="JNI接口开发"></a>JNI接口开发</h3><p>JNI接口生成之后，我们就需要写实现了，使用C或C++都可以，使用NDK编译。不过一般接口参数等都不是C的类型，是JNI的类型，可能需要做一些数据类型转换，而且在实现的时候要注意安全性，否则最终使用直接导致进程崩溃，而非Java的异常，具体的百度。</p>
+<p>代码实现之后，Android Studio 使用CMake编译脚本，在当前 <code>jni</code> 目录也创建一个 <code>CMakeLists.txt</code> 的文件，内容参照下面的脚本修改</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.4</span>.<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">AUX_SOURCE_DIRECTORY</span>(./DeCodec CODE_SOURCE)</span><br><span class="line"><span class="keyword">add_compile_options</span>(-fvisibility=hidden)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(CMAKE_C_FLAGS_RELEASE <span class="string">"$&#123;CMAKE_C_FLAGS_RELEASE&#125; -s"</span>)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_FLAGS_RELEASE <span class="string">"$&#123;CMAKE_CXX_FLAGS_RELEASE&#125; -s"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">add_library</span>(DeCodec SHARED <span class="variable">$&#123;BARCODE_SOURCE&#125;</span> com_xx_decodec_Decoder.cpp )</span><br><span class="line"><span class="keyword">target_link_libraries</span>(DeCodec <span class="variable">$&#123;log-lib&#125;</span> )</span><br></pre></td></tr></table></figure>
+<p>然后在库目录 <code>mylib</code> 下的 <code>build.gradle</code> 中的 <code>android</code> 节点下添加</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">externalNativeBuild &#123;</span><br><span class="line">    cmake &#123;</span><br><span class="line">        path &quot;src/main/jni/CMakeLists.txt&quot;</span><br><span class="line">        version &quot;3.10.2&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后同步一下Gradle即可，编译模块或整个项目就能在 <code>build/outpus/aar/</code> 目录下获得 <code>aar</code> 格式的库。</p>
+<h3 id="测试使用"><a href="#测试使用" class="headerlink" title="测试使用"></a>测试使用</h3><p>将生成的 <code>aar</code> 文件拷贝到测试工程 <code>app</code> 目录下的 <code>libs</code> 目录，然后在测试工程 <code>app</code> 目录下的 <code>build.gradle</code> 的 <code>android</code> 节点添加以下内容</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">repositories &#123;</span><br><span class="line">    flatDir &#123;</span><br><span class="line">        dirs &apos;libs&apos;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 然后在最后面的 <code>dependencies</code> 添加依赖项</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">implementation(name: &apos;mylib-release&apos;, ext: &apos;aar&apos;)</span><br></pre></td></tr></table></figure>
+<p>工程配置完成了，然后就可以在java代码中引用使用了，比如</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="keyword">import</span> com.xx.mylib.Decoder;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> Decoder decoder = <span class="keyword">new</span> Decoder();</span><br></pre></td></tr></table></figure>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2019/06/20/jar-use-jna-with-dll/" title="JAR使用JNA并打包dll">JAR使用JNA并打包dll</a></h2>
+                <p class="excerpt">
+                
+                搞Java的同学应该都清楚，Java与C++交互方式是通过DLL，使用JNI技术，也就是现在Android上最常用的方式，但其实现在有更高层次的封装了，那就是JNA方式。虽然JNA使用很简单，但是发布却比较麻烦，特别是参考网上的文章基本很少有正确的方法，本文将详述正确的方法。
+JNA的使用JNA(J
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2019-06-20T06:17:00.000Z" class="post-list__meta--date date">2019-06-20</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/06/20/jar-use-jna-with-dll/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2019/05/24/deploy-apprtc/" title="部署AppRTC服务">部署AppRTC服务</a></h2>
+                <p class="excerpt">
+                
+                AppRTC是WebRTC视频通话的服务程序，一般可以将其作为参考实现，搭建AppRTC服务受限于很多条件，并不是太容易。在参考了官方操作和大量的博客之后，根据自己操作实践排除了很多网络博客上的错误方法，终于部署成功了一套环境。测试环境为阿里云的CentOS 7服务器，带公网IP和域名。
+部署前的必
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2019-05-24T01:01:00.000Z" class="post-list__meta--date date">2019-05-24</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/05/24/deploy-apprtc/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>BOOST不支持JSON输出数字值 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="前文刚讲述过boost的porperty_tree在JSON上的一些问题，最近使用又发现一些问题，可能大家都可能发现了，就是用该库来生成JSON的时候，不支持数字等非字符串类型的值。">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="BOOST不支持JSON输出数字值 | xilixili.net">
+    <meta name="twitter:description" content="前文刚讲述过boost的porperty_tree在JSON上的一些问题，最近使用又发现一些问题，可能大家都可能发现了，就是用该库来生成JSON的时候，不支持数字等非字符串类型的值。">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="BOOST不支持JSON输出数字值 | xilixili.net">
+    <meta property="og:description" content="前文刚讲述过boost的porperty_tree在JSON上的一些问题，最近使用又发现一些问题，可能大家都可能发现了，就是用该库来生成JSON的时候，不支持数字等非字符串类型的值。">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2020/11/09/boost-property-tree-not-support-non-string-in-json/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2020-11-09T07:23:00.000Z" class="post-list__meta--date date">2020-11-09</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">BOOST不支持JSON输出数字值</h1>
+  </header>
+
+  <section class="post">
+    <p>前文刚讲述过boost的porperty_tree在JSON上的一些问题，最近使用又发现一些问题，可能大家都可能发现了，就是用该库来生成JSON的时候，不支持数字等非字符串类型的值。</p>
+<a id="more"></a>
+<h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>如果在使用boost解析JSON可能感觉不到，如果在生成的时候，如下</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">boost::property_tree::ptree root;</span><br><span class="line">root.put&lt;<span class="keyword">int</span>&gt;(<span class="string">"key"</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">stringstream</span> ss;</span><br><span class="line">boost::property_tree::write_json(ss, root, <span class="literal">false</span>);</span><br></pre></td></tr></table></figure>
+<p>这样生成的JSON会是这样</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123; <span class="attr">"key"</span>: <span class="string">"0"</span> &#125;</span><br></pre></td></tr></table></figure>
+<p>确实和我们想象的不一样，很多时候这种生成结果将会导致后续无法使用。</p>
+<h3 id="如何解决"><a href="#如何解决" class="headerlink" title="如何解决"></a>如何解决</h3><p>我搜索了一些方法，感觉并不是太可取，建议还是替换使用其他库。</p>
+<p>一些可参考的解决方法，供参考，或者参考借鉴或者在此基础上改进</p>
+<p><a href="https://xbuba.com/questions/2855741" target="_blank" rel="noopener">https://xbuba.com/questions/2855741</a></p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2020/12/14/centos-6-config-vault-yum-repo/" title="CentOS6支持到期后配置备份更新源">CentOS6支持到期后配置备份更新源</a></h2>
+                <p class="excerpt">
+                
+                CentOS 6 的支持在上个月到期了，各个更新源都下线了，线上一堆的服务器又不能升级，偶尔安装个软件可怎么办，其实官方还保留了一个备份的源用来更新，虽然不升级了，但至少安装软件没问题。
+配置备份虽然说备份已经没啥用了，但是作为良好的操作习惯，还是建议做一下。
+备份目录 /etc/yum.repo.
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2020-12-14T09:41:00.000Z" class="post-list__meta--date date">2020-12-14</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2020/12/14/centos-6-config-vault-yum-repo/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2020/09/28/boost-property-ptree-json-write-chinese/" title="BOOST生成JSON中文乱码">BOOST生成JSON中文乱码</a></h2>
+                <p class="excerpt">
+                
+                最近Linux生产环境在用boost库生成json的时候发现中文乱码，经调测发现是boost库的bug，在此记录。
+boost生成Json一般用法boost有两个数据结构，其中一个是 property::ptree, 这个数据结构可以表示 xml json ini 等格式的文件内容，在不使用第三方比
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2020-09-28T09:02:00.000Z" class="post-list__meta--date date">2020-09-28</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2020/09/28/boost-property-ptree-json-write-chinese/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

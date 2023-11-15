@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>C++字符串格式化库 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="总的来说，C++可使用的字符串格式化库是非常少，基本可选用的如sprintf系列，boost.format等，诚然stringstream也可以，但是和其他库有明显使用上的区别，不是很方便。
+自实现的格式化库曾经因为项目日志打印问题，比如申请多少缓冲区问题，为了防止越界等问题，多方考虑自己实现了一个格式化库
+详见 跨平台的STL字符串格式化库（码云） 
+其中GNU的版本采用了特别底层的函数实现，基">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="C++字符串格式化库 | xilixili.net">
+    <meta name="twitter:description" content="总的来说，C++可使用的字符串格式化库是非常少，基本可选用的如sprintf系列，boost.format等，诚然stringstream也可以，但是和其他库有明显使用上的区别，不是很方便。
+自实现的格式化库曾经因为项目日志打印问题，比如申请多少缓冲区问题，为了防止越界等问题，多方考虑自己实现了一个格式化库
+详见 跨平台的STL字符串格式化库（码云） 
+其中GNU的版本采用了特别底层的函数实现，基">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="C++字符串格式化库 | xilixili.net">
+    <meta property="og:description" content="总的来说，C++可使用的字符串格式化库是非常少，基本可选用的如sprintf系列，boost.format等，诚然stringstream也可以，但是和其他库有明显使用上的区别，不是很方便。
+自实现的格式化库曾经因为项目日志打印问题，比如申请多少缓冲区问题，为了防止越界等问题，多方考虑自己实现了一个格式化库
+详见 跨平台的STL字符串格式化库（码云） 
+其中GNU的版本采用了特别底层的函数实现，基">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2018/03/07/cpp-format-library/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2018-03-07T09:00:00.000Z" class="post-list__meta--date date">2018-03-07</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">C++字符串格式化库</h1>
+  </header>
+
+  <section class="post">
+    <p>总的来说，C++可使用的字符串格式化库是非常少，基本可选用的如sprintf系列，boost.format等，诚然stringstream也可以，但是和其他库有明显使用上的区别，不是很方便。</p>
+<h3 id="自实现的格式化库"><a href="#自实现的格式化库" class="headerlink" title="自实现的格式化库"></a>自实现的格式化库</h3><p>曾经因为项目日志打印问题，比如申请多少缓冲区问题，为了防止越界等问题，多方考虑自己实现了一个格式化库</p>
+<p>详见 <a href="https://gitee.com/rangerlee/format" target="_blank" rel="noopener">跨平台的STL字符串格式化库（码云）</a> </p>
+<p>其中GNU的版本采用了特别底层的函数实现，基本就屏蔽了支持格式的问题。Win32上实现基本都是提前探测，自己申请内存，然后<code>sprintf</code>，在GNU下采用了 <code>vasprintf</code> 此接口强大之处在于，直接返回申请并格式化后的字符串，且需要自己释放内存。这种情况下，性能应该是最高的了，毕竟是系统申请的内存并格式化后的，减少了很多的内存拷贝等。大家在某些自己开发的工程中，如果有类似的需求，可以直接调这些底层接口实现，对性能提升帮助很大。</p>
+<h3 id="第三方库fmt"><a href="#第三方库fmt" class="headerlink" title="第三方库fmt"></a>第三方库fmt</h3><p>最近又通过之前介绍的 <a href="//www.xilixili.net/2016/10/10/plog/">plog日志库</a> 库发现了一个新的格式化库，项目详见 </p>
+<p><a href="https://github.com/fmtlib/fmt" target="_blank" rel="noopener">https://github.com/fmtlib/fmt</a></p>
+<p>使用其他特别方便，特别举例说明</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">//按顺序实现参数</span></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">string</span> str = fmt::format(<span class="string">"data: &#123;&#125;&#123;&#125;&#123;&#125;"</span>, <span class="string">"abra"</span>, <span class="number">4</span>, <span class="number">5</span>);</span><br><span class="line"><span class="comment">//指定参数顺序</span></span><br><span class="line">str = fmt::format(<span class="string">"data: &#123;0&#125;&#123;1&#125;&#123;0&#125;"</span>, <span class="string">"abra"</span>, <span class="string">"cad"</span>);</span><br><span class="line"><span class="comment">//标签化参数</span></span><br><span class="line">str = fmt::format(<span class="string">"last &#123;DATA&#125; size &#123;SIZE&#125;"</span>,</span><br><span class="line">                  fmt::arg(<span class="string">"DATA"</span>, str), fmt::arg(<span class="string">"DATA"</span>, str.size()))</span><br></pre></td></tr></table></figure>
+<p>第一眼看上去都会怀疑这是C++么，要不是看见std::string，真以为是其他什么语言，这种风格和传统的C/C++的区别很大，很类似于C#和Java等其他语言的方式。当然该库还不止这一点功能，大家可参考主页文档深挖。</p>
+<p>另外，在其他网页看到说这个库的性能非常高，直逼C，我没测试不敢保证。</p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2018/04/13/28181-ptz-code/" title="GB28181云台控制">GB28181云台控制</a></h2>
+                <p class="excerpt">
+                
+                最近完成了GB28181的云台控制功能，记录下相关代码。
+参考要实现GB28181的云台控制，基本不用参考其他文档了，直接查看标准文档即可，当然COPY别人现成代码也是很爽的，不过百度相关代码其实也不多，是不是搞这块的人不多呢。这里主要要说的是，云台控制就是发送了消息，相机会一直执行，直到其他命令或
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2018-04-13T10:30:00.000Z" class="post-list__meta--date date">2018-04-13</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2018/04/13/28181-ptz-code/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2018/03/05/parse-protocol-with-regex/" title="采用正则解析协议">采用正则解析协议</a></h2>
+                <p class="excerpt">
+                
+                大家都知道开发网络协议的C++一般是很少的，比如HTTP、RTSP、SIP等就很少，如果有特殊需求基本上已经没有什么可以使用的库了，所以C++程序员一般热衷于造轮子。记得之前做异步HTTP的时候，基本都是ASIO做网络I/O，数据自己来做解析，各种的匹配，逐条处理等等。
+比如在解析HTTP文本的时候
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2018-03-05T09:43:00.000Z" class="post-list__meta--date date">2018-03-05</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2018/03/05/parse-protocol-with-regex/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

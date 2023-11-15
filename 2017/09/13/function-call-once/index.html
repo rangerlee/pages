@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>如何保证函数只被调用一次 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="经常会有一些函数全局只需要调用一次，如WSAStartup等，一般这种都会在程序入口处统一单独调用，但也容易忘记，封装在其他地方难免多次初始化，在C++中可以考虑采用一些技巧来实现。">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="如何保证函数只被调用一次 | xilixili.net">
+    <meta name="twitter:description" content="经常会有一些函数全局只需要调用一次，如WSAStartup等，一般这种都会在程序入口处统一单独调用，但也容易忘记，封装在其他地方难免多次初始化，在C++中可以考虑采用一些技巧来实现。">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="如何保证函数只被调用一次 | xilixili.net">
+    <meta property="og:description" content="经常会有一些函数全局只需要调用一次，如WSAStartup等，一般这种都会在程序入口处统一单独调用，但也容易忘记，封装在其他地方难免多次初始化，在C++中可以考虑采用一些技巧来实现。">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2017/09/13/function-call-once/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2017-09-13T08:00:00.000Z" class="post-list__meta--date date">2017-09-13</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">如何保证函数只被调用一次</h1>
+  </header>
+
+  <section class="post">
+    <p>经常会有一些函数全局只需要调用一次，如WSAStartup等，一般这种都会在程序入口处统一单独调用，但也容易忘记，封装在其他地方难免多次初始化，在C++中可以考虑采用一些技巧来实现。</p>
+<a id="more"></a>
+<h3 id="静态flag判断"><a href="#静态flag判断" class="headerlink" title="静态flag判断"></a>静态flag判断</h3><p>采用静态变量进行全局控制，大概实现如下</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">bool</span> flag = <span class="literal">true</span>;</span><br><span class="line"><span class="keyword">if</span>(flag)</span><br><span class="line">&#123;</span><br><span class="line">    foo();</span><br><span class="line">    flag = <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>非常简单完美的实现了只调用一次的功能，但是总感觉是比较low，不符合气质。</p>
+<h3 id="静态赋值实现"><a href="#静态赋值实现" class="headerlink" title="静态赋值实现"></a>静态赋值实现</h3><p>假设函数返回某种类型，比如int</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> dummy = foo();</span><br></pre></td></tr></table></figure>
+<p>简洁高效，利用静态成员初始化一次的特性实现，比前面的方法看起来高大上多了。但是，如果函数返回 <code>void</code> 怎么办，总不能继续套用上面的方法，毕竟我们知道 <code>void</code> 不是个类型，没理解的再去重温下。</p>
+<p>也许可以考虑这么封装一下，比如</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">dummyfunc</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;<span class="keyword">return</span> <span class="literal">true</span>;&#125;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">bool</span> dummy = dummyfunc(foo()); <span class="comment">//!不能生效</span></span><br></pre></td></tr></table></figure>
+<p>但是事实上这个也还是不行的，<code>void</code> 不能传值赋值，也就不能这么做。</p>
+<p>幸亏C/C++还有个<strong>逗号运算符</strong>，逗号表达式会这个计算每个子表达式，并返回最后一个子表达式的值。于是乎，可以用逗号封装实现，也是简洁高效。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">bool</span> dummy = (foo(), <span class="literal">true</span>);</span><br></pre></td></tr></table></figure>
+<p>这种办法更加精简了，调整顺序，可以解决返回值不同的问题。</p>
+<h3 id="call-once实现"><a href="#call-once实现" class="headerlink" title="call_once实现"></a>call_once实现</h3><p>C++11有call_once实现，可以实现只调用一次。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="built_in">std</span>::once_flag oc;  </span><br><span class="line"><span class="built_in">std</span>::call_once(oc, foo);</span><br></pre></td></tr></table></figure>
+<p>如果关心返回值，可以直接使用lambda表达式封装，毕竟都使用C++11了。另外once_flag采用静态只是为了保证多次调用是同一个flag，完全可以采用类成员等方式。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">bool</span> result = <span class="literal">false</span>;</span><br><span class="line"><span class="built_in">std</span>::call_once(<span class="keyword">this</span>-&gt;oc, [=, &amp;result]() &#123; result = <span class="keyword">this</span>-&gt;foo(); &#125;);</span><br></pre></td></tr></table></figure>
+<p>总的来说，上面几种方式，多线程并发情况下应该只有静态赋值及call_once可以保证功能没问题。建议采用逗号方式，毕竟通用，不需要特殊的编译器要求。当然我们也可以采用原子及锁等方式实现个。</p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2017/10/17/about-new-operator/" title="深入C++的new">深入C++的new</a></h2>
+                <p class="excerpt">
+                
+                无事便来扯扯C++中的new，基本上都知晓C++的new和C的malloc的区别用伪码实现大概就是这么个意思
+T *p = (T*)malloc(sizeof(T));p-&amp;gt;T::T(...);return p;
+效果上好像就是这么个区别，但事实上new的内存分配失败后会调用new_handl
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-10-17T09:17:00.000Z" class="post-list__meta--date date">2017-10-17</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2017/10/17/about-new-operator/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2017/04/01/parse-pcap/" title="从PCAP简单提取HTTP数据">从PCAP简单提取HTTP数据</a></h2>
+                <p class="excerpt">
+                
+                为了追查现网的声音卡顿和噪音问题，做了一些抓包。但是我们协议当时还没有采用WebSocket，而且采用了双工的HTTP，想从里面提取音频不太容易，而且更主要的是还需要和包时间进行分析，分析卡顿问题。我的设想是提取TCP包内容，解析HTTP协议并提取音频数据，根据包时间和间隔，填充需要的静音数据进去，
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-04-01T07:11:00.000Z" class="post-list__meta--date date">2017-04-01</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2017/04/01/parse-pcap/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

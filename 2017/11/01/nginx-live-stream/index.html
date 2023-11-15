@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>Nginx架构下的直播 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="之前已经编译好了nginx的RTMP扩展，其实在这个扩展中已经默认增加支持了HLS和DASH功能，在使用RTMP功能的同时，也可以输出HLS和DASH。更关键的是RTMP只能在PC端播放，刚好采用HLS的方式可以在移动端播放。">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Nginx架构下的直播 | xilixili.net">
+    <meta name="twitter:description" content="之前已经编译好了nginx的RTMP扩展，其实在这个扩展中已经默认增加支持了HLS和DASH功能，在使用RTMP功能的同时，也可以输出HLS和DASH。更关键的是RTMP只能在PC端播放，刚好采用HLS的方式可以在移动端播放。">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Nginx架构下的直播 | xilixili.net">
+    <meta property="og:description" content="之前已经编译好了nginx的RTMP扩展，其实在这个扩展中已经默认增加支持了HLS和DASH功能，在使用RTMP功能的同时，也可以输出HLS和DASH。更关键的是RTMP只能在PC端播放，刚好采用HLS的方式可以在移动端播放。">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2017/11/01/nginx-live-stream/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2017-11-01T08:41:00.000Z" class="post-list__meta--date date">2017-11-01</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">Nginx架构下的直播</h1>
+  </header>
+
+  <section class="post">
+    <p>之前已经编译好了nginx的RTMP扩展，其实在这个扩展中已经默认增加支持了HLS和DASH功能，在使用RTMP功能的同时，也可以输出HLS和DASH。更关键的是RTMP只能在PC端播放，刚好采用HLS的方式可以在移动端播放。</p>
+<a id="more"></a>
+<p>目前DASH已经是一个新标准了，原本打算打算输出DASH，结果在nginx下输出的是m4v格式，浏览器不能正常播放，用VLC等播放器也不能播放，不知何故，故而切换到了HLS上。</p>
+<p>HLS在iOS上原生支持，在Android上有浏览器差异，不过可以采用第三方的videojs的HLS插件实现。</p>
+<p><img src="/2017/11/01/nginx-live-stream/20171101164613.svg" alt=""></p>
+<p>大概的架构如上，在原来的RTMP架构上直接输出两种格式，nginx也支持edge服务器，即通过配置<code>push</code>将流推送到其他服务器上实现扩展。启用HLS也非常容易，在原来的RTMP内部配置继续增加HLS的配置</p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">rtmp</span> &#123;</span><br><span class="line">    <span class="section">server</span> &#123;</span><br><span class="line">        <span class="attribute">listen</span> <span class="number">1935</span>;</span><br><span class="line"></span><br><span class="line">        <span class="attribute">application</span> live &#123;</span><br><span class="line">            <span class="attribute">live</span> <span class="literal">on</span>;</span><br><span class="line">            <span class="attribute">push</span> rtmp://192.168.1.206/live;</span><br><span class="line">      </span><br><span class="line">            <span class="attribute">hls</span> <span class="literal">on</span>;</span><br><span class="line">            <span class="attribute">hls_path</span> temp/live;</span><br><span class="line">            <span class="attribute">hls_fragment</span> <span class="number">3s</span>;</span><br><span class="line">            <span class="attribute">hls_playlist_length</span> <span class="number">10s</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样就可以同时输出RTMP和HLS两种协议。创建<code>temp/live</code>目录，这样HLS的<code>m3u8</code>和<code>ts</code>切片文件就生成在该目录，下一步只需要给nginx的http配置上访问该目录即可，比如</p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">http</span> &#123;</span><br><span class="line">    <span class="section">server</span> &#123;</span><br><span class="line">        <span class="attribute">listen</span>      <span class="number">8080</span>;</span><br><span class="line">		</span><br><span class="line">        <span class="attribute">location</span> /live &#123;</span><br><span class="line">            <span class="attribute">root</span> ./temp;</span><br><span class="line">            <span class="attribute">add_header</span> <span class="string">'Cache-Control'</span> <span class="string">'no-cache'</span>;</span><br><span class="line">            <span class="attribute">add_header</span> <span class="string">'Access-Control-Allow-Origin'</span> <span class="string">'*'</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>启动nginx后，推送RTMP流到<code>rtmp://192.168.1.178/live/stream</code>。其中PC端浏览器播放该RTMP导致，移动端播放<code>http://192.168.1.178:8080/live/stream.m3u8</code>地址。搞个HTML测试页面，为了能够让网络上访问，暂时将搞个<code>hls.html</code>文件也放该目录下</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">video</span> <span class="attr">id</span>=<span class="string">example-video</span> <span class="attr">width</span>=<span class="string">600</span> <span class="attr">height</span>=<span class="string">300</span> </span></span><br><span class="line"><span class="tag">       <span class="attr">class</span>=<span class="string">"video-js vjs-default-skin"</span> <span class="attr">controls</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">source</span></span></span><br><span class="line"><span class="tag">     <span class="attr">src</span>=<span class="string">"http://192.168.1.178:8080/live/stream.m3u8"</span></span></span><br><span class="line"><span class="tag">     <span class="attr">type</span>=<span class="string">"application/x-mpegURL"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">video</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"http://vjs.zencdn.net/6.2.8/video.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.12.1/videojs-contrib-hls.min.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">	<span class="keyword">var</span> player = videojs(<span class="string">'example-video'</span>);</span></span><br><span class="line"><span class="undefined">	player.play();</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>上面的HLS地址根据你的实际IP替换下<code>src</code>的路径，此次不再赘述。在手机连接在同一网络下即可通过手机端浏览器访问<code>http://192.168.1.178:8080/live/hls.html</code>查看效果。腾讯的内核也是支持的，因此发送链接到QQ或者微信，直接打开网络连接也可以查看到效果。</p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2017/11/16/about-webrtc-on-browser/" title="关于浏览器端WebRTC的使用">关于浏览器端WebRTC的使用</a></h2>
+                <p class="excerpt">
+                
+                WebRTC被开源后是越来越火，主要应该是第一是里面的各种音视频及通信技术，第二是浏览器无插件实现P2P模式的视频通话。之前很有兴趣玩这玩意，最终也是浅尝辄止。最近工作上也开始搞这块东西，又从头仔细研究了下，随便做点记录。
+起因虽然说浏览器端，但是标题这么起，其实肯定最终不是简单的JS API调用，因为我要做的是直播，肯定不是P2P的一对一，但好歹也是要在浏览器上做，就先记录下浏览器上测试使用的简单方法吧。
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-11-16T11:23:00.000Z" class="post-list__meta--date date">2017-11-16</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2017/11/16/about-webrtc-on-browser/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2017/10/26/build-nginx-rtmp-module-with-vistualstudio/" title="VisualStudio编译Nginx的RTMP扩展">VisualStudio编译Nginx的RTMP扩展</a></h2>
+                <p class="excerpt">
+                
+                AMS做RTMP服务还是存在各种问题，比如服务器压力过高会断流等，决定采用nginx架构。网上说Win10编译不了，亲测可以正常编译，另外OpenSSL高版本在VS2010下确实编译失败，网上有解决办法，比较麻烦且没有测试成功，直接采用较低可用的版本，请注意。
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-10-26T03:10:00.000Z" class="post-list__meta--date date">2017-10-26</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2017/10/26/build-nginx-rtmp-module-with-vistualstudio/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

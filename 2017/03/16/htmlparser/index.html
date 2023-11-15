@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>C++实现HTML解析器 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="闲来无事，想做个网页爬虫。用C++来做的话，当然是先要做HTTP下载了，最简单的方式当然是用libcurl实现，然后从网页信息中提取必要的信息即可。这其中，libcurl下载可以支持chunked流及gzip压缩的特殊情况，难点在于HTML的解析。
+HTML是从XML来的，我用项目之前的xml封装库做解析，发现HTML文档并不能解析成功，但是在网页浏览器却可以成功，打开开发者工具查看DOM树，发现">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="C++实现HTML解析器 | xilixili.net">
+    <meta name="twitter:description" content="闲来无事，想做个网页爬虫。用C++来做的话，当然是先要做HTTP下载了，最简单的方式当然是用libcurl实现，然后从网页信息中提取必要的信息即可。这其中，libcurl下载可以支持chunked流及gzip压缩的特殊情况，难点在于HTML的解析。
+HTML是从XML来的，我用项目之前的xml封装库做解析，发现HTML文档并不能解析成功，但是在网页浏览器却可以成功，打开开发者工具查看DOM树，发现">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="C++实现HTML解析器 | xilixili.net">
+    <meta property="og:description" content="闲来无事，想做个网页爬虫。用C++来做的话，当然是先要做HTTP下载了，最简单的方式当然是用libcurl实现，然后从网页信息中提取必要的信息即可。这其中，libcurl下载可以支持chunked流及gzip压缩的特殊情况，难点在于HTML的解析。
+HTML是从XML来的，我用项目之前的xml封装库做解析，发现HTML文档并不能解析成功，但是在网页浏览器却可以成功，打开开发者工具查看DOM树，发现">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2017/03/16/htmlparser/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2017-03-16T06:06:00.000Z" class="post-list__meta--date date">2017-03-16</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">C++实现HTML解析器</h1>
+  </header>
+
+  <section class="post">
+    <p>闲来无事，想做个网页爬虫。用C++来做的话，当然是先要做HTTP下载了，最简单的方式当然是用libcurl实现，然后从网页信息中提取必要的信息即可。这其中，libcurl下载可以支持chunked流及gzip压缩的特殊情况，难点在于HTML的解析。</p>
+<p>HTML是从XML来的，我用项目之前的xml封装库做解析，发现HTML文档并不能解析成功，但是在网页浏览器却可以成功，打开开发者工具查看DOM树，发现确实是中途多了一个 <code>&lt;/div&gt;</code> 标签。在XML规范中这个就会失败，看来简单的通过XML解析引擎去解析不是很靠谱。</p>
+<p>既然XML不行，直接上HTML解析库，看了下C++的就一个htmlcxx，demo看着就不是很好用。果断在github去看看，确实找了几个不错的，可惜不知为何，clone代码编译之后，自带的测试DEMO都会core，看来稳定性还是有点问题的（应该是兼容性吧）。</p>
+<p>好吧，造轮子吧！</p>
+<h3 id="解析原理"><a href="#解析原理" class="headerlink" title="解析原理"></a>解析原理</h3><p>HTML文档其实可以看成是一个XML文档，只是有一些特有的地方。解析的话，思想就是先解析一个标签，从中取出属性，然后再找是是否是自关闭，未关闭继续在内容中递归。按照这个思路很容易写出对应的代码，设计一个元素类，内部包含熟悉、值、子元素、父元素。有了这些基本一个HTML文档就串联起来了。</p>
+<p>当然如果一切顺利的话，解析起来不难，就如同XML引擎解析HTML失败，大量的HTML网页存在大量不规范的地方，即不符合XHTML规范。</p>
+<ul>
+<li>元素不关闭，这个很常见，有可能是忘记了，有可能是习惯问题。最常见的比如 <code>&lt;br&gt;</code> 这个换行就没有关闭，理论上应该是 <code>&lt;br/&gt;</code>。</li>
+<li>标签不对应，这个和上面类似，但是有的时候突然多出来某些标签的关闭标签，但是前文却没有对应的标签。</li>
+<li>还有某些特殊的标签，比如 <code>&lt;% ... %&gt;</code> ，应该是脚本语言引擎未正确执行吧。</li>
+<li>某些属性的 <code>&quot;</code> 或者 <code>&#39;</code> 不匹配。</li>
+<li>另外就是标签的交叉问题。</li>
+</ul>
+<p>总之不规范的地方还是挺多的，但基本都可以被浏览器支持的，说明浏览器的容错性还是不错的，据说就是因为较早版本的HTML规范没这么严格导致的。实现的时候还是要尽量的兼容一下。</p>
+<h3 id="解析实现"><a href="#解析实现" class="headerlink" title="解析实现"></a>解析实现</h3><p>我的实现基本上是以可以解析现有文档并提取有效信息为出发点，找了163等网站主页作为测试页，均已可以测试通过（网易主页也有很多不规范的地方）。同时为了保证内存泄露问题，采用了智能指针，子元素用 <code>shared_ptr</code> 封装，父元素用 <code>weak_ptr</code> 封装。</p>
+<p>目前是将元素内的所有值（非子元素）全部保持到value中，比如 </p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  	hello<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">""</span> /&gt;</span>world</span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><code>body</code> 元素的值会保存为 <code>hello world</code> ，我觉得应该分别作为子元素存在，目前还没有这么做。</p>
+<p>另外在操作DOM的时候Javascript的getElementByXXX系列还是很好用的，有了前面的结构，通过递归也很容易实现，不过class一般可以配置多个，还需要分割。</p>
+<p>当然存在的问题还很多，但已经基本够用。已分享到 <a href="http://github.com/rangerlee/htmlparser" target="_blank" rel="noopener">http://github.com/rangerlee/htmlparser</a>。</p>
+<h3 id="应用举例"><a href="#应用举例" class="headerlink" title="应用举例"></a>应用举例</h3><p>写个demo测试下，用libcurl下载某网页到内存进行解析，提取美图地址。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">HtmlParser parser;</span><br><span class="line"><span class="built_in">shared_ptr</span>&lt;HtmlDocument&gt; doc = parser.Parse(data.c_str(), data.size());</span><br><span class="line"></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="built_in">shared_ptr</span>&lt;HtmlElement&gt;&gt; pics;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="built_in">shared_ptr</span>&lt;HtmlElement&gt;&gt; picbox = parser.GetElementByClassName(<span class="string">"pic_box"</span>);</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span> box : picbox) &#123;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="built_in">shared_ptr</span>&lt;HtmlElement&gt;&gt; tmp = box-&gt;GetElementByTagName(<span class="string">"img"</span>);</span><br><span class="line">    pics.insert(pics.end(), tmp.begin(), tmp.end());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span> v : pics) &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"img: %s\n"</span>, v-&gt;GetAttribute(<span class="string">"src"</span>).c_str());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当然测试写的是C++11代码，解析器其实也可以自动适配支持非C++11编译器，使用tr1里面的库。</p>
+<h3 id="后续更新"><a href="#后续更新" class="headerlink" title="后续更新"></a>后续更新</h3><p>以下功能更新于2019/1/25</p>
+<ul>
+<li>针对查询指定节点很复杂的问题，实现了一个简单的XPath搜索</li>
+<li>为了防止查询节点重复，接口改为使用set(unordered_set) </li>
+<li>将文本默认改为plain节点，增加html和text输出接口</li>
+</ul>
+<p>以下功能更新于2018/8/20</p>
+<ul>
+<li>完成Windows和Linux下的编译器(VS及GCC)支持</li>
+<li>完成对自关闭标签的解析支持，如常见的 <code>img</code> <code>br</code> <code>input</code> <code>meta</code> 等等</li>
+<li>完成对无引号属性值的解析支持，如 <code>&lt;span id=xxx&gt;&lt;/span&gt;</code></li>
+<li>支持对多个class值的查询支持，类似JQuery的选择器</li>
+</ul>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2017/04/01/parse-pcap/" title="从PCAP简单提取HTTP数据">从PCAP简单提取HTTP数据</a></h2>
+                <p class="excerpt">
+                
+                为了追查现网的声音卡顿和噪音问题，做了一些抓包。但是我们协议当时还没有采用WebSocket，而且采用了双工的HTTP，想从里面提取音频不太容易，而且更主要的是还需要和包时间进行分析，分析卡顿问题。我的设想是提取TCP包内容，解析HTTP协议并提取音频数据，根据包时间和间隔，填充需要的静音数据进去，
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-04-01T07:11:00.000Z" class="post-list__meta--date date">2017-04-01</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2017/04/01/parse-pcap/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2017/02/23/weixinalarm/" title="用微信做现网告警">用微信做现网告警</a></h2>
+                <p class="excerpt">
+                
+                一般对于比较重要的现网监控，都有专人维护。但是个别规模很小切偶发问题几率很小的业务，用现有的邮件告警实时性比较低，一个是因为非办公地点很少登录邮件，另外一个就是垃圾邮件比较多。而短信和微信就比较方便了，不过短信一般需要收费，我们可以使用免费的微信实现实时告警消息。
+实现业务是一个Spring的Web
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-02-23T01:03:00.000Z" class="post-list__meta--date date">2017-02-23</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2017/02/23/weixinalarm/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

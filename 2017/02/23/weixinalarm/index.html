@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>用微信做现网告警 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="一般对于比较重要的现网监控，都有专人维护。但是个别规模很小切偶发问题几率很小的业务，用现有的邮件告警实时性比较低，一个是因为非办公地点很少登录邮件，另外一个就是垃圾邮件比较多。而短信和微信就比较方便了，不过短信一般需要收费，我们可以使用免费的微信实现实时告警消息。
+实现业务是一个Spring的Web项目，在日志中采用了logback日志框架。logback日志框架有个好处就是可以配置很多的appe">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="用微信做现网告警 | xilixili.net">
+    <meta name="twitter:description" content="一般对于比较重要的现网监控，都有专人维护。但是个别规模很小切偶发问题几率很小的业务，用现有的邮件告警实时性比较低，一个是因为非办公地点很少登录邮件，另外一个就是垃圾邮件比较多。而短信和微信就比较方便了，不过短信一般需要收费，我们可以使用免费的微信实现实时告警消息。
+实现业务是一个Spring的Web项目，在日志中采用了logback日志框架。logback日志框架有个好处就是可以配置很多的appe">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="用微信做现网告警 | xilixili.net">
+    <meta property="og:description" content="一般对于比较重要的现网监控，都有专人维护。但是个别规模很小切偶发问题几率很小的业务，用现有的邮件告警实时性比较低，一个是因为非办公地点很少登录邮件，另外一个就是垃圾邮件比较多。而短信和微信就比较方便了，不过短信一般需要收费，我们可以使用免费的微信实现实时告警消息。
+实现业务是一个Spring的Web项目，在日志中采用了logback日志框架。logback日志框架有个好处就是可以配置很多的appe">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2017/02/23/weixinalarm/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2017-02-23T01:03:00.000Z" class="post-list__meta--date date">2017-02-23</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">用微信做现网告警</h1>
+  </header>
+
+  <section class="post">
+    <p>一般对于比较重要的现网监控，都有专人维护。但是个别规模很小切偶发问题几率很小的业务，用现有的邮件告警实时性比较低，一个是因为非办公地点很少登录邮件，另外一个就是垃圾邮件比较多。而短信和微信就比较方便了，不过短信一般需要收费，我们可以使用免费的微信实现实时告警消息。</p>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>业务是一个Spring的Web项目，在日志中采用了logback日志框架。logback日志框架有个好处就是可以配置很多的appender，通过tcp的appender，可以将特殊的日志发送到日志收集工具logstash上，在logstash上我们通过规则实现调用微信API接口实现告警信息发送。</p>
+<h4 id="logback"><a href="#logback" class="headerlink" title="logback"></a>logback</h4><p>logback只需要配置特定的appender即可，如将ERROR级别的日志全部告警，配置 <code>logback.xml</code> 增加appender配置如下<br><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span>=<span class="string">"stash"</span> <span class="attr">class</span>=<span class="string">"net.logstash.logback.appender.LogstashAccessTcpSocketAppender"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">destination</span>&gt;</span>192.168.85.229:4560<span class="tag">&lt;/<span class="name">destination</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">filter</span> <span class="attr">class</span>=<span class="string">"ch.qos.logback.classic.filter.LevelFilter"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">level</span>&gt;</span>ERROR<span class="tag">&lt;/<span class="name">level</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">onMatch</span>&gt;</span>ACCEPT<span class="tag">&lt;/<span class="name">onMatch</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">onMismatch</span>&gt;</span>DENY<span class="tag">&lt;/<span class="name">onMismatch</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">filter</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">&lt;!-- encoder is required --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">encoder</span> <span class="attr">class</span>=<span class="string">"net.logstash.logback.encoder.LogstashEncoder"</span> &gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">encoder</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">keepAliveDuration</span>&gt;</span>5 minutes<span class="tag">&lt;/<span class="name">keepAliveDuration</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">reconnectionDelay</span>&gt;</span>3 second<span class="tag">&lt;/<span class="name">reconnectionDelay</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">appender</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>其中 <code>destination</code> 配置的是logstash的地址。</p>
+<p>当然必须配置日志级别，如下</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">root</span> <span class="attr">level</span>=<span class="string">"ERROR"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">appender-ref</span> <span class="attr">ref</span>=<span class="string">"stash"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="logstash"><a href="#logstash" class="headerlink" title="logstash"></a>logstash</h4><p>logstash下载安装此处就不再赘述，详见<a href="https://www.elastic.co/downloads/logstash" target="_blank" rel="noopener">https://www.elastic.co/downloads/logstash</a>，安装完成后修改 <code>/etc/logstash/conf.d/logstash.conf</code>，配置规则如下</p>
+<figure class="highlight erlang"><table><tr><td class="code"><pre><span class="line">input &#123;</span><br><span class="line">    tcp &#123;</span><br><span class="line">        port =&gt; <span class="number">4560</span></span><br><span class="line">        codec =&gt; json</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">output &#123;</span><br><span class="line">    exec &#123;</span><br><span class="line">        command =&gt; <span class="string">"/etc/logstash/conf.d/mail.py '%&#123;message&#125;'"</span></span><br><span class="line">    &#125;</span><br><span class="line">    exec &#123;</span><br><span class="line">        command =&gt; <span class="string">"/etc/logstash/conf.d/weixin.py '%&#123;message&#125;'"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述配置将接收到的日志的信息直接通python脚本发送，可以同时配置多种方式，此次配置了邮件及微信发送接口。当然此处配置只是logstash最简单的配置，但足以实现告警功能了。在正确修改配置文件之后启动logstash服务。</p>
+<h4 id="微信发送"><a href="#微信发送" class="headerlink" title="微信发送"></a>微信发送</h4><p>微信发送消息，到底是往哪发呢？做过微信公众号的读者应该晓得公众号的限制实现不了告警，那我们就使用企业号，去申请个企业号 <a href="https://qy.weixin.qq.com/" target="_blank" rel="noopener">https://qy.weixin.qq.com/</a>。</p>
+<p>申请完成之后，首先在通信录里面的组织架构里面先添加一些接收告警的微信，添加完成之后在标签里面添加一个标签，比如业务告警，在此标签下将用户拉进来。此步骤操作难度应该不大，就不上图了，目的是方便后续用户管理，记住标签ID。</p>
+<p>下一步在应用中心创建应用，记得选择消息型应用，简单填信息提交之后，应用界面大概如下图所示：</p>
+<p><picture class="picture"><source type="image/webp" srcset="/2017/02/23/weixinalarm/20170222192054.png.webp"><img class="image" src="/2017/02/23/weixinalarm/20170222192054.png" alt=""></picture></p>
+<p>主要关注下可见范围是不是正确，同时记住应用ID，其他不需要关注。</p>
+<p>然后切换到设置菜单页，选择权限管理。左边会看到我们刚创建的应用，点击出现权限设置。将其中的各个权限选择下，目前只有一个组织以及项目，因此权限选择只能选那一个。记住里面的CorpID和Secret。</p>
+<p>剩下的就是开发发送微信接口了，具体参见<a href="http://qydev.weixin.qq.com/wiki/index.php" target="_blank" rel="noopener">http://qydev.weixin.qq.com/wiki/index.php</a>。开发者文档里面需要关注的是 <a href="http://qydev.weixin.qq.com/wiki/index.php?title=%E4%B8%BB%E5%8A%A8%E8%B0%83%E7%94%A8" target="_blank" rel="noopener">主动调用</a> ，里面介绍的是如何获取access_token，access_token是用来发送消息的。<a href="http://qydev.weixin.qq.com/wiki/index.php?title=%E5%8F%91%E9%80%81%E6%8E%A5%E5%8F%A3%E8%AF%B4%E6%98%8E" target="_blank" rel="noopener">发送接口说明</a>里面介绍的是发送消息API，可以发文本，图片等格式的消息。根据接口文档，很容易用Python等脚本语言实现一个简单的告警，简单来说分两步：</p>
+<h5 id="1-获取TOKEN"><a href="#1-获取TOKEN" class="headerlink" title="1. 获取TOKEN"></a>1. 获取TOKEN</h5><p>向 <strong><a href="https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=xxxxxx&amp;corpsecret=yyyyyyyyy" target="_blank" rel="noopener">https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=xxxxxx&amp;corpsecret=yyyyyyyyy</a></strong> 发送GET请求，会获取到ACCESS_TOKEN，如</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">   <span class="attr">"access_token"</span>: <span class="string">"accesstoken000001"</span>,</span><br><span class="line">   <span class="attr">"expires_in"</span>: <span class="number">7200</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意替换里面的 <code>corpid</code> 以及 <code>corpsecret</code></p>
+<h5 id="2-发送文本消息"><a href="#2-发送文本消息" class="headerlink" title="2. 发送文本消息"></a>2. 发送文本消息</h5><p>向 <strong><a href="https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=ACCESS_TOKEN" target="_blank" rel="noopener">https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=ACCESS_TOKEN</a></strong> (注意替换ACCESS_TOKEN)发送POST请求，提交消息数据，其中消息数据为json格式，如</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"touser"</span>: <span class="string">"UserID1|UserID2|UserID3"</span>,</span><br><span class="line">    <span class="attr">"toparty"</span>: <span class="string">" PartyID1 | PartyID2 "</span>,</span><br><span class="line">    <span class="attr">"totag"</span>: <span class="string">" TagID1 | TagID2 "</span>,</span><br><span class="line">    <span class="attr">"msgtype"</span>: <span class="string">"text"</span>,</span><br><span class="line">    <span class="attr">"agentid"</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="attr">"text"</span>: &#123;</span><br><span class="line">        <span class="attr">"content"</span>: <span class="string">"Message Content"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"safe"</span>:<span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意 <code>touser</code> 与 <code>toparty</code> 及 <code>totag</code> 三选一即可，没必要全部赋值，前文我们采用了标签的方式，查询下标签ID，我们只创建了一个标签，ID应该是1。在 <code>totag</code> 里面填 <code>1</code> 即可。<code>agentid</code> 是前文所述的应用ID。文本消息内容放在 <code>content</code> 里面即可。</p>
+<h3 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h3><p>通过在业务中产生告警日志，日志通过logback传输到logstash，最终发送给微信企业平台，而分发到用户微信。</p>
+<p>可以发现微信上出现了单独的企业号（刚创建的企业号），进入之后可以显示应用列表，可以看到告警应用（看不到应用就是应用的可见权限设置问题）。在业务按照规则产生告警时，实时的发送到微信这个应用里面，和普通的消息提示是一样的，简单方便快捷。</p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2017/03/16/htmlparser/" title="C++实现HTML解析器">C++实现HTML解析器</a></h2>
+                <p class="excerpt">
+                
+                闲来无事，想做个网页爬虫。用C++来做的话，当然是先要做HTTP下载了，最简单的方式当然是用libcurl实现，然后从网页信息中提取必要的信息即可。这其中，libcurl下载可以支持chunked流及gzip压缩的特殊情况，难点在于HTML的解析。
+HTML是从XML来的，我用项目之前的xml封装库
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-03-16T06:06:00.000Z" class="post-list__meta--date date">2017-03-16</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2017/03/16/htmlparser/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2017/02/22/zookeeper/" title="C++集成zookeeper客户端">C++集成zookeeper客户端</a></h2>
+                <p class="excerpt">
+                
+                zookeeper是Java下常用的分布式应用程序协调服务。因接触到Java业务系统的一些架构，比如流行的微服务架构等等都采用zookeeper做服务发现。某些系统服务可以采用其他语言如C\C++实现来提升性能或者实现某些特殊功能。
+本文为C++集成zookeeper客户端的开发调研。
+开始zook
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-02-22T03:39:00.000Z" class="post-list__meta--date date">2017-02-22</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2017/02/22/zookeeper/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

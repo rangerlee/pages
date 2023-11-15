@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>从PCAP简单提取HTTP数据 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="为了追查现网的声音卡顿和噪音问题，做了一些抓包。但是我们协议当时还没有采用WebSocket，而且采用了双工的HTTP，想从里面提取音频不太容易，而且更主要的是还需要和包时间进行分析，分析卡顿问题。我的设想是提取TCP包内容，解析HTTP协议并提取音频数据，根据包时间和间隔，填充需要的静音数据进去，最终保存一个音频文件。
+音频部分目前是PCM格式，而且也是很规律标准的320字节，不需要编解码，直接">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="从PCAP简单提取HTTP数据 | xilixili.net">
+    <meta name="twitter:description" content="为了追查现网的声音卡顿和噪音问题，做了一些抓包。但是我们协议当时还没有采用WebSocket，而且采用了双工的HTTP，想从里面提取音频不太容易，而且更主要的是还需要和包时间进行分析，分析卡顿问题。我的设想是提取TCP包内容，解析HTTP协议并提取音频数据，根据包时间和间隔，填充需要的静音数据进去，最终保存一个音频文件。
+音频部分目前是PCM格式，而且也是很规律标准的320字节，不需要编解码，直接">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="从PCAP简单提取HTTP数据 | xilixili.net">
+    <meta property="og:description" content="为了追查现网的声音卡顿和噪音问题，做了一些抓包。但是我们协议当时还没有采用WebSocket，而且采用了双工的HTTP，想从里面提取音频不太容易，而且更主要的是还需要和包时间进行分析，分析卡顿问题。我的设想是提取TCP包内容，解析HTTP协议并提取音频数据，根据包时间和间隔，填充需要的静音数据进去，最终保存一个音频文件。
+音频部分目前是PCM格式，而且也是很规律标准的320字节，不需要编解码，直接">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2017/04/01/parse-pcap/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2017-04-01T07:11:00.000Z" class="post-list__meta--date date">2017-04-01</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">从PCAP简单提取HTTP数据</h1>
+  </header>
+
+  <section class="post">
+    <p>为了追查现网的声音卡顿和噪音问题，做了一些抓包。但是我们协议当时还没有采用WebSocket，而且采用了双工的HTTP，想从里面提取音频不太容易，而且更主要的是还需要和包时间进行分析，分析卡顿问题。我的设想是提取TCP包内容，解析HTTP协议并提取音频数据，根据包时间和间隔，填充需要的静音数据进去，最终保存一个音频文件。</p>
+<p>音频部分目前是PCM格式，而且也是很规律标准的320字节，不需要编解码，直接写文件即可。比较麻烦的是抓包文件，可以人工处理的是进行流过滤，单个流保存一个文件，这样稍微简单点。而且在协议解析部分，之前在项目中已经实现过HTTP协议的解析，剩余的就是从抓包文件里面提取时间和TCP数据了。</p>
+<h3 id="PCAP文件解析"><a href="#PCAP文件解析" class="headerlink" title="PCAP文件解析"></a>PCAP文件解析</h3><p>PCAP文件可以用libpcap库进行解析，感觉其实也没这必要，根据pcap文件格式直接进行解析，并从中提取出帧头、IP头、TCP头和数据。</p>
+<p>PCAP文件大致是由文件头和一帧帧数据包构成，文件头的C结构定义如下</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">pcap_header</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">uchar8_t</span>   magic[<span class="number">4</span>];</span><br><span class="line">    <span class="keyword">uint16_t</span>   version_major;</span><br><span class="line">    <span class="keyword">uint16_t</span>   version_minor;</span><br><span class="line">    <span class="keyword">int32_t</span>    thiszone;      <span class="comment">/*时区修正*/</span></span><br><span class="line">    <span class="keyword">uint32_t</span>   sigfigs;       <span class="comment">/*精确时间戳*/</span></span><br><span class="line">    <span class="keyword">uint32_t</span>   snaplen;       <span class="comment">/*抓包最大长度*/</span></span><br><span class="line">    <span class="keyword">uint32_t</span>   linktype;      <span class="comment">/*链路类型*/</span></span><br><span class="line">&#125; <span class="keyword">pcap_header_t</span>;</span><br></pre></td></tr></table></figure>
+<p>其中，magic是文件起始，值依次为 <code>0xd4</code> <code>0xc3</code> <code>0xb2</code> <code>0xa1</code> ，表明文件是PCAP文件，其他字段见说明。</p>
+<p>提取了文件头之后，就可以循环提取数据包了，数据包头的C结构定义如下</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">pcap_packet_header</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">uint32_t</span>   seconds;     <span class="comment">/*秒数*/</span></span><br><span class="line">    <span class="keyword">uint32_t</span>   u_seconds;   <span class="comment">/*毫秒数*/</span></span><br><span class="line">    <span class="keyword">uint32_t</span>   caplen;      <span class="comment">/*数据包长度*/</span></span><br><span class="line">    <span class="keyword">uint32_t</span>   len;         <span class="comment">/*文件数据包长度*/</span></span><br><span class="line">&#125; <span class="keyword">pcap_packet_header_t</span>;</span><br></pre></td></tr></table></figure>
+<p>读取之后，后面len长度的数据就是包数据了，而且我们需要的时间也在这个头结构中。</p>
+<h3 id="TCP数据解析"><a href="#TCP数据解析" class="headerlink" title="TCP数据解析"></a>TCP数据解析</h3><p>数据和时间我们已经可以正常提取了，然后剩下的就是提取TCP数据，直接用帧报头结构、IP头结构、TCP头结构映射过去即可（C指针就是这么强大）。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">frame_header</span></span></span><br><span class="line"><span class="class">&#123;</span> </span><br><span class="line">    <span class="keyword">uint8_t</span> DstMAC[<span class="number">6</span>]; <span class="comment">//目的MAC地址</span></span><br><span class="line">    <span class="keyword">uint8_t</span> SrcMAC[<span class="number">6</span>]; <span class="comment">//源MAC地址</span></span><br><span class="line">    u_short FrameType; <span class="comment">//帧类型</span></span><br><span class="line">&#125; <span class="keyword">frame_header_t</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">ip_header</span></span></span><br><span class="line"><span class="class">&#123;</span> </span><br><span class="line">    <span class="keyword">uint8_t</span> Ver_HLen;       <span class="comment">//版本+报头长度</span></span><br><span class="line">    <span class="keyword">uint8_t</span> TOS;            <span class="comment">//服务类型</span></span><br><span class="line">    <span class="keyword">uint16_t</span> TotalLen;       <span class="comment">//总长度</span></span><br><span class="line">    <span class="keyword">uint16_t</span> ID;            <span class="comment">//标识</span></span><br><span class="line">    <span class="keyword">uint16_t</span> Flag_Segment;   <span class="comment">//标志+片偏移</span></span><br><span class="line">    <span class="keyword">uint8_t</span> TTL;            <span class="comment">//生存周期</span></span><br><span class="line">    <span class="keyword">uint8_t</span> Protocol;       <span class="comment">//协议类型</span></span><br><span class="line">    <span class="keyword">uint16_t</span> Checksum;       <span class="comment">//头部校验和</span></span><br><span class="line">    <span class="keyword">uint32_t</span> SrcIP;         <span class="comment">//源IP地址</span></span><br><span class="line">    <span class="keyword">uint32_t</span> DstIP;         <span class="comment">//目的IP地址</span></span><br><span class="line">&#125; <span class="keyword">ip_header_t</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">tcp_header</span></span></span><br><span class="line"><span class="class">&#123;</span> </span><br><span class="line">    <span class="keyword">uint16_t</span> SrcPort; <span class="comment">//源端口</span></span><br><span class="line">    <span class="keyword">uint16_t</span> DstPort; <span class="comment">//目的端口</span></span><br><span class="line">    <span class="keyword">uint32_t</span> SeqNO; <span class="comment">//序号</span></span><br><span class="line">    <span class="keyword">uint32_t</span> AckNO; <span class="comment">//确认号</span></span><br><span class="line">    <span class="keyword">uint8_t</span> HeaderLen; <span class="comment">//数据报头的长度(4 bit) + 保留(4 bit)</span></span><br><span class="line">    <span class="keyword">uint8_t</span> Flags; <span class="comment">//标识TCP不同的控制消息</span></span><br><span class="line">    <span class="keyword">uint16_t</span> Window; <span class="comment">//窗口大小</span></span><br><span class="line">    <span class="keyword">uint16_t</span> Checksum; <span class="comment">//校验和</span></span><br><span class="line">    <span class="keyword">uint16_t</span> UrgentPointer;  <span class="comment">//紧急指针</span></span><br><span class="line">&#125;<span class="keyword">tcp_header_t</span>;</span><br></pre></td></tr></table></figure>
+<p>这里面在实践中发现了2个问题。</p>
+<ul>
+<li>帧头不对</li>
+<li>TCP头长度可变</li>
+</ul>
+<p>帧头不对的问题是这样的，在正常抓包后，解析帧头是标准的定义如上，但是某些抓包却不是这样的，后来仔细对比发现不对的地方在wireshark里面显示的是 <code>linux cooked capture</code> 意思大概就是由于抓包采用了any，某些包没有报头，只能统一伪造包头了，这个需要注意下，伪造报头大概是16个字节，此次不再展示定义了，具体的相关知识可以百度。</p>
+<p>TCP头长度不对其实是开始的理解不对，在TCP的定义里面有个头长度，根据这个头长度解析即可，因为TCP头可能还有其他数据，上面的定义只是最基础的结构，还要根据某些值来判断后续数据，因此根据TCP头里面的长度跳过头才是正确的做法。另外长度这个长度字段只有4bit，不是简单取值即可，这个真实长度是需要进行再计算获取的，大概这么计算，具体细节自行百度</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">uint8_t</span> len = pData-&gt;HeaderLen;</span><br><span class="line">len = (len &gt;&gt; <span class="number">4</span> ) * <span class="number">4</span>;</span><br></pre></td></tr></table></figure>
+<p>注意这里面超过一个字节的数字需要大小端转换，网络包都是大端字节序。</p>
+<p>剩下的就是HTTP解析和音频补偿和保存了，可以采用项目现有代码实现。</p>
+<h3 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h3><p>后面再回头看看，PCAP抓包文件格式还是挺简单的了，完全没有必要使用libpcap解析，而且自己解析还可以顺便了解下协议相关知识，也还是有好处的。</p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2017/09/13/function-call-once/" title="如何保证函数只被调用一次">如何保证函数只被调用一次</a></h2>
+                <p class="excerpt">
+                
+                经常会有一些函数全局只需要调用一次，如WSAStartup等，一般这种都会在程序入口处统一单独调用，但也容易忘记，封装在其他地方难免多次初始化，在C++中可以考虑采用一些技巧来实现。
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-09-13T08:00:00.000Z" class="post-list__meta--date date">2017-09-13</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2017/09/13/function-call-once/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2017/03/16/htmlparser/" title="C++实现HTML解析器">C++实现HTML解析器</a></h2>
+                <p class="excerpt">
+                
+                闲来无事，想做个网页爬虫。用C++来做的话，当然是先要做HTTP下载了，最简单的方式当然是用libcurl实现，然后从网页信息中提取必要的信息即可。这其中，libcurl下载可以支持chunked流及gzip压缩的特殊情况，难点在于HTML的解析。
+HTML是从XML来的，我用项目之前的xml封装库
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-03-16T06:06:00.000Z" class="post-list__meta--date date">2017-03-16</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2017/03/16/htmlparser/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>xilixili.net | 生活と技术の杂记</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="xilixili.net | 生活と技术の杂记">
+    <meta name="twitter:description" content="">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="xilixili.net | 生活と技术の杂记">
+    <meta property="og:description" content="">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <div class="main-post-list">
+    
+  <ol class="post-list">
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2021/03/25/rtp-out-of-order/" title="阅读 视频RTP乱序问题">视频RTP乱序问题</a></h2>
+      <p class="excerpt">
+    
+      问题分析最近在一个新环境下保持RTP的H264视频数据花屏，按照以往经验，最大可能性是丢包了，遂抓包分析，发现包个数足够，并没有反馈任何包的丢失，这就有意思了。
+不过在看抓包过程中，不经意间发现了下面的现象
+
+seq 51 的包跑到 seq 50 的前面了，怪不得解包的视频不正确。顺着这个线索继续看发现
+
+乱序现象一直存在，间隔时间不长就出现一次
+乱序的包是一个视频帧，即其时间戳是相同的
+
+解决方
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2021-03-25T06:51:00.000Z" class="post-list__meta--date date">2021-03-25</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2021/03/25/rtp-out-of-order/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2021/02/08/h264-get-width-height-from-sps/" title="阅读 从H264中SPS计算宽高">从H264中SPS计算宽高</a></h2>
+      <p class="excerpt">
+    
+      最近在处理H264流的时候发现计算的宽高并不正确。
+基本计算方法大家都知道SPS解析之后，宽高就可以通过下面的计算公式计算出来：
+
+宽 (pic_width_in_mbs_minus1 + 1) * 16
+高 (pic_height_in_map_units_minus1 + 1) * 16
+
+然而仔细思考一下就发现，这种方式计算的宽高都是16的倍数，但好像和平时的认知不符啊。
+其实针对不是16整
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2021-02-08T10:54:00.000Z" class="post-list__meta--date date">2021-02-08</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2021/02/08/h264-get-width-height-from-sps/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2020/12/14/centos-6-config-vault-yum-repo/" title="阅读 CentOS6支持到期后配置备份更新源">CentOS6支持到期后配置备份更新源</a></h2>
+      <p class="excerpt">
+    
+      CentOS 6 的支持在上个月到期了，各个更新源都下线了，线上一堆的服务器又不能升级，偶尔安装个软件可怎么办，其实官方还保留了一个备份的源用来更新，虽然不升级了，但至少安装软件没问题。
+配置备份虽然说备份已经没啥用了，但是作为良好的操作习惯，还是建议做一下。
+备份目录 /etc/yum.repo.d/ ,将里面官方的 repo 文件都备份，备份之后删除目录内容，如果里面有其他未下线的仓库配置，暂
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2020-12-14T09:41:00.000Z" class="post-list__meta--date date">2020-12-14</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2020/12/14/centos-6-config-vault-yum-repo/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2020/11/09/boost-property-tree-not-support-non-string-in-json/" title="阅读 BOOST不支持JSON输出数字值">BOOST不支持JSON输出数字值</a></h2>
+      <p class="excerpt">
+    
+      前文刚讲述过boost的porperty_tree在JSON上的一些问题，最近使用又发现一些问题，可能大家都可能发现了，就是用该库来生成JSON的时候，不支持数字等非字符串类型的值。
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2020-11-09T07:23:00.000Z" class="post-list__meta--date date">2020-11-09</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2020/11/09/boost-property-tree-not-support-non-string-in-json/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2020/09/28/boost-property-ptree-json-write-chinese/" title="阅读 BOOST生成JSON中文乱码">BOOST生成JSON中文乱码</a></h2>
+      <p class="excerpt">
+    
+      最近Linux生产环境在用boost库生成json的时候发现中文乱码，经调测发现是boost库的bug，在此记录。
+boost生成Json一般用法boost有两个数据结构，其中一个是 property::ptree, 这个数据结构可以表示 xml json ini 等格式的文件内容，在不使用第三方比如 jsonpp 等库的情况下，在使用boost的情况下也不需要引入其他库，一般操作完 ptree 
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2020-09-28T09:02:00.000Z" class="post-list__meta--date date">2020-09-28</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2020/09/28/boost-property-ptree-json-write-chinese/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2020/05/18/yuv420p-merge/" title="阅读 拼接YUV420P图像">拼接YUV420P图像</a></h2>
+      <p class="excerpt">
+    
+      最近需要实现视频的左右拼接，从而可以实现2路摄像头的同时显示，调研使用了几种实现方式进行了对比。
+ffmpeg方式谈到视频方面的处理，肯定首选 ffmpeg，想要实现上面的功能，其实 ffmpeg 就能实现，使用其 filter 就可以，大概思路是：
+
+使用  pad 扩展出另外一个图像的空间
+使用 overlay 复制另外一个图像到扩展出来的空间
+
+整体实现不难，后续再讲一下这个，因为可以实现很
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2020-05-18T08:31:00.000Z" class="post-list__meta--date date">2020-05-18</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2020/05/18/yuv420p-merge/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2020/05/14/blockchain-fisco-bcos-dynamic-group/" title="阅读 FISCOBCOS~2.4动态群组试用">FISCOBCOS~2.4动态群组试用</a></h2>
+      <p class="excerpt">
+    
+      续前文，近期 FISCO BCOS 2.4  版本发布了，最核心的特性是动态群组管理，这个功能免去了手动部署新群组的过程，极大的方便了群组管理。
+新版本部署FISCO BCOS 2.4 版本部署前一版本基本没有区别，注意 2.3 版本部署的时候配置文件稍有变化（依然兼容以前配置）。按照以前的部署方法部署即可，新配置参考 2.3 的配置即可。
+动态创建群组这个版本虽然增加了动态创建群组的功能，但是 
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2020-05-14T02:50:00.000Z" class="post-list__meta--date date">2020-05-14</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2020/05/14/blockchain-fisco-bcos-dynamic-group/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2020/05/12/hik-camera-ptz-rotation/" title="阅读 精确控制海康摄像头PTZ">精确控制海康摄像头PTZ</a></h2>
+      <p class="excerpt">
+    
+      项目中需要定时抓取摄像头不同角度的视频图像，也就是要精确控制海康摄像头PTZ旋转指定的角度，比如像我们的需求应该是90°，旋转完成之后刷屏，然后继续旋转。这种需求第一个想到的就是控制预置点，这个也是一个非常不错的方法，因为可以对真实情况进行调整，但是由于摄像头数据太大，一个个调整不太现实。
+PTZ旋转实现海康的PTZ控制比较简单， 但是要精确控制PTZ到指定的位置，好像没那么容易。查看海康的API
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2020-05-12T09:38:00.000Z" class="post-list__meta--date date">2020-05-12</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2020/05/12/hik-camera-ptz-rotation/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2020/04/30/blockchain-fisco-bcos-deploy/" title="阅读 FISCOBCOS~联盟链部署">FISCOBCOS~联盟链部署</a></h2>
+      <p class="excerpt">
+    
+      续前文，开始进行区块链部署。
+部署前准备首先清楚联盟链，是需要多家机构组成联盟，因此在部署上稍微有区别。其中 FISCO BCOS 支持多群组概念，也就是意思说，多个组织组成多个联盟，而且联盟中可以允许共同的组织节点。
+FISCO BCOS 部署需要 Linux 平台，建议使用 CentOS 7 平台，同时安装可能的依赖软件 OpenSSL 和 Python 等。
+安装部署工具如果未安装部署工具，
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2020-04-30T06:10:00.000Z" class="post-list__meta--date date">2020-04-30</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2020/04/30/blockchain-fisco-bcos-deploy/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2020/04/27/blockchain-fisco-bcos-ca/" title="阅读 FISCOBCOS~自建CA及实现认证">FISCOBCOS~自建CA及实现认证</a></h2>
+      <p class="excerpt">
+    
+      最近在调试区块链，开始调研了很多区块链平台，包括百度京东的，最终还是觉得微众银行的FISCO BCOS最好用。至于各个平台的差异，大家可自行百度对比。顺便说一句，FISCO BCOS(以下称FB)的社区还不错，官方支持nice！
+关于FISCO BCOS自建区块链，基本比较合适的方式是联盟链。因为使用公链存着信息泄露，私链又没有信用背书，因此诞生了在有限范围内使用的区块链架构，即联盟链。
+联盟链是
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2020-04-27T13:55:00.000Z" class="post-list__meta--date date">2020-04-27</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2020/04/27/blockchain-fisco-bcos-ca/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+  </ol>
+
+
+  <nav class="pagination" role="navigation">
+    
+      <a class="older-posts pagination__newer btn btn-small btn-tertiary" href="/#blog">&larr; 最近</a>
+    
+    <span class="pagination__page-number">  2 / 9 </span>
+    
+      <a class="older-posts pagination__older btn btn-small btn-tertiary" href="/archives/page/3/">更早 &rarr;</a>
+    
+  </nav>
+
+ <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+    
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</div>
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

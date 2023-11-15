@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>C++集成zookeeper客户端 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="zookeeper是Java下常用的分布式应用程序协调服务。因接触到Java业务系统的一些架构，比如流行的微服务架构等等都采用zookeeper做服务发现。某些系统服务可以采用其他语言如C\C++实现来提升性能或者实现某些特殊功能。
+本文为C++集成zookeeper客户端的开发调研。
+开始zookeeper的C\C++开发客户端源代码和zookeeper在一起，从官网下载zookeeper包，解">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="C++集成zookeeper客户端 | xilixili.net">
+    <meta name="twitter:description" content="zookeeper是Java下常用的分布式应用程序协调服务。因接触到Java业务系统的一些架构，比如流行的微服务架构等等都采用zookeeper做服务发现。某些系统服务可以采用其他语言如C\C++实现来提升性能或者实现某些特殊功能。
+本文为C++集成zookeeper客户端的开发调研。
+开始zookeeper的C\C++开发客户端源代码和zookeeper在一起，从官网下载zookeeper包，解">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="C++集成zookeeper客户端 | xilixili.net">
+    <meta property="og:description" content="zookeeper是Java下常用的分布式应用程序协调服务。因接触到Java业务系统的一些架构，比如流行的微服务架构等等都采用zookeeper做服务发现。某些系统服务可以采用其他语言如C\C++实现来提升性能或者实现某些特殊功能。
+本文为C++集成zookeeper客户端的开发调研。
+开始zookeeper的C\C++开发客户端源代码和zookeeper在一起，从官网下载zookeeper包，解">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2017/02/22/zookeeper/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2017-02-22T03:39:00.000Z" class="post-list__meta--date date">2017-02-22</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">C++集成zookeeper客户端</h1>
+  </header>
+
+  <section class="post">
+    <p>zookeeper是Java下常用的分布式应用程序协调服务。因接触到Java业务系统的一些架构，比如流行的微服务架构等等都采用zookeeper做服务发现。某些系统服务可以采用其他语言如C\C++实现来提升性能或者实现某些特殊功能。</p>
+<p>本文为C++集成zookeeper客户端的开发调研。</p>
+<h3 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h3><p>zookeeper的C\C++开发客户端源代码和zookeeper在一起，从官网下载zookeeper包，解压后C\C++客户端在src\c目录中。网上说多线程程序链接zookeeper_mt，单线程zookeeper_st，实测在Windows环境下只有zookeeper一个库，请注意。</p>
+<h4 id="数据模型"><a href="#数据模型" class="headerlink" title="数据模型"></a>数据模型</h4><p>zookeeper表现为一个分层的文件系统目录树结构（不同于文件系统的是，节点可以有自己的数据，而文件系统中的目录节点只有子节点）。</p>
+<h4 id="监视WATCHES"><a href="#监视WATCHES" class="headerlink" title="监视WATCHES"></a>监视WATCHES</h4><p>zookeeper中所有的读操作都可以设置监视，监视事件可以理解为一次性触发器。其中：</p>
+<ul>
+<li><p>一次性触发 </p>
+<p>当设置监视的数据发生改变时，该监视事件会被发送到客户端，例如，如果客户端调用了getData(“/znode1”,true) 并且稍后/znode1节点上的数据发生了改变或者被删除了，客户端将会获取到/znode1发生变化的监视事件，而如果/znode1再一次发生了变化，除非客户端再次对/znode1设置监视，否则客户端不会收到事件通知。</p>
+</li>
+<li><p>发送至客户端</p>
+<p>zookeeper客户端和服务端是通过socket进行通信的，由于网络存在故障，所以监视事件很有可能不会成功地到达客户端，监视事件是异步发送至监视者的，zookeeper本身提供了保序性(ordering guarantee)：即客户端只有首先看到了监视事件后，才会感知到它所设置监视的znode发生了变化(a client will never see a hange for which it has set a watch until it first sees the watch event)。网络延迟或者其他因素可能导致不同的客户端在不同的时刻感知某一监视事件，但是不同的客户端所看到的一切具有一致的顺序。</p>
+</li>
+<li><p>被监视的数据</p>
+<p>这意味着znode节点本身具有不同的改变方式。你也可以想象Zookeeper维护了两条监视链表：数据监视和子节点监视(data watches and child watches) getData() and exists()设置数据监视，getChildren()设置子节点监视。 或者，你也可以想象zookeeper设置的不同监视返回不同的数据，getData()和exists()返回znode节点的相关信息，而getChildren()返回子节点列表。因此，setData()会触发设置在某一节点上所设置的数据监视(假定数据设置成功)，而一次成功的create()操作则会出发当前节点上所设置的数据监视以及父节点的子节点监视。一次成功的delete()操作将会触发当前节点的数据监视和子节点监视事件，同时也会触发该节点父节点的child watch。</p>
+</li>
+</ul>
+<p>zookeeper中的监视是轻量级的，因此容易设置、维护和分发。当客户端与zookeeper服务器端失去联系时，客户端并不会收到监视事件的通知，只有当客户端重新连接后，若在必要的情况下，以前注册的监视会重新被注册并触发，对于开发人员来说 这通常是透明的。只有一种情况会导致监视事件的丢失，即：通过exists()设置了某个znode节点的监视，但是如果某个客户端在此znode节点被创建和删除的时间间隔内与zookeeper服务器失去了联系，该客户端即使稍后重新连接zookeeper服务器后也得不到事件通知。</p>
+<h4 id="连接状态Stat相关的常量"><a href="#连接状态Stat相关的常量" class="headerlink" title="连接状态Stat相关的常量"></a>连接状态Stat相关的常量</h4><ul>
+<li>ZOO_EXPIRED_SESSION_STATE</li>
+<li>ZOO_AUTH_FAILED_STATE</li>
+<li>ZOO_CONNECTING_STATE</li>
+<li>ZOO_ASSOCIATING_STATE</li>
+<li>ZOO_CONNECTED_STATE</li>
+</ul>
+<h4 id="与监视类型相关的常量"><a href="#与监视类型相关的常量" class="headerlink" title="与监视类型相关的常量"></a>与监视类型相关的常量</h4><ul>
+<li>ZOO_CREATED_EVENT; //节点被创建(此前该节点不存在)，通过zoo_exists()设置监视。</li>
+<li>ZOO_DELETED_EVENT; //节点被删除，通过zoo_exists()和zoo_get()设置监视。</li>
+<li>ZOO_CHANGED_EVENT; //节点发生变化，通过zoo_exists()和zoo_get()设置监视。</li>
+<li>ZOO_CHILD_EVENT; //子节点事件，通过zoo_get_children()和zoo_get_children2()设置监视。</li>
+<li>ZOO_SESSION_EVENT; //会话丢失</li>
+<li>ZOO_NOTWATCHING_EVENT; //监视被移除。</li>
+</ul>
+<h3 id="开发"><a href="#开发" class="headerlink" title="开发"></a>开发</h3><h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*const char* host = "127.0.0.1:2181,127.0.0.1:2182," </span></span><br><span class="line"><span class="comment">"127.0.0.1:2183,127.0.0.1:2184,127.0.0.1:2185";*/</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">char</span>* host = <span class="string">"192.168.58.80:2181"</span>;</span><br><span class="line"><span class="keyword">int</span> timeout = <span class="number">30000</span>;</span><br><span class="line">zoo_set_debug_level(ZOO_LOG_LEVEL_WARN);</span><br><span class="line"><span class="comment">// 初始化 zookeeper ，倒数第二个参数没啥用，</span></span><br><span class="line"><span class="comment">// 但是可以作为内部的参数传递，对应 zktest_watcher_g 函数最后一个参数</span></span><br><span class="line">zkhandle = zookeeper_init(host,</span><br><span class="line">	zktest_watcher_g, timeout, <span class="number">0</span>, <span class="string">"hello zookeeper."</span>, <span class="number">0</span>);</span><br><span class="line"><span class="keyword">if</span> (zkhandle == <span class="literal">NULL</span>) &#123;</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Error when connecting to zookeeper servers...\n"</span>);</span><br><span class="line">	<span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中 zktest_watcher_g 是监视回调函数，格式如下</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">zktest_watcher_g</span><span class="params">(<span class="keyword">zhandle_t</span>* zh, <span class="keyword">int</span> type, <span class="keyword">int</span> state, <span class="keyword">const</span> <span class="keyword">char</span>* path, <span class="keyword">void</span>* watcherCtx)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>watcherCtx 设置的值，见前面代码注释；</p>
+<h4 id="释放"><a href="#释放" class="headerlink" title="释放"></a>释放</h4><p>使用结束后释放</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">zookeeper_close(zkhandle);</span><br></pre></td></tr></table></figure>
+<h4 id="监视数据"><a href="#监视数据" class="headerlink" title="监视数据"></a>监视数据</h4><p>一般在初始化的回调中会产生一些回调事件，如连接状态等，监视数据我们就在连接成功之后触发，且目录必须是节点创建之后才可以监听。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">zktest_watcher_g</span><span class="params">(<span class="keyword">zhandle_t</span> *zh, <span class="keyword">int</span> type, <span class="keyword">int</span> state,</span></span></span><br><span class="line"><span class="function"><span class="params">                      <span class="keyword">const</span> <span class="keyword">char</span> *path, <span class="keyword">void</span> *watcherCtx)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"Something happened.\n"</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"type: %d\t"</span>, type);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"state: %d\t"</span>, state);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"path: %s\t"</span>, path);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"watcherCtx: %s\n"</span>, (<span class="keyword">char</span> *) watcherCtx);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//事件类型</span></span><br><span class="line">    <span class="keyword">if</span> (type == ZOO_SESSION_EVENT) &#123;</span><br><span class="line">        <span class="keyword">if</span> (state == ZOO_CONNECTED_STATE) &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">"--------------ZOO_CONNECTED_STATE----------------\n"</span>);</span><br><span class="line">            <span class="keyword">int</span> ret = zoo_aexists(zkhandle, <span class="string">"/xyz"</span>, <span class="number">1</span>, zktest_stat_completion, <span class="string">"aexists"</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">//我们真实的情况应该是监听一个目录</span></span><br><span class="line">            zoo_awget_children2(zkhandle, <span class="string">"/xyz"</span>, zktest_watcher_g,</span><br><span class="line">                                <span class="string">"childwatchctx"</span>, zktest_string_completion2, <span class="string">"childwatch"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (type == ZOO_CREATED_EVENT || type == ZOO_DELETED_EVENT || </span><br><span class="line">            type == ZOO_CHANGED_EVENT) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"---ZOO_CREATED_EVENT|ZOO_DELETED_EVENT|ZOO_CHANGED_EVENT---\n"</span>);</span><br><span class="line">        <span class="comment">//zoo_aexists 可以监听 ZOO_CREATED_EVENT;ZOO_DELETED_EVENT；ZOO_CHANGED_EVENT</span></span><br><span class="line">        <span class="keyword">int</span> ret = zoo_aexists(zkhandle, <span class="string">"/xyz"</span>, <span class="number">1</span>, zktest_stat_completion, <span class="string">"aexists"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">///！！！必须在监听的目录创建之后才可以监听</span></span><br><span class="line">        <span class="keyword">if</span> (type == ZOO_CREATED_EVENT) &#123;</span><br><span class="line">            zoo_awget_children2(zkhandle, <span class="string">"/xyz"</span>, zktest_watcher_g,</span><br><span class="line">                                <span class="string">"childwatchctx"</span>, zktest_string_completion2, <span class="string">"childwatch"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (type == ZOO_CHILD_EVENT) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"--------------ZOO_CHILD_EVENT----------------\n"</span>);</span><br><span class="line">        <span class="comment">//zoo_get_children() 和 zoo_get_children2() 监视的消息</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//测试此处貌似还必须继续监听才行</span></span><br><span class="line">        zoo_awget_children2(zkhandle, <span class="string">"/xyz"</span>, zktest_watcher_g,</span><br><span class="line">                            <span class="string">"childwatchctx"</span>, zktest_string_completion2, <span class="string">"childwatch"</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (type == ZOO_SESSION_EVENT) &#123;</span><br><span class="line">        <span class="comment">//会话丢失</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"--------------ZOO_SESSION_EVENT----------------\n"</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (type == ZOO_NOTWATCHING_EVENT) &#123;</span><br><span class="line">        <span class="comment">//监视被移除</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"--------------ZOO_NOTWATCHING_EVENT----------------\n"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>响应的回调函数实现如下,特别注意各个数据之间的流程（在回调中根据返回码确认是否继续监听），数据的监听采用exist，之后get，节点则用zoo_awget_children2监听节点变化，之后根据变化再获取值，各处注意之处可看注释及日志输出说明。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">zktest_dump_stat</span><span class="params">(<span class="keyword">const</span> struct Stat *stat)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!stat) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"version=%x\taversion=%x"</span></span><br><span class="line">                    <span class="string">"\tephemeralOwner = %llx\n"</span>,</span><br><span class="line">            (<span class="keyword">unsigned</span> <span class="keyword">int</span>) stat-&gt;version, (<span class="keyword">unsigned</span> <span class="keyword">int</span>) stat-&gt;aversion,</span><br><span class="line">            stat-&gt;ephemeralOwner);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">zktest_string_completion2</span><span class="params">(<span class="keyword">int</span> rc, <span class="keyword">const</span> struct String_vector *name, </span></span></span><br><span class="line"><span class="function"><span class="params">                               <span class="keyword">const</span> struct Stat *stat, <span class="keyword">const</span> <span class="keyword">void</span> *data)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"zktest_string_completion2: rc = %d\n"</span>, rc);</span><br><span class="line">    <span class="keyword">if</span> (rc == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; name-&gt;count; i++) &#123;</span><br><span class="line">            <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"name = %s\n"</span>, name-&gt;data[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    zktest_dump_stat(stat);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">zktest_data_completion</span><span class="params">(<span class="keyword">int</span> rc, <span class="keyword">const</span> <span class="keyword">char</span> *value, <span class="keyword">int</span> value_len,</span></span></span><br><span class="line"><span class="function"><span class="params">                            <span class="keyword">const</span> struct Stat *stat, <span class="keyword">const</span> <span class="keyword">void</span> *data)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (rc == ZOK) &#123;</span><br><span class="line">        <span class="comment">//value和value_len就是取出来的值</span></span><br><span class="line">        <span class="built_in">std</span>::<span class="function"><span class="built_in">string</span> <span class="title">buf</span><span class="params">(value, value_len)</span></span>;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"%s: rc = %d valle=%s\n"</span>,</span><br><span class="line">                (<span class="keyword">char</span> *) data, rc, buf.c_str());</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"%s: rc = %d valle=%s\n"</span>,</span><br><span class="line">                (<span class="keyword">char</span> *) data, rc, value);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">zktest_watcher_g</span><span class="params">(<span class="keyword">zhandle_t</span> *zh, <span class="keyword">int</span> type, <span class="keyword">int</span> state,</span></span></span><br><span class="line"><span class="function"><span class="params">                      <span class="keyword">const</span> <span class="keyword">char</span> *path, <span class="keyword">void</span> *watcherCtx)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">zktest_stat_completion</span><span class="params">(<span class="keyword">int</span> rc, <span class="keyword">const</span> struct Stat *stat, <span class="keyword">const</span> <span class="keyword">void</span> *data)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"%s: rc = %d Stat:\n"</span>, (<span class="keyword">char</span> *) data, rc);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (rc == ZNONODE) &#123;</span><br><span class="line">        <span class="comment">//数据被删除了</span></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (rc == ZOK) &#123;</span><br><span class="line">        zktest_dump_stat(stat);</span><br><span class="line">        <span class="comment">//监听到变化就取值</span></span><br><span class="line">        <span class="keyword">int</span> ret = zoo_aget(zkhandle, <span class="string">"/xyz"</span>, <span class="literal">NULL</span>, zktest_data_completion, <span class="string">"mydata"</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">//其他错误</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>zookeeper安装目录bin下有客户端zkCli.cmd （linux下为zkClient.sh ）,启动之后默认连接本地服务，可使用connect命令连接远程。<br>上述例子（可见完整代码）测试，可先启动程序，再执行创建命令，在zookeeper中创建目录必须层层创建，比如例子中/xyz/目录下的/xyz/abc，首先建立/xyz节点（且实际测试必须赋值，网上提供的例子均不需要赋值）</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">create /xyz "anyvalue"</span><br></pre></td></tr></table></figure>
+<p>当然可通过set修改值<br><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">set /xyz "newvalue"</span><br></pre></td></tr></table></figure></p>
+<p>创建目录（子节点）</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">create /xyz/abc "nodevalue"</span><br></pre></td></tr></table></figure>
+<p>修改节点</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">set /xyz/abc "newvalue"</span><br></pre></td></tr></table></figure>
+<p>删除节点</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">rmr /xyz</span><br></pre></td></tr></table></figure>
+<p>依次操作可查看程序日志输出，同时也可先创建节点再启动程序进行修改等操作观察日志输出。即可了解zookeeper客户端的回调机制。</p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2017/02/23/weixinalarm/" title="用微信做现网告警">用微信做现网告警</a></h2>
+                <p class="excerpt">
+                
+                一般对于比较重要的现网监控，都有专人维护。但是个别规模很小切偶发问题几率很小的业务，用现有的邮件告警实时性比较低，一个是因为非办公地点很少登录邮件，另外一个就是垃圾邮件比较多。而短信和微信就比较方便了，不过短信一般需要收费，我们可以使用免费的微信实现实时告警消息。
+实现业务是一个Spring的Web
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-02-23T01:03:00.000Z" class="post-list__meta--date date">2017-02-23</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2017/02/23/weixinalarm/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2017/02/07/webp/" title="网页自适应显示WebP图片">网页自适应显示WebP图片</a></h2>
+                <p class="excerpt">
+                
+                生命不息，折腾不止。
+起因最近上传了个背景图，加载的非常慢，才发现上传了个1M多的图。优化手段无非就是做做图片裁剪已经质量压缩，网上确实也有不少的分析压缩的方法，但基本都是jpeg和png等。偶然发现最近流行的WebP格式，又是对图片压缩的一大进步，可以大幅优化流量。
+WebP就不多做介绍了，有兴趣
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-02-07T12:44:00.000Z" class="post-list__meta--date date">2017-02-07</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2017/02/07/webp/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

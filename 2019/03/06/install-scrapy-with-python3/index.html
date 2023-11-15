@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>Python3安装Scrapy爬虫引擎 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="因最近在使用Scrapy框架，但是最终系统需要部署到Linux上，故记录下在Windows上和Linux上安装Scrapy爬虫引擎的。
+安装Python3现在Python3逐渐开始流行，因此我们直接使用Python3.6版本，在Window上安装Python的方法比较简单，在官网下载对应的安装包安装即可，此处重点说下Linux下安装步骤。
+Linux安装比较麻烦的是多版本共存，比如CentOS7系">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Python3安装Scrapy爬虫引擎 | xilixili.net">
+    <meta name="twitter:description" content="因最近在使用Scrapy框架，但是最终系统需要部署到Linux上，故记录下在Windows上和Linux上安装Scrapy爬虫引擎的。
+安装Python3现在Python3逐渐开始流行，因此我们直接使用Python3.6版本，在Window上安装Python的方法比较简单，在官网下载对应的安装包安装即可，此处重点说下Linux下安装步骤。
+Linux安装比较麻烦的是多版本共存，比如CentOS7系">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Python3安装Scrapy爬虫引擎 | xilixili.net">
+    <meta property="og:description" content="因最近在使用Scrapy框架，但是最终系统需要部署到Linux上，故记录下在Windows上和Linux上安装Scrapy爬虫引擎的。
+安装Python3现在Python3逐渐开始流行，因此我们直接使用Python3.6版本，在Window上安装Python的方法比较简单，在官网下载对应的安装包安装即可，此处重点说下Linux下安装步骤。
+Linux安装比较麻烦的是多版本共存，比如CentOS7系">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2019/03/06/install-scrapy-with-python3/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2019-03-06T10:01:00.000Z" class="post-list__meta--date date">2019-03-06</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">Python3安装Scrapy爬虫引擎</h1>
+  </header>
+
+  <section class="post">
+    <p>因最近在使用Scrapy框架，但是最终系统需要部署到Linux上，故记录下在Windows上和Linux上安装Scrapy爬虫引擎的。</p>
+<h3 id="安装Python3"><a href="#安装Python3" class="headerlink" title="安装Python3"></a>安装Python3</h3><p>现在Python3逐渐开始流行，因此我们直接使用Python3.6版本，在Window上安装Python的方法比较简单，在官网下载对应的安装包安装即可，此处重点说下Linux下安装步骤。</p>
+<p>Linux安装比较麻烦的是多版本共存，比如CentOS7系统中，已经存在了Python2.7版本，为了防止对系统造成依赖等问题，我们不打算卸载2.7版本，直接安装3.6版本。</p>
+<p>网上很多人都说要源码安装，但是源码安装比较麻烦，不如YUM方便，因此我们直接通过YUM安装，但是官方仓库是没有的， 我们需要安装EPEL仓库，安装命令如下</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum -y install epel-release</span><br><span class="line">yum update</span><br></pre></td></tr></table></figure>
+<p>安装并更新缓存之后，就可以安装3.6版本了，命令如下</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install python36</span><br></pre></td></tr></table></figure>
+<p>之后会在  <code>/usr/bin/</code>  目录下生成以下执行文件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">/usr/bin/python36</span><br><span class="line">/usr/bin/python3.6</span><br><span class="line">/usr/bin/python3.6m</span><br></pre></td></tr></table></figure>
+<p>虽然很多，但是并没有  python3  我们创建一个符号链接即可</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ln -s /usr/bin/python36 /usr/bin/python3</span><br></pre></td></tr></table></figure>
+<p>如果你还想将 <code>/usr/bin/python</code> 链接成 3.6版本也可以，不过我没有测试，主要是怕出现冲突。</p>
+<p>接下来需要安装 pip 了，同样使用YUM安装即可</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">yum install python36-pip</span><br></pre></td></tr></table></figure>
+<p>同样的，在 <code>/usr/bin/</code> 目录下生成了多个 pip3 系列执行程序，但是并没有 pip3，同上的方法创建软链接</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ln -s /usr/bin/pip36 /usr/bin/pip3</span><br></pre></td></tr></table></figure>
+<p>同样也可以将 <code>pip</code> 切换为 <code>pip3</code>，不过不推荐。</p>
+<h3 id="安装Scrapy"><a href="#安装Scrapy" class="headerlink" title="安装Scrapy"></a>安装Scrapy</h3><p>安装Scrapy只需要pip安装即可，但是Scrapy依赖的的 Twisted 在Windows下不支持，另外在Linux下也需要特殊处理。</p>
+<h4 id="Windows安装Scrapy"><a href="#Windows安装Scrapy" class="headerlink" title="Windows安装Scrapy"></a>Windows安装Scrapy</h4><p>Windows下安装首先要安装 Twisted  库，而且不能通过 pip 安装， 否则你会发现好多错误，正确的安装办法是下载第三方提供的安装包安装，网址 <a href="https://www.lfd.uci.edu/~gohlke/pythonlibs/#twisted" target="_blank" rel="noopener">https://www.lfd.uci.edu/~gohlke/pythonlibs/#twisted</a></p>
+<p>注意选择对应的 Python 版本和对应的系统架构版本，比如</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pip3 install https://download.lfd.uci.edu/pythonlibs/u2hcgva4/Twisted-18.9.0-cp36-cp36m-win_amd64.whl</span><br></pre></td></tr></table></figure>
+<p>安装成功之后， 就可以安装Scrapy</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pip3 install scrapy</span><br></pre></td></tr></table></figure>
+<h4 id="Linux安装Scrapy"><a href="#Linux安装Scrapy" class="headerlink" title="Linux安装Scrapy"></a>Linux安装Scrapy</h4><p>以CentOS7为例，官方仓库的 Twisted 需要编译，也就是在安装的时候就需要编译，编译依赖两个模块</p>
+<ul>
+<li>GCC 编译器，负责编译代码</li>
+<li>Python 开发包（C语言的开发包）</li>
+</ul>
+<p>因此安装 GCC 和 Python 的开发包（必须对应Python版本，如python36），YUM安装命令如下</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">yum install gcc</span><br><span class="line">yum install openssl-devel</span><br><span class="line">yum install python36-devel</span><br></pre></td></tr></table></figure>
+<p>最后安装 Scrapy，Twisted 依赖会自动安装</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pip3 install scrapy</span><br></pre></td></tr></table></figure>
+<h4 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h4><p>虽然上面安装成功了，但是却并没有安装所有的依赖，导致遇到一些其他错误，比如使用的时候报缺失PIL库错误，所以在使用测试中根据错误提示补充对应的库，以下是目前测试遇到需要补充的库</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pip3 install pillow</span><br></pre></td></tr></table></figure>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2019/03/18/compile-soci-with-sqlite3-by-visualstudio/" title="编译数据库开发库SOCI">编译数据库开发库SOCI</a></h2>
+                <p class="excerpt">
+                
+                SOCI是一个比较不错的C++使用的数据库操作库，封装了常见的多种数据库。Linux上安装较为简单，在官方仓库即有开发的安装包，因此在此记录Win32上使用Visual Studio编译源码的方法，并以最简单的Sqlite3后端数据库为例。
+安装Sqlite3SQLite是一个小巧流行的嵌入式数据库
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2019-03-18T03:09:00.000Z" class="post-list__meta--date date">2019-03-18</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/03/18/compile-soci-with-sqlite3-by-visualstudio/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2019/01/30/nginx-listen-multi-port-and-proxy/" title="Nginx监听多端口并根据端口代理">Nginx监听多端口并根据端口代理</a></h2>
+                <p class="excerpt">
+                
+                一般使用nginx做代理的时候，基本都是使用的是域名的方式，但是在某些情况下，无法使用域名和路径进行负载代理，使用的是端口进行区分，也是有办法的。
+多端口监听监听多端口不是什么问题，但是很多人其实不知道怎么简化配置，特别是像上面的情况下，一个一个server节点配置难道要复制很多份吗，这样其实也太复
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2019-01-30T13:53:00.000Z" class="post-list__meta--date date">2019-01-30</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/01/30/nginx-listen-multi-port-and-proxy/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

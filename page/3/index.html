@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>xilixili.net | 生活と技术の杂记</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="xilixili.net | 生活と技术の杂记">
+    <meta name="twitter:description" content="">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="xilixili.net | 生活と技术の杂记">
+    <meta property="og:description" content="">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover ">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <div class="main-post-list">
+    
+  <ol class="post-list">
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2020/02/13/python-disable-pip-install-user-site-package/" title="阅读 禁用PIP安装到用户目录">禁用PIP安装到用户目录</a></h2>
+      <p class="excerpt">
+    
+      当前使用的 CentOS 7 系统上， 在某些脚本中自动安装一些软件竟然安装到root的用户的目录下了，其他用户根本用不了，因此针对该现象进行了分析。
+问题基本分析正常情况下软件包是安装到系统目录下的，也就是安装目录下的  site-packages 目录，但是不知道为啥会安装到用户目录，不管什么情况了，总之将其改掉，全部安装到系统目录下。
+经常上网搜索发现了其有一个这样的命令
+pip -m si
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2020-02-13T05:48:00.000Z" class="post-list__meta--date date">2020-02-13</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2020/02/13/python-disable-pip-install-user-site-package/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2020/01/02/win32-nginx-autoindex-support-chinese/" title="阅读 NGINX支持中文目录索引(Win32)">NGINX支持中文目录索引(Win32)</a></h2>
+      <p class="excerpt">
+    
+      Windows平台上在使用Nginx的时候无法支持中文路径，哪怕是直接访问一个中文路径，也无法访问到，访问文件是404，访问目录是500。
+解决方案思考正常情况下先访问一个内部有中文文件或目录的目录，Nginx会显示为乱码(调整网页编码能正确)，而且其中的链接是直接编码的，什么意思，就是这个链接是GBK字符集的URL编码，所以肯定是访问不了的了。不过即使手动将链接改为UTF-8字符集的URL编码，
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2020-01-02T01:10:00.000Z" class="post-list__meta--date date">2020-01-02</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2020/01/02/win32-nginx-autoindex-support-chinese/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2019/11/29/install-soci-development-for-visual-studio/" title="阅读 VC编译安装SOCI(SQLITE后端)">VC编译安装SOCI(SQLITE后端)</a></h2>
+      <p class="excerpt">
+    
+      SOCI 是C++中为数不多的非常方便访问数据库的工具，Poco.Data 库基本也是参考了该库实现，SOCI 在 Linux 各个版本均有开发包，VisualStudio 上还需要自己编译。
+以下为 SOCI 库添加 sqlite 后端为例的编译方法。
+编译前需求
+sqlite 开发包
+参考前文的第二或者第三种方法安装
+
+
+CMake 工具
+
+官网下载地址 https://cmake.org/d
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2019-11-29T06:02:00.000Z" class="post-list__meta--date date">2019-11-29</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/11/29/install-soci-development-for-visual-studio/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2019/11/29/install-sqlite3-development-for-visual-studio/" title="阅读 VC安装SQLITE开发库">VC安装SQLITE开发库</a></h2>
+      <p class="excerpt">
+    
+      sqlite 是一个非常小巧易于使用的 SQL 数据库，并且是嵌入式的，更容易使用部署。在实际使用中有多种引用方式。
+直接加入项目中使用从 sqlite3官网 下载源码压缩包
+
+sqlite-amalgamation-3300100.zip 
+
+将其中的 .h 和 .c 通通加入到需要引用的工程中直接编译使用。
+编译成开发库编译安装就是将源码编译成动态库 .dll 或者静态库 .lib 供后续使用
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2019-11-29T05:45:00.000Z" class="post-list__meta--date date">2019-11-29</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/11/29/install-sqlite3-development-for-visual-studio/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2019/11/14/build-webrtc/" title="阅读 编译WebRTC源码(2019年11月)">编译WebRTC源码(2019年11月)</a></h2>
+      <p class="excerpt">
+    
+      最近又打算调试下 WebRTC 的问题，苦于半天找不到网上可以下载的工程，打算自己编译，虽然官网可以访问了，但是源码依然无法下载，在某博客发现博主分享了SS账号，使用其进行下载。
+不翻墙方法
+https://webrtc.org.cn/mirror/
+https://zhuanlan.zhihu.com/p/82559314
+
+声网和学而思都给了镜像和使用说明，不过经我在 Win 10 和 Win
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2019-11-14T06:15:00.000Z" class="post-list__meta--date date">2019-11-14</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/11/14/build-webrtc/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2019/10/30/fmp4-unsupport-live/" title="阅读 FMP4不支持直播">FMP4不支持直播</a></h2>
+      <p class="excerpt">
+    
+      因为在直播中，H5侧目前主要是B站的 flv.js 这个项目来做FLV的直播，但是H5原生支持MP4，而且SRS等均只输出简单的FLV视频。因此可以考虑尝试使用直接输出MP4的方法来实现，这样就可以跳过很多控制，直接原生支持，结果验证失败了。
+测试前思考想要输出MP4，势必先要了解MP4的格式，然后再remux，CSDN的这篇博客是我的主要参考
+软编码Flv 到Mp4 容器
+作者主要是从事类似 f
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2019-10-30T09:37:00.000Z" class="post-list__meta--date date">2019-10-30</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/10/30/fmp4-unsupport-live/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2019/10/23/parse-hikvision-camera-ps-stream-supplement/" title="阅读 从海康28181的PS流解析H264的补充">从海康28181的PS流解析H264的补充</a></h2>
+      <p class="excerpt">
+    
+      前文 《简单解析海康PS流获取H264》 针对海康摄像头的PS流解析做了简单处理，基本逻辑是正确的，但最近几个摄像头出现了一些奇怪的问题，需要针对相关现象进行查询。
+RTP传输层项目中为了可靠处理且因其他原因使用了TCP来传输28181的RTP数据，根据 rfc4571 记录，使用TCP传输的时候只需要在RTP包之前打上2个字节的长度，用来控制，毕竟TCP是流式传输，只能靠长度字段进行包的区分。
+
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2019-10-23T05:53:00.000Z" class="post-list__meta--date date">2019-10-23</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/10/23/parse-hikvision-camera-ps-stream-supplement/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2019/10/21/dev-linux-with-visual-studio/" title="阅读 使用VS开发Linux程序">使用VS开发Linux程序</a></h2>
+      <p class="excerpt">
+    
+      VisualStudio的新版本已经开始支持远程编译调试Linux了，我安装了VS2017，尝试在Windows上写了一个Linux服务程序，非常方便。
+基本原理能支持Linux开发的也只是在最新的版本中才行，好像应该是2015起。当然在安装VS的时候必须勾选跨平台下的Linux，没有安装的打开安装器可以添加补充上。
+在创建项目的时候，需要选择一个Linux服务器，一般都是通过SSH连接的，然后V
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2019-10-21T09:45:00.000Z" class="post-list__meta--date date">2019-10-21</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/10/21/dev-linux-with-visual-studio/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2019/09/17/linux-config-vsftpd/" title="阅读 Linux配置添加FTP用户">Linux配置添加FTP用户</a></h2>
+      <p class="excerpt">
+    
+      Linux下最常用的FTP软件是vsftpd，使用起来非常简单，功能也很强大，以下记录下最简单的使用配置方法。
+服务安装vsftpd是常用软件，因此一般安装也不用费时费力的去源码安装，直接在仓库中进行安装即可，比如在红帽系的发行版上，直接通过YUM安装，如
+yum install vsftpd
+系统会自动安装成功。安装完成之后，默认情况下，其配置文件在 /etc/vsfptd 目录下。
+服务配置v
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2019-09-17T01:26:00.000Z" class="post-list__meta--date date">2019-09-17</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/09/17/linux-config-vsftpd/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2019/09/10/bat-request-admin-rights-and-others/" title="阅读 BAT脚本自动获取管理员权限等功能">BAT脚本自动获取管理员权限等功能</a></h2>
+      <p class="excerpt">
+    
+      偶尔可能会用到Windows下批处理脚本，虽然对BAT脚本使用的少，但是确实很有用，在此记录下一些常用的功能实现代码，长期更新。
+自动获取管理员权限在Windows上很多操作需要管理员权限，比如创建服务等。但是在批处理在需要管理器权限的时候，一般要求操作人员切换到管理器 CMD 或 PS 下，进行执行，比较不方便，下面的脚本可以实现自动获取管理员权限，只需要操作人员确认即可
+@echo off%1
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2019-09-10T07:22:00.000Z" class="post-list__meta--date date">2019-09-10</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/09/10/bat-request-admin-rights-and-others/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+  </ol>
+
+
+  <nav class="pagination" role="navigation">
+    
+      <a class="older-posts pagination__newer btn btn-small btn-tertiary" href="/page/2/">&larr; 最近</a>
+    
+    <span class="pagination__page-number">  3 / 9 </span>
+    
+      <a class="older-posts pagination__older btn btn-small btn-tertiary" href="/page/4/">更早 &rarr;</a>
+    
+  </nav>
+
+ <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+    
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</div>
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

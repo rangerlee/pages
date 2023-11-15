@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>Linux下hook实现 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="项目中需要改变一个动态库的默认行为，但一般我们没有源码或者不可能通过修改源码的方式实现，因此需要用到hook。linux下hook函数实现一般用的比较少，但是比起win32要简单的多，下面介绍常用的一些方法。
+预加载预加载的方式如下，首先我们实现需要hook函数的同名函数，将相关代码编译成so，在程序启动前采用 LD_PRELOAD 宏进行加载，比如
+export LD_PRELOAD=./lib">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Linux下hook实现 | xilixili.net">
+    <meta name="twitter:description" content="项目中需要改变一个动态库的默认行为，但一般我们没有源码或者不可能通过修改源码的方式实现，因此需要用到hook。linux下hook函数实现一般用的比较少，但是比起win32要简单的多，下面介绍常用的一些方法。
+预加载预加载的方式如下，首先我们实现需要hook函数的同名函数，将相关代码编译成so，在程序启动前采用 LD_PRELOAD 宏进行加载，比如
+export LD_PRELOAD=./lib">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Linux下hook实现 | xilixili.net">
+    <meta property="og:description" content="项目中需要改变一个动态库的默认行为，但一般我们没有源码或者不可能通过修改源码的方式实现，因此需要用到hook。linux下hook函数实现一般用的比较少，但是比起win32要简单的多，下面介绍常用的一些方法。
+预加载预加载的方式如下，首先我们实现需要hook函数的同名函数，将相关代码编译成so，在程序启动前采用 LD_PRELOAD 宏进行加载，比如
+export LD_PRELOAD=./lib">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2016/09/23/linux-api-hook/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2016-09-23T02:09:00.000Z" class="post-list__meta--date date">2016-09-23</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">Linux下hook实现</h1>
+  </header>
+
+  <section class="post">
+    <p>项目中需要改变一个动态库的默认行为，但一般我们没有源码或者不可能通过修改源码的方式实现，因此需要用到hook。linux下hook函数实现一般用的比较少，但是比起win32要简单的多，下面介绍常用的一些方法。</p>
+<h3 id="预加载"><a href="#预加载" class="headerlink" title="预加载"></a>预加载</h3><p>预加载的方式如下，首先我们实现需要hook函数的同名函数，将相关代码编译成so，在程序启动前采用 <strong>LD_PRELOAD</strong> 宏进行加载，比如</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">export LD_PRELOAD=./libtest.so</span><br><span class="line">./myapp</span><br></pre></td></tr></table></figure>
+<p>很明显这样子的配置对后续程序会造成影响，因此一般会这样操作</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">LD_PRELOAD=./libtest.so ./myapp</span><br></pre></td></tr></table></figure>
+<h3 id="动态hook"><a href="#动态hook" class="headerlink" title="动态hook"></a>动态hook</h3><p>上面的例子基本上只能是替换函数，但我们经常hook的目的是做一些事情之后，再继续调用原函数（或者需要替换函数的so已经加载，比如修改glibc里面socket族函数），大概需要这样做:<br>以科大讯飞TTS开发接口为例，先看TTS的接口原定义</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">HTTSINSTANCE TTSLIBAPI <span class="title">TTSConnect</span><span class="params">(PTTSConnectStruct pConnect)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">HTTSINSTANCE</span> <span class="params">(*Proc_TTSConnect)</span><span class="params">(PTTSConnectStruct pConnect)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><code>HTTSINSTANCE</code> 定义是 <code>void*</code>, 在程序中hook实现该函数</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span>* <span class="title">TTSConnect</span><span class="params">(PTTSConnectStruct pConnect)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> Proc_TTSConnect pRealConnect = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">if</span>(pRealConnect == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        pRealConnect = (Proc_TTSConnect)dlsym(RTLD_NEXT, <span class="string">"TTSConnect"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"=======I'M HOOK TTSConnect=======\n"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(pRealConnect)</span><br><span class="line">        <span class="keyword">return</span> pRealConnect(pConnect);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>本例中hook实现中只做了日志打印，实际使用中就可以做任何事情。</p>
+<p>当然原理应该是程序运行时相同的函数首先加载第一份，在我们函数实现里可以继续加载下一个同名函数，使得hook变的可能。这当然要求我们的接口被先加载，一般来讲，在程序里面实现的基本是肯定是第一调用的。如果我们提供的是单独的动态库呢，同理在链接的时候调整我们的库连接顺序在hook的函数之前即可。</p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2016/10/10/plog/" title="Plog日志库">Plog日志库</a></h2>
+                <p class="excerpt">
+                
+                C\C++程序员最喜欢干的事情就是写个日志库了，基本上所有人都干过。在实际项目中基本上，各个项目都会有自己的日志要求等等，另外由于写一个日志框架也不是很难，所以有大量的日志框架可供选择（相比起来Java就少的多）。最近应用了一个新的日志框架plog，感觉非常好，特此推荐一下。
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2016-10-10T14:00:00.000Z" class="post-list__meta--date date">2016-10-10</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2016/10/10/plog/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2016/06/13/ffmpeg-decode-audio/" title="ffmpeg编解码音频相关问题">ffmpeg编解码音频相关问题</a></h2>
+                <p class="excerpt">
+                
+                重拾FFMPEG，版本已经3.0了，和我很早使用的0.8版本的变化还是很大的。项目要实现音频转M4R格式（AAC编码）的功能，编码倒是问题不大，解码测试时还是遇到了好几个问题，记录一下。
+编码数据丢失使用 avcodec_decode_audio4 解码出来的AVFrame在 avcodec_enc
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2016-06-13T02:20:44.000Z" class="post-list__meta--date date">2016-06-13</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2016/06/13/ffmpeg-decode-audio/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

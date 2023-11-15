@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>ffmpeg编解码音频相关问题 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="重拾FFMPEG，版本已经3.0了，和我很早使用的0.8版本的变化还是很大的。项目要实现音频转M4R格式（AAC编码）的功能，编码倒是问题不大，解码测试时还是遇到了好几个问题，记录一下。
+编码数据丢失使用 avcodec_decode_audio4 解码出来的AVFrame在 avcodec_encode_audio2 编码出来的数据有丢失（反馈出来就是音质差），而且经常打屏还能看到提示说音频过多">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="ffmpeg编解码音频相关问题 | xilixili.net">
+    <meta name="twitter:description" content="重拾FFMPEG，版本已经3.0了，和我很早使用的0.8版本的变化还是很大的。项目要实现音频转M4R格式（AAC编码）的功能，编码倒是问题不大，解码测试时还是遇到了好几个问题，记录一下。
+编码数据丢失使用 avcodec_decode_audio4 解码出来的AVFrame在 avcodec_encode_audio2 编码出来的数据有丢失（反馈出来就是音质差），而且经常打屏还能看到提示说音频过多">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="ffmpeg编解码音频相关问题 | xilixili.net">
+    <meta property="og:description" content="重拾FFMPEG，版本已经3.0了，和我很早使用的0.8版本的变化还是很大的。项目要实现音频转M4R格式（AAC编码）的功能，编码倒是问题不大，解码测试时还是遇到了好几个问题，记录一下。
+编码数据丢失使用 avcodec_decode_audio4 解码出来的AVFrame在 avcodec_encode_audio2 编码出来的数据有丢失（反馈出来就是音质差），而且经常打屏还能看到提示说音频过多">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2016/06/13/ffmpeg-decode-audio/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2016-06-13T02:20:44.000Z" class="post-list__meta--date date">2016-06-13</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">ffmpeg编解码音频相关问题</h1>
+  </header>
+
+  <section class="post">
+    <p>重拾FFMPEG，版本已经3.0了，和我很早使用的0.8版本的变化还是很大的。项目要实现音频转M4R格式（AAC编码）的功能，编码倒是问题不大，解码测试时还是遇到了好几个问题，记录一下。</p>
+<h3 id="编码数据丢失"><a href="#编码数据丢失" class="headerlink" title="编码数据丢失"></a>编码数据丢失</h3><p>使用 <code>avcodec_decode_audio4</code> 解码出来的AVFrame在 <code>avcodec_encode_audio2</code> 编码出来的数据有丢失（反馈出来就是音质差），而且经常打屏还能看到提示说音频过多之类的， 事实正是如此，<code>avcodec_encode_audio2</code> 每次处理一帧数据，因此过多的数据不会被处理，我暂时使用缓存处理</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">frame-&gt;data[<span class="number">0</span>] = (<span class="keyword">uint8_t</span>*)data.c_str();  <span class="comment">//取缓存数据</span></span><br><span class="line">frame-&gt;pts=AV_NOPTS_VALUE;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> ret = avcodec_encode_audio2(pCodecCtx, &amp;pkt, frame, &amp;got_encoding_frame);</span><br><span class="line">data.erase(<span class="number">0</span>,size);</span><br><span class="line"><span class="comment">// size 是通过 av_samples_get_buffer_size(</span></span><br><span class="line"><span class="comment">//	NULL, pCodecCtx-&gt;channels,pCodecCtx-&gt;frame_size, </span></span><br><span class="line"><span class="comment">//	pCodecCtx-&gt;sample_fmt, 1) 计算出来的每帧数据大小</span></span><br></pre></td></tr></table></figure>
+<h3 id="取解码数据"><a href="#取解码数据" class="headerlink" title="取解码数据"></a>取解码数据</h3><p>采用缓存后，需要将解码数据缓存，实际测试多种文件发现某些文件的解码数据不全，大量的数据丢失（听着会非常明显），仔细对比发现音频格式的区别主要在sample_fmt，比如有些是AV_SAMPLE_FMT_S16，而另外一些是AV_SAMPLE_FMT_S16P，那么这个P的区别到底在哪。</p>
+<p> 对于ffmpeg来说，音频数据会保存在AVFrame中extended_data数组中，如果是打包模式(packed)，就只用 <code>extended_data[0]</code> ,如果是planar模式，则每个channel分别保存在extended_data[i]中。对于音频，只有 <code>linesize[0]</code> 有效，打包模式保存整个音频帧的buff大小，planar模式保存每个channel的buff大小。</p>
+<p>ffmpeg中对两种模式(planar和packed)的说明(在frame.h文件中有详细说明)：</p>
+<blockquote>
+<p>For planar audio, each channel has a separate data pointer, and linesize[0] contains the size of each channel buffer.<br>For packed audio, there is just one data pointer, and linesize[0] contains the total size of the buffer for all channels. </p>
+</blockquote>
+<p>因此缓存方法我加了区分</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(infmt_ctx-&gt;streams[audioindex]-&gt;codec-&gt;sample_fmt &gt;= AV_SAMPLE_FMT_U8P &amp;&amp;</span><br><span class="line">   infmt_ctx-&gt;streams[audioindex]-&gt;codec-&gt;sample_fmt &lt;= AV_SAMPLE_FMT_DBLP) &#123;</span><br><span class="line">	<span class="keyword">int</span> data_size = av_get_bytes_per_sample(incode_ctx-&gt;sample_fmt);</span><br><span class="line">	<span class="keyword">for</span> (i=<span class="number">0</span>; i&lt;decoded_frame-&gt;nb_samples; i++)</span><br><span class="line">		<span class="keyword">for</span> (ch=<span class="number">0</span>; ch&lt;incode_ctx-&gt;channels; ch++) &#123;</span><br><span class="line">			data.append((decoded_frame-&gt;data[ch] + data_size*i),data_size);</span><br><span class="line">		&#125;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">	data.append(decoded_frame-&gt;data[<span class="number">0</span>], decoded_frame-&gt;linesize[<span class="number">0</span>]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="解码数据丢失"><a href="#解码数据丢失" class="headerlink" title="解码数据丢失"></a>解码数据丢失</h3><p>解码MP3等文件时采用了上面的机制基本没有问题，但是解码APE格式少了好多数据，其实跟编码类似，解码数据也不是一次解码完成的，见 <code>avcodec_decode_audio4</code> 接口说明</p>
+<blockquote>
+<p> @return A negative error code is returned if an error occurred during decoding, otherwise the number of bytes consumed from the input AVPacket is returned.</p>
+</blockquote>
+<p>因此还是需要循环的解码，每次去除已解码数据。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">while</span> (packet.size &gt; <span class="number">0</span>) &#123;</span><br><span class="line">	<span class="keyword">int</span> got_frame = <span class="number">0</span>;</span><br><span class="line">	AVFrame* decoded_frame = av_frame_alloc();</span><br><span class="line">	<span class="keyword">int</span> len = avcodec_decode_audio4(incode_ctx, decoded_frame, &amp;got_frame, &amp;packet);</span><br><span class="line">	packet.size -= len;</span><br><span class="line">	packet.data += len;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="AAC编码报错"><a href="#AAC编码报错" class="headerlink" title="AAC编码报错"></a>AAC编码报错</h3><p>AAC编码时报错 <code>**Malformed AAC bitstream detected: use the audio bitstream filter &#39;aac_adtstoasc&#39; to fix it (&#39;-bsf:a aac_adtstoasc&#39; option with ffmpeg)**</code>，这个很清楚的已经提供了解决办法。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">//全局初始化</span></span><br><span class="line">AVBitStreamFilterContext* aacbsfc = av_bitstream_filter_init(<span class="string">"aac_adtstoasc"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//编码后调用</span></span><br><span class="line">av_bitstream_filter_filter(aacbsfc, audio_st-&gt;codec, <span class="literal">NULL</span>, </span><br><span class="line">	&amp;pkt.data, &amp;pkt.size, pkt.data, pkt.size, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//全局释放</span></span><br><span class="line">av_bitstream_filter_close(aacbsfc);</span><br></pre></td></tr></table></figure>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2016/09/23/linux-api-hook/" title="Linux下hook实现">Linux下hook实现</a></h2>
+                <p class="excerpt">
+                
+                项目中需要改变一个动态库的默认行为，但一般我们没有源码或者不可能通过修改源码的方式实现，因此需要用到hook。linux下hook函数实现一般用的比较少，但是比起win32要简单的多，下面介绍常用的一些方法。
+预加载预加载的方式如下，首先我们实现需要hook函数的同名函数，将相关代码编译成so，在程
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2016-09-23T02:09:00.000Z" class="post-list__meta--date date">2016-09-23</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2016/09/23/linux-api-hook/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2016/04/27/run-linux-program-in-background/" title="后台运行Linux程序的方法">后台运行Linux程序的方法</a></h2>
+                <p class="excerpt">
+                
+                一般远程登陆LINUX，在网络断开及注销等情况下，进程会接收到HUP信号，从而导致进程被关闭。解决方案一个是让进程忽略该信号，另一个是让进程运行在新 会话中，使其不属于此终端的子进程。下面是几种实现进程后台运行的方法：
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2016-04-27T01:58:51.000Z" class="post-list__meta--date date">2016-04-27</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2016/04/27/run-linux-program-in-background/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

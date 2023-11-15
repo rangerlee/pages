@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>Modbus协议规范 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="MODBUS协议目前最常用的是Modbus RTU和Modbus TCP，分别对应串口和网络。二者核心是相同的，仅封包格式略有区别。以下以Modbus RTU 和 Modbus TCP为例总结。
+
+协议中所有的16bit及以上数值均按大端字节序存储
+
+通用帧定义本节主要讲的是Modbus RTU和Modbus TCP报文中相同的通用帧部分，将此部分称为通用Modbus帧，即PDU（协议数据单元），">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Modbus协议规范 | xilixili.net">
+    <meta name="twitter:description" content="MODBUS协议目前最常用的是Modbus RTU和Modbus TCP，分别对应串口和网络。二者核心是相同的，仅封包格式略有区别。以下以Modbus RTU 和 Modbus TCP为例总结。
+
+协议中所有的16bit及以上数值均按大端字节序存储
+
+通用帧定义本节主要讲的是Modbus RTU和Modbus TCP报文中相同的通用帧部分，将此部分称为通用Modbus帧，即PDU（协议数据单元），">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Modbus协议规范 | xilixili.net">
+    <meta property="og:description" content="MODBUS协议目前最常用的是Modbus RTU和Modbus TCP，分别对应串口和网络。二者核心是相同的，仅封包格式略有区别。以下以Modbus RTU 和 Modbus TCP为例总结。
+
+协议中所有的16bit及以上数值均按大端字节序存储
+
+通用帧定义本节主要讲的是Modbus RTU和Modbus TCP报文中相同的通用帧部分，将此部分称为通用Modbus帧，即PDU（协议数据单元），">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2019/04/19/modbus-analysis/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2019-04-19T06:58:00.000Z" class="post-list__meta--date date">2019-04-19</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">Modbus协议规范</h1>
+  </header>
+
+  <section class="post">
+    <p>MODBUS协议目前最常用的是Modbus RTU和Modbus TCP，分别对应串口和网络。二者核心是相同的，仅封包格式略有区别。以下以Modbus RTU 和 Modbus TCP为例总结。</p>
+<blockquote>
+<p>协议中所有的16bit及以上数值均按大端字节序存储</p>
+</blockquote>
+<h3 id="通用帧定义"><a href="#通用帧定义" class="headerlink" title="通用帧定义"></a>通用帧定义</h3><p>本节主要讲的是Modbus RTU和Modbus TCP报文中相同的通用帧部分，将此部分称为通用Modbus帧，即PDU（协议数据单元），这部分仅包含2部分数据，1个字节的功能码和若干数据。</p>
+<table>
+<thead>
+<tr>
+<th>功能码</th>
+<th>数据域</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1字节</td>
+<td>若干字节</td>
+</tr>
+</tbody>
+</table>
+<p>而数据域部分，各个类型的数据含义和读写状态如下，</p>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>数据含义</th>
+<th>读写状态</th>
+<th>PLC地址</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>离散输入</td>
+<td>位变量</td>
+<td>只读</td>
+<td>10001~19999</td>
+</tr>
+<tr>
+<td>线圈</td>
+<td>位变量</td>
+<td>读写</td>
+<td>00001~09999</td>
+</tr>
+<tr>
+<td>输入寄存器</td>
+<td>16bit变量</td>
+<td>只读</td>
+<td>30001~39999</td>
+</tr>
+<tr>
+<td>保持寄存器</td>
+<td>16bit变量</td>
+<td>读写</td>
+<td>40001~49999</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>此处地址为PLC地址，从1开始，Modbus协议地址从0开始，因此PLC地址转换为协议地址最终在协议传输的时候，转换公式为 (ADDR - 1)%10000</p>
+</blockquote>
+<p>根据功能码不同，其请求和响应而数据格式不相同，以下分别以功能码为例详解。</p>
+<h4 id="01H-读线圈状态"><a href="#01H-读线圈状态" class="headerlink" title="01H 读线圈状态"></a>01H 读线圈状态</h4><p>读从机的线圈的ON/OFF状态，可以读单个或者多个。</p>
+<p>举例请求格式及数据说明</p>
+<table>
+<thead>
+<tr>
+<th>列</th>
+<th>数据(16进制)</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>功能码</td>
+<td>01</td>
+<td>固定01</td>
+</tr>
+<tr>
+<td>起始地址高位</td>
+<td>00</td>
+<td>起始地址11</td>
+</tr>
+<tr>
+<td>起始地址低位</td>
+<td>0A</td>
+<td>/</td>
+</tr>
+<tr>
+<td>线圈数量高位</td>
+<td>00</td>
+<td>读取数量13</td>
+</tr>
+<tr>
+<td>线圈数量低位</td>
+<td>0D</td>
+<td>/</td>
+</tr>
+</tbody>
+</table>
+<p>举例响应格式及数据说明</p>
+<table>
+<thead>
+<tr>
+<th>列</th>
+<th>数据(16进制)</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>功能码</td>
+<td>01</td>
+<td>固定01</td>
+</tr>
+<tr>
+<td>字节数</td>
+<td>02</td>
+<td>共2个数据，所以只有数据1和数据2</td>
+</tr>
+<tr>
+<td>数据1</td>
+<td>0A</td>
+<td>数据1</td>
+</tr>
+<tr>
+<td>数据2</td>
+<td>11</td>
+<td>数据2</td>
+</tr>
+</tbody>
+</table>
+<p>需要注意的是位操作，也就是说返回值的数据是用标志位表示的，每一个比特表示8个位，假设上面其实读取的地址为P，那么各个位表示的地址如下</p>
+<table>
+<thead>
+<tr>
+<th>数据</th>
+<th>bit8</th>
+<th>bit7</th>
+<th>bit6</th>
+<th>bit5</th>
+<th>bit4</th>
+<th>bit3</th>
+<th>bit2</th>
+<th>bit1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Data1</td>
+<td>P+7</td>
+<td>P+6</td>
+<td>P+5</td>
+<td>P+4</td>
+<td>P+3</td>
+<td>P+2</td>
+<td>P+1</td>
+<td>P</td>
+</tr>
+<tr>
+<td>Data2</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>P+11</td>
+<td>P+10</td>
+<td>P+9</td>
+<td>P+8</td>
+</tr>
+</tbody>
+</table>
+<p>如果读取的数量不是8的倍数，会导致最后一个数据不够8位，因此会对这个字节高位不足的部分补0，如上表表示的是读取P地址的数据，读取数量是12，那么第二个数据位的高4位就没有数据，最终会用0补齐。</p>
+<h4 id="02H-读离散输入状态"><a href="#02H-读离散输入状态" class="headerlink" title="02H 读离散输入状态"></a>02H 读离散输入状态</h4><p>读离散输入寄存寄存器，位操作，可以读一个或多个，协议类似 <a href="#01H 读线圈状态">01H 读线圈状态</a></p>
+<h4 id="03H-读保持寄存器"><a href="#03H-读保持寄存器" class="headerlink" title="03H 读保持寄存器"></a>03H 读保持寄存器</h4><p>读保持寄存器，可读单个或多个。举例请求格式如下</p>
+<table>
+<thead>
+<tr>
+<th>列</th>
+<th>数据(16进制)</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>功能码</td>
+<td>03</td>
+<td>固定03</td>
+</tr>
+<tr>
+<td>起始地址高位</td>
+<td>00</td>
+<td>起始地址40001</td>
+</tr>
+<tr>
+<td>起始地址低位</td>
+<td>00</td>
+<td>/</td>
+</tr>
+<tr>
+<td>寄存器数量高位</td>
+<td>00</td>
+<td>读取2个</td>
+</tr>
+<tr>
+<td>寄存器数量低位</td>
+<td>02</td>
+<td>/</td>
+</tr>
+</tbody>
+</table>
+<p>响应格式如下</p>
+<table>
+<thead>
+<tr>
+<th>列</th>
+<th>数据(16进制)</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>功能码</td>
+<td>03</td>
+<td>固定03</td>
+</tr>
+<tr>
+<td>后续数据字节长度</td>
+<td>04</td>
+<td>后续4个字节</td>
+</tr>
+<tr>
+<td>数据1高位</td>
+<td>00</td>
+<td>数据1为0x0006</td>
+</tr>
+<tr>
+<td>数据1低位</td>
+<td>06</td>
+<td>/</td>
+</tr>
+<tr>
+<td>数据2高位</td>
+<td>00</td>
+<td>数据2为0x0005</td>
+</tr>
+<tr>
+<td>数据2低位</td>
+<td>05</td>
+<td>/</td>
+</tr>
+</tbody>
+</table>
+<h4 id="04H-读输入寄存器"><a href="#04H-读输入寄存器" class="headerlink" title="04H 读输入寄存器"></a>04H 读输入寄存器</h4><p>读输入寄存器，可读单个或者多个，协议类似 <a href="#03H 读保持寄存器">03H 读保持寄存器</a></p>
+<h4 id="05H-写单个线圈"><a href="#05H-写单个线圈" class="headerlink" title="05H 写单个线圈"></a>05H 写单个线圈</h4><p>写单个线圈，只能写一个，写<strong>0xff00</strong>表示设置线圈状态为ON，写<strong>0x0000</strong>表示写线圈状态为OFF。</p>
+<p>比如写如ON数据的举例如下</p>
+<table>
+<thead>
+<tr>
+<th>列</th>
+<th>数据(16进制)</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>功能码</td>
+<td>05</td>
+<td>固定05</td>
+</tr>
+<tr>
+<td>线圈起始地址高位</td>
+<td>00</td>
+<td>写线圈173</td>
+</tr>
+<tr>
+<td>线圈起始地址低位</td>
+<td>AC</td>
+<td>/</td>
+</tr>
+<tr>
+<td>写入数据高位</td>
+<td>FF</td>
+<td>写入ON</td>
+</tr>
+<tr>
+<td>写入数据低位</td>
+<td>00</td>
+<td>/</td>
+</tr>
+</tbody>
+</table>
+<p>响应直接回显，格式同请求格式。</p>
+<h4 id="06H-写单个保持寄存器"><a href="#06H-写单个保持寄存器" class="headerlink" title="06H 写单个保持寄存器"></a>06H 写单个保持寄存器</h4><p>写单个保持寄存器，只能写一个</p>
+<table>
+<thead>
+<tr>
+<th>列</th>
+<th>数据(16进制)</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>功能码</td>
+<td>06</td>
+<td>固定06</td>
+</tr>
+<tr>
+<td>寄存器起始地址高位</td>
+<td>00</td>
+<td>写入40002</td>
+</tr>
+<tr>
+<td>寄存器起始地址低位</td>
+<td>01</td>
+<td>/</td>
+</tr>
+<tr>
+<td>写入数据高位</td>
+<td>00</td>
+<td>写入值0x0003</td>
+</tr>
+<tr>
+<td>写入数据低位</td>
+<td>03</td>
+<td>/</td>
+</tr>
+</tbody>
+</table>
+<p>响应直接回显，格式同请求格式。</p>
+<h4 id="0FH-写多个线圈"><a href="#0FH-写多个线圈" class="headerlink" title="0FH 写多个线圈"></a>0FH 写多个线圈</h4><p>写多个线圈寄存器，若数据区的某位值为1，表示请求设置该线圈状态为ON，为0表示设置为OFF，其写入值的BIT格式同 <a href="#01H 读线圈状态">01H 读线圈状态</a> 定义。</p>
+<p>举例写入请求格式如下</p>
+<table>
+<thead>
+<tr>
+<th>列</th>
+<th>数据(16进制)</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>功能码</td>
+<td>0F</td>
+<td>固定0F</td>
+</tr>
+<tr>
+<td>线圈起始地址高位</td>
+<td>00</td>
+<td>写入地址20</td>
+</tr>
+<tr>
+<td>线圈起始地址低位</td>
+<td>13</td>
+<td>/</td>
+</tr>
+<tr>
+<td>线圈数量高位</td>
+<td>00</td>
+<td>写入数量10</td>
+</tr>
+<tr>
+<td>线圈数量低位</td>
+<td>0A</td>
+<td>/</td>
+</tr>
+<tr>
+<td>写入数据长度</td>
+<td>02</td>
+<td>2个字节</td>
+</tr>
+<tr>
+<td>写入数据1</td>
+<td>CD</td>
+<td>数据1</td>
+</tr>
+<tr>
+<td>写入数据2</td>
+<td>01</td>
+<td>数据2</td>
+</tr>
+</tbody>
+</table>
+<p>写入数据 0xCD01 对应的线圈如下</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">数据位值 : 1  1  0  0  1  1  0  1   0  0  0  0  0  0  0  1</span><br><span class="line">对应线圈 : 27 26 25 24 23 22 21 20  -  -  -  -  -  -  29 28</span><br></pre></td></tr></table></figure>
+<p>举例响应格式如下，返回写入的地址和数量</p>
+<table>
+<thead>
+<tr>
+<th>列</th>
+<th>数据(16进制)</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>功能码</td>
+<td>0F</td>
+<td>固定0F</td>
+</tr>
+<tr>
+<td>线圈起始地址高位</td>
+<td>00</td>
+<td>地址20</td>
+</tr>
+<tr>
+<td>线圈起始地址低位</td>
+<td>13</td>
+<td>/</td>
+</tr>
+<tr>
+<td>线圈数量高位</td>
+<td>00</td>
+<td>数量10</td>
+</tr>
+<tr>
+<td>线圈数量低位</td>
+<td>0A</td>
+<td>/</td>
+</tr>
+</tbody>
+</table>
+<h4 id="10H-写多个保持寄存器"><a href="#10H-写多个保持寄存器" class="headerlink" title="10H 写多个保持寄存器"></a>10H 写多个保持寄存器</h4><p>写多个寄存器，指定寄存器个数，寄存器值按short类型排列，举例写入格式如下</p>
+<table>
+<thead>
+<tr>
+<th>列</th>
+<th>数据(16进制)</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>功能码</td>
+<td>10</td>
+<td></td>
+</tr>
+<tr>
+<td>寄存器起始地址高位</td>
+<td>00</td>
+<td></td>
+</tr>
+<tr>
+<td>寄存器起始地址低位</td>
+<td>01</td>
+<td></td>
+</tr>
+<tr>
+<td>寄存器数量高位</td>
+<td>00</td>
+<td>寄存器数量</td>
+</tr>
+<tr>
+<td>寄存器数量低位</td>
+<td>02</td>
+<td></td>
+</tr>
+<tr>
+<td>数据长度</td>
+<td>4</td>
+<td>数据长度是按字节计算,寄存器二倍</td>
+</tr>
+<tr>
+<td>数据值</td>
+<td>XX XX XX XX</td>
+<td>数据</td>
+</tr>
+</tbody>
+</table>
+<p>举例响应格式如下，返回写入的地址和数量</p>
+<table>
+<thead>
+<tr>
+<th>列</th>
+<th>数据(16进制)</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>功能码</td>
+<td>10</td>
+<td></td>
+</tr>
+<tr>
+<td>寄存器起始地址高位</td>
+<td>00</td>
+<td>对应请求</td>
+</tr>
+<tr>
+<td>寄存器起始地址低位</td>
+<td>01</td>
+<td></td>
+</tr>
+<tr>
+<td>寄存器数据高位</td>
+<td>00</td>
+<td>对应请求</td>
+</tr>
+<tr>
+<td>寄存器数量低位</td>
+<td>02</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>除了上面常用功能码外，还有很多，特别的是当上面的功能码在对端返回错误的时候，功能码会将高位置1，也就是0x01对应0x81，即当前功能码加上0x80，以此代表本次请求错误</p>
+</blockquote>
+<h3 id="应用帧定义"><a href="#应用帧定义" class="headerlink" title="应用帧定义"></a>应用帧定义</h3><p>在前面通用帧定义的基础上再做不同的封装，实现了RTU和TCP两种，其主要封包格式如下：</p>
+<p>RTU包格式定义如下</p>
+<table>
+<thead>
+<tr>
+<th>起始位</th>
+<th>设备地址</th>
+<th>PDU</th>
+<th>CRC校验</th>
+<th>结束符</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3.5字符时间</td>
+<td>从机地址1字节</td>
+<td>N字节</td>
+<td>2字节</td>
+<td>3.5字符时间</td>
+</tr>
+</tbody>
+</table>
+<p>TCP封包因为TCP本身是可靠协议，因此不需要CRC校验，但是却单独增加了一个MBAP头，完整结构如下</p>
+<table>
+<thead>
+<tr>
+<th>域</th>
+<th>长度</th>
+<th>说明</th>
+<th>主机</th>
+<th>从机</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>事务标识符</td>
+<td>2字节</td>
+<td>用于返回校验</td>
+<td>主机生成</td>
+<td>复制返回</td>
+</tr>
+<tr>
+<td>协议标识符</td>
+<td>2字节</td>
+<td>置为0</td>
+<td>主机生成</td>
+<td>复制返回</td>
+</tr>
+<tr>
+<td>长度</td>
+<td>2字节</td>
+<td>以下字节长度</td>
+<td>主机生成</td>
+<td>从机生成</td>
+</tr>
+<tr>
+<td>单元标识符</td>
+<td>1字节</td>
+<td>从站地址</td>
+<td>主机生成</td>
+<td>复制返回</td>
+</tr>
+<tr>
+<td>数据PDU</td>
+<td>N字节</td>
+<td>上面的PDU格式</td>
+<td>主机生成</td>
+<td>从机生成</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Modbus TCP模式是主机连接从机的模式</p>
+</blockquote>
+<h3 id="CRC校验算法"><a href="#CRC校验算法" class="headerlink" title="CRC校验算法"></a>CRC校验算法</h3><p>RTU使用CRC16校验算法，因为CRC16算法很多，此处直接给出其C代码算法</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function">WORD <span class="title">CRC16</span> <span class="params">(<span class="keyword">const</span> BYTE *nData, WORD wLength)</span> </span>&#123;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> WORD wCRCTable[] = &#123;</span><br><span class="line">   <span class="number">0X0000</span>, <span class="number">0XC0C1</span>, <span class="number">0XC181</span>, <span class="number">0X0140</span>, <span class="number">0XC301</span>, <span class="number">0X03C0</span>, <span class="number">0X0280</span>, <span class="number">0XC241</span>,</span><br><span class="line">   <span class="number">0XC601</span>, <span class="number">0X06C0</span>, <span class="number">0X0780</span>, <span class="number">0XC741</span>, <span class="number">0X0500</span>, <span class="number">0XC5C1</span>, <span class="number">0XC481</span>, <span class="number">0X0440</span>,</span><br><span class="line">   <span class="number">0XCC01</span>, <span class="number">0X0CC0</span>, <span class="number">0X0D80</span>, <span class="number">0XCD41</span>, <span class="number">0X0F00</span>, <span class="number">0XCFC1</span>, <span class="number">0XCE81</span>, <span class="number">0X0E40</span>,</span><br><span class="line">   <span class="number">0X0A00</span>, <span class="number">0XCAC1</span>, <span class="number">0XCB81</span>, <span class="number">0X0B40</span>, <span class="number">0XC901</span>, <span class="number">0X09C0</span>, <span class="number">0X0880</span>, <span class="number">0XC841</span>,</span><br><span class="line">   <span class="number">0XD801</span>, <span class="number">0X18C0</span>, <span class="number">0X1980</span>, <span class="number">0XD941</span>, <span class="number">0X1B00</span>, <span class="number">0XDBC1</span>, <span class="number">0XDA81</span>, <span class="number">0X1A40</span>,</span><br><span class="line">   <span class="number">0X1E00</span>, <span class="number">0XDEC1</span>, <span class="number">0XDF81</span>, <span class="number">0X1F40</span>, <span class="number">0XDD01</span>, <span class="number">0X1DC0</span>, <span class="number">0X1C80</span>, <span class="number">0XDC41</span>,</span><br><span class="line">   <span class="number">0X1400</span>, <span class="number">0XD4C1</span>, <span class="number">0XD581</span>, <span class="number">0X1540</span>, <span class="number">0XD701</span>, <span class="number">0X17C0</span>, <span class="number">0X1680</span>, <span class="number">0XD641</span>,</span><br><span class="line">   <span class="number">0XD201</span>, <span class="number">0X12C0</span>, <span class="number">0X1380</span>, <span class="number">0XD341</span>, <span class="number">0X1100</span>, <span class="number">0XD1C1</span>, <span class="number">0XD081</span>, <span class="number">0X1040</span>,</span><br><span class="line">   <span class="number">0XF001</span>, <span class="number">0X30C0</span>, <span class="number">0X3180</span>, <span class="number">0XF141</span>, <span class="number">0X3300</span>, <span class="number">0XF3C1</span>, <span class="number">0XF281</span>, <span class="number">0X3240</span>,</span><br><span class="line">   <span class="number">0X3600</span>, <span class="number">0XF6C1</span>, <span class="number">0XF781</span>, <span class="number">0X3740</span>, <span class="number">0XF501</span>, <span class="number">0X35C0</span>, <span class="number">0X3480</span>, <span class="number">0XF441</span>,</span><br><span class="line">   <span class="number">0X3C00</span>, <span class="number">0XFCC1</span>, <span class="number">0XFD81</span>, <span class="number">0X3D40</span>, <span class="number">0XFF01</span>, <span class="number">0X3FC0</span>, <span class="number">0X3E80</span>, <span class="number">0XFE41</span>,</span><br><span class="line">   <span class="number">0XFA01</span>, <span class="number">0X3AC0</span>, <span class="number">0X3B80</span>, <span class="number">0XFB41</span>, <span class="number">0X3900</span>, <span class="number">0XF9C1</span>, <span class="number">0XF881</span>, <span class="number">0X3840</span>,</span><br><span class="line">   <span class="number">0X2800</span>, <span class="number">0XE8C1</span>, <span class="number">0XE981</span>, <span class="number">0X2940</span>, <span class="number">0XEB01</span>, <span class="number">0X2BC0</span>, <span class="number">0X2A80</span>, <span class="number">0XEA41</span>,</span><br><span class="line">   <span class="number">0XEE01</span>, <span class="number">0X2EC0</span>, <span class="number">0X2F80</span>, <span class="number">0XEF41</span>, <span class="number">0X2D00</span>, <span class="number">0XEDC1</span>, <span class="number">0XEC81</span>, <span class="number">0X2C40</span>,</span><br><span class="line">   <span class="number">0XE401</span>, <span class="number">0X24C0</span>, <span class="number">0X2580</span>, <span class="number">0XE541</span>, <span class="number">0X2700</span>, <span class="number">0XE7C1</span>, <span class="number">0XE681</span>, <span class="number">0X2640</span>,</span><br><span class="line">   <span class="number">0X2200</span>, <span class="number">0XE2C1</span>, <span class="number">0XE381</span>, <span class="number">0X2340</span>, <span class="number">0XE101</span>, <span class="number">0X21C0</span>, <span class="number">0X2080</span>, <span class="number">0XE041</span>,</span><br><span class="line">   <span class="number">0XA001</span>, <span class="number">0X60C0</span>, <span class="number">0X6180</span>, <span class="number">0XA141</span>, <span class="number">0X6300</span>, <span class="number">0XA3C1</span>, <span class="number">0XA281</span>, <span class="number">0X6240</span>,</span><br><span class="line">   <span class="number">0X6600</span>, <span class="number">0XA6C1</span>, <span class="number">0XA781</span>, <span class="number">0X6740</span>, <span class="number">0XA501</span>, <span class="number">0X65C0</span>, <span class="number">0X6480</span>, <span class="number">0XA441</span>,</span><br><span class="line">   <span class="number">0X6C00</span>, <span class="number">0XACC1</span>, <span class="number">0XAD81</span>, <span class="number">0X6D40</span>, <span class="number">0XAF01</span>, <span class="number">0X6FC0</span>, <span class="number">0X6E80</span>, <span class="number">0XAE41</span>,</span><br><span class="line">   <span class="number">0XAA01</span>, <span class="number">0X6AC0</span>, <span class="number">0X6B80</span>, <span class="number">0XAB41</span>, <span class="number">0X6900</span>, <span class="number">0XA9C1</span>, <span class="number">0XA881</span>, <span class="number">0X6840</span>,</span><br><span class="line">   <span class="number">0X7800</span>, <span class="number">0XB8C1</span>, <span class="number">0XB981</span>, <span class="number">0X7940</span>, <span class="number">0XBB01</span>, <span class="number">0X7BC0</span>, <span class="number">0X7A80</span>, <span class="number">0XBA41</span>,</span><br><span class="line">   <span class="number">0XBE01</span>, <span class="number">0X7EC0</span>, <span class="number">0X7F80</span>, <span class="number">0XBF41</span>, <span class="number">0X7D00</span>, <span class="number">0XBDC1</span>, <span class="number">0XBC81</span>, <span class="number">0X7C40</span>,</span><br><span class="line">   <span class="number">0XB401</span>, <span class="number">0X74C0</span>, <span class="number">0X7580</span>, <span class="number">0XB541</span>, <span class="number">0X7700</span>, <span class="number">0XB7C1</span>, <span class="number">0XB681</span>, <span class="number">0X7640</span>,</span><br><span class="line">   <span class="number">0X7200</span>, <span class="number">0XB2C1</span>, <span class="number">0XB381</span>, <span class="number">0X7340</span>, <span class="number">0XB101</span>, <span class="number">0X71C0</span>, <span class="number">0X7080</span>, <span class="number">0XB041</span>,</span><br><span class="line">   <span class="number">0X5000</span>, <span class="number">0X90C1</span>, <span class="number">0X9181</span>, <span class="number">0X5140</span>, <span class="number">0X9301</span>, <span class="number">0X53C0</span>, <span class="number">0X5280</span>, <span class="number">0X9241</span>,</span><br><span class="line">   <span class="number">0X9601</span>, <span class="number">0X56C0</span>, <span class="number">0X5780</span>, <span class="number">0X9741</span>, <span class="number">0X5500</span>, <span class="number">0X95C1</span>, <span class="number">0X9481</span>, <span class="number">0X5440</span>,</span><br><span class="line">   <span class="number">0X9C01</span>, <span class="number">0X5CC0</span>, <span class="number">0X5D80</span>, <span class="number">0X9D41</span>, <span class="number">0X5F00</span>, <span class="number">0X9FC1</span>, <span class="number">0X9E81</span>, <span class="number">0X5E40</span>,</span><br><span class="line">   <span class="number">0X5A00</span>, <span class="number">0X9AC1</span>, <span class="number">0X9B81</span>, <span class="number">0X5B40</span>, <span class="number">0X9901</span>, <span class="number">0X59C0</span>, <span class="number">0X5880</span>, <span class="number">0X9841</span>,</span><br><span class="line">   <span class="number">0X8801</span>, <span class="number">0X48C0</span>, <span class="number">0X4980</span>, <span class="number">0X8941</span>, <span class="number">0X4B00</span>, <span class="number">0X8BC1</span>, <span class="number">0X8A81</span>, <span class="number">0X4A40</span>,</span><br><span class="line">   <span class="number">0X4E00</span>, <span class="number">0X8EC1</span>, <span class="number">0X8F81</span>, <span class="number">0X4F40</span>, <span class="number">0X8D01</span>, <span class="number">0X4DC0</span>, <span class="number">0X4C80</span>, <span class="number">0X8C41</span>,</span><br><span class="line">   <span class="number">0X4400</span>, <span class="number">0X84C1</span>, <span class="number">0X8581</span>, <span class="number">0X4540</span>, <span class="number">0X8701</span>, <span class="number">0X47C0</span>, <span class="number">0X4680</span>, <span class="number">0X8641</span>,</span><br><span class="line">   <span class="number">0X8201</span>, <span class="number">0X42C0</span>, <span class="number">0X4380</span>, <span class="number">0X8341</span>, <span class="number">0X4100</span>, <span class="number">0X81C1</span>, <span class="number">0X8081</span>, <span class="number">0X4040</span> &#125;;</span><br><span class="line"></span><br><span class="line">  BYTE nTemp;</span><br><span class="line">  WORD wCRCWord = <span class="number">0xFFFF</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">while</span> (wLength--)&#123;</span><br><span class="line">      nTemp = *nData++ ^ wCRCWord;</span><br><span class="line">      wCRCWord &gt;&gt;= <span class="number">8</span>;</span><br><span class="line">      wCRCWord  ^= wCRCTable[nTemp];</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> wCRCWord;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2019/05/06/tensorflow-errors/" title="Tensorflow常见错误">Tensorflow常见错误</a></h2>
+                <p class="excerpt">
+                
+                最近重新安装了Tensorflow的训练环境，并不是一帆风顺，比起PyTorch的安装，Tensorflow还是问题多多，比如字符编码、PyCocoTools等，在此记录下安装和使用过程中的常见问题，但并不对安装过程进行详细记录
+无法加载Tensorflow在使用GPU版本情况下，目前我直接pip安
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2019-05-06T05:45:00.000Z" class="post-list__meta--date date">2019-05-06</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/05/06/tensorflow-errors/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2019/04/18/about-user-agent-in-broswer/" title="浏览器迷之UA">浏览器迷之UA</a></h2>
+                <p class="excerpt">
+                
+                不光是网页前台，网页后台经常也会出于统计等目的进行用户信息进行统计，而用户的信息一般只可能标记在浏览器的身份信息里面，也就是User-Agent，但是当你仔细的查看各个浏览器的UA(User-Agent)时候，你会惊奇的发现其如此的混乱，这要从浏览器的发展历史说起。
+浏览器UA起源在万维网兴起之后，
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2019-04-18T02:02:00.000Z" class="post-list__meta--date date">2019-04-18</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/闲言/">闲言</a>
+</span><a class="btn-border-small" href="/2019/04/18/about-user-agent-in-broswer/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

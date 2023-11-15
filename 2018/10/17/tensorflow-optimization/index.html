@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>Tensorflow加速 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="最近在研究学习Tensorflow的图像的物体识别功能，Python迁移学习用起来爽的不要不要的，但是机器才是2G的750Ti显卡，不说训练了，就是检测识别i7 6700也是十几二十秒，效果很差。当然一般深度学习是用GPU，1060显卡起且显存至少8G起，但是我木有显卡啊，自从挖矿导致的显卡涨价之后，还是那么贵，暂无预算，此路不通。因此只能研究下CPU的加速了。
+Python环境加速一般当我们训练">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Tensorflow加速 | xilixili.net">
+    <meta name="twitter:description" content="最近在研究学习Tensorflow的图像的物体识别功能，Python迁移学习用起来爽的不要不要的，但是机器才是2G的750Ti显卡，不说训练了，就是检测识别i7 6700也是十几二十秒，效果很差。当然一般深度学习是用GPU，1060显卡起且显存至少8G起，但是我木有显卡啊，自从挖矿导致的显卡涨价之后，还是那么贵，暂无预算，此路不通。因此只能研究下CPU的加速了。
+Python环境加速一般当我们训练">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Tensorflow加速 | xilixili.net">
+    <meta property="og:description" content="最近在研究学习Tensorflow的图像的物体识别功能，Python迁移学习用起来爽的不要不要的，但是机器才是2G的750Ti显卡，不说训练了，就是检测识别i7 6700也是十几二十秒，效果很差。当然一般深度学习是用GPU，1060显卡起且显存至少8G起，但是我木有显卡啊，自从挖矿导致的显卡涨价之后，还是那么贵，暂无预算，此路不通。因此只能研究下CPU的加速了。
+Python环境加速一般当我们训练">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2018/10/17/tensorflow-optimization/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2018-10-17T07:24:00.000Z" class="post-list__meta--date date">2018-10-17</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">Tensorflow加速</h1>
+  </header>
+
+  <section class="post">
+    <p>最近在研究学习Tensorflow的图像的物体识别功能，Python迁移学习用起来爽的不要不要的，但是机器才是2G的750Ti显卡，不说训练了，就是检测识别i7 6700也是十几二十秒，效果很差。<br>当然一般深度学习是用GPU，1060显卡起且显存至少8G起，但是我木有显卡啊，自从挖矿导致的显卡涨价之后，还是那么贵，暂无预算，此路不通。因此只能研究下CPU的加速了。</p>
+<h3 id="Python环境加速"><a href="#Python环境加速" class="headerlink" title="Python环境加速"></a>Python环境加速</h3><p>一般当我们训练或者识别检测时，tensorflow 会打印下面一句话（根据CPU不同，会有所不同）</p>
+<blockquote>
+<p>Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX AVX2</p>
+</blockquote>
+<p>查看CPU的指令集，基本上主要看一下以下几个</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SSE SSE2 SSE3.1 SSE4.1 AVX AVX2 AVX512 FMA</span><br></pre></td></tr></table></figure>
+<p>注：Windows下可用CPU-Z，Linux下直接 <code>cat /proc/cpuinfo</code></p>
+<p>确实提示的指令集我们是支持的，但是 tensorflow 却没有支持，为什么，因为 tensorflow 发布版本是面向一般机器的，如果该机器不支持某些指令集则会崩溃，为了兼容只能去掉特殊的指令集的编译。一般 <strong>AVX</strong> 的加速要好于<strong>SSE</strong>，此处我们根据提示只要给 tensorflow 增加指令集即可。但是这要涉及到重新编译的问题。</p>
+<p>如何编译，百度有很多教程（某些依赖需要翻墙），就可以编译出python的安装包。当然如果你不想编译的话，直接使用别人已经编译好的安装包，地址如下（除了 <strong>AVX512</strong> 外，基本比较新的CPU都支持了其他所以的指令集）</p>
+<p><a href="https://github.com/lakshayg/tensorflow-build" target="_blank" rel="noopener">https://github.com/lakshayg/tensorflow-build</a></p>
+<p>实测，识别时长可以达到四五秒。</p>
+<h3 id="MKL加速"><a href="#MKL加速" class="headerlink" title="MKL加速"></a>MKL加速</h3><p>如果你研究的够深，会发现Intel出了MKL版本的tensorflow，只需要安装他的即可</p>
+<p>详见  <a href="https://software.intel.com/en-us/articles/intel-optimization-for-tensorflow-installation-guide" target="_blank" rel="noopener">Intel® Optimization for TensorFlow* Installation Guide</a></p>
+<p>这里我不能做具体的判断，首先据说 Anaconda 的底层已经有<strong>MKL</strong> 加速，如前测试也是在Anaconda环境下进行的，其次之前十几秒的情况也是 Anaconda 环境，同时也安装了 Intel 版本和 Conda (可能是相同的版本)版本测试。另外，Anaconda 环境下还有个叫做  <code>tensorflow-mkl</code> 的包，安装之后也没什么实质效果。</p>
+<h3 id="C-环境加速"><a href="#C-环境加速" class="headerlink" title="C++环境加速"></a>C++环境加速</h3><p>一想到 Python，肯定想到的是性能不行，于是又打算搞C++版本，编译C++版本也有两个问题，首先同上面的Python安装包的编译，想编译成功也不是太容易（能翻墙可能成功率高一些吧），其次C++的使用开发文档太少了，出点问题基本就是处于懵逼的状态。注：自行编译可百度编译过程，同时注意添加支持的CPU指令集。</p>
+<p>Windows下如果不想自己编译，可下载别人已经编译好的开发库 </p>
+<p><a href="https://github.com/fo40225/tensorflow-windows-wheel" target="_blank" rel="noopener">https://github.com/fo40225/tensorflow-windows-wheel</a>  包含Windows上的Python和C++的开发库</p>
+<p>此处贡献一个可用的物体检测的C++ Demo代码  <a href="https://github.com/tensorflow/models/issues/1741" target="_blank" rel="noopener">C++ example to run object detection models</a></p>
+<p>实测，和Python环境性能基本没多大差距。</p>
+<h3 id="完结建议"><a href="#完结建议" class="headerlink" title="完结建议"></a>完结建议</h3><p>基本上加速后，两种语言没多大差距，尽量选择Python环境，毕竟简单好用。</p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2018/11/14/gcc4.8-with-regex-problem/" title="GCC4.8正则异常问题">GCC4.8正则异常问题</a></h2>
+                <p class="excerpt">
+                
+                之前在做28181服务开发的时候有意使用了boost库，以及VS 2010以及CentOS 7 自带 GCC都能支持的C++11的特性，月初发现程序好像不正常工作了。日志拉取还真是一个漫长的过程，好的一点是之前日志还算打的足够详细，特别是异常错误部分，所以很容易就找到了出错日志。
+关于正则的使用直接
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2018-11-14T06:55:00.000Z" class="post-list__meta--date date">2018-11-14</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2018/11/14/gcc4.8-with-regex-problem/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2018/09/04/centos-update-gcc/" title="CentOS升级GCC">CentOS升级GCC</a></h2>
+                <p class="excerpt">
+                
+                一般的Linux都是企业应用相对的发行版的软件包相对较旧，而现在C++11逐渐普及，支持C++11的编译器在Linux上的GCC稍微完整点的都至少是4.8版本，反观CentOS 6的GCC版本为4.4，即使是最新的CentOS 7也才仅为4.7。因此很多时候需要升级系统自带的编译器（注意，千万不要从
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2018-09-04T08:51:00.000Z" class="post-list__meta--date date">2018-09-04</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2018/09/04/centos-update-gcc/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

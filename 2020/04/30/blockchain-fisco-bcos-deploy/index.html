@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>FISCOBCOS~联盟链部署 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="续前文，开始进行区块链部署。
+部署前准备首先清楚联盟链，是需要多家机构组成联盟，因此在部署上稍微有区别。其中 FISCO BCOS 支持多群组概念，也就是意思说，多个组织组成多个联盟，而且联盟中可以允许共同的组织节点。
+FISCO BCOS 部署需要 Linux 平台，建议使用 CentOS 7 平台，同时安装可能的依赖软件 OpenSSL 和 Python 等。
+安装部署工具如果未安装部署工具，">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="FISCOBCOS~联盟链部署 | xilixili.net">
+    <meta name="twitter:description" content="续前文，开始进行区块链部署。
+部署前准备首先清楚联盟链，是需要多家机构组成联盟，因此在部署上稍微有区别。其中 FISCO BCOS 支持多群组概念，也就是意思说，多个组织组成多个联盟，而且联盟中可以允许共同的组织节点。
+FISCO BCOS 部署需要 Linux 平台，建议使用 CentOS 7 平台，同时安装可能的依赖软件 OpenSSL 和 Python 等。
+安装部署工具如果未安装部署工具，">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="FISCOBCOS~联盟链部署 | xilixili.net">
+    <meta property="og:description" content="续前文，开始进行区块链部署。
+部署前准备首先清楚联盟链，是需要多家机构组成联盟，因此在部署上稍微有区别。其中 FISCO BCOS 支持多群组概念，也就是意思说，多个组织组成多个联盟，而且联盟中可以允许共同的组织节点。
+FISCO BCOS 部署需要 Linux 平台，建议使用 CentOS 7 平台，同时安装可能的依赖软件 OpenSSL 和 Python 等。
+安装部署工具如果未安装部署工具，">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2020/04/30/blockchain-fisco-bcos-deploy/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2020-04-30T06:10:00.000Z" class="post-list__meta--date date">2020-04-30</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">FISCOBCOS~联盟链部署</h1>
+  </header>
+
+  <section class="post">
+    <p>续前文，开始进行区块链部署。</p>
+<h3 id="部署前准备"><a href="#部署前准备" class="headerlink" title="部署前准备"></a>部署前准备</h3><p>首先清楚联盟链，是需要多家机构组成联盟，因此在部署上稍微有区别。其中 <code>FISCO BCOS</code> 支持多群组概念，也就是意思说，多个组织组成多个联盟，而且联盟中可以允许共同的组织节点。</p>
+<p><code>FISCO BCOS</code> 部署需要 <code>Linux</code> 平台，建议使用 <code>CentOS 7</code> 平台，同时安装可能的依赖软件 <code>OpenSSL</code> 和 <code>Python</code> 等。</p>
+<h3 id="安装部署工具"><a href="#安装部署工具" class="headerlink" title="安装部署工具"></a>安装部署工具</h3><p>如果未安装部署工具，请先安装部署工具。</p>
+<p>部署工具有两种安装方法，第一从其他组织拷贝，其次是在线安装。</p>
+<p>从其他组织拷贝的工具，需要安装 Python的 <code>configparser</code> 包。</p>
+<p>在线安装的方法需要使用 git 工具下载：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/FISCO-BCOS/generator.git</span><br></pre></td></tr></table></figure>
+<p>该工具为 Python 需要安装相应的依赖，执行项目的命令安装。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> generator</span><br><span class="line">bash ./scripts/install.sh</span><br></pre></td></tr></table></figure>
+<p>完成之后就可以下载部署工具了。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./generator --download_fisco ./meta</span><br></pre></td></tr></table></figure>
+<p>由于工具可用自动进行一些证书的生成，因此使用组织自己的 <code>cert.cnf</code> 替换 <code>generator/scripts</code> 目录下的同名文件。</p>
+<h3 id="新建节点"><a href="#新建节点" class="headerlink" title="新建节点"></a>新建节点</h3><p>一般情况下，一个组织创建节点意味要加入新的群组了，因此二者是对应的。</p>
+<p>首先将之前CA下发的证书以及自己组织的私钥存放在 meta 目录下，一般情况下文件如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ca.crt agency.crt agency.key</span><br></pre></td></tr></table></figure>
+<p>然后修改 <code>meta/node_deployment.ini</code> 格式如下，主要根据实际修改</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[group]</span></span><br><span class="line"><span class="attr">group_id</span>=<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="section">[node0]</span></span><br><span class="line"><span class="comment">; Host IP for the communication among peers.</span></span><br><span class="line"><span class="comment">; Please use your ssh login IP.</span></span><br><span class="line"><span class="attr">p2p_ip</span>=<span class="number">127.0</span>.<span class="number">0.1</span></span><br><span class="line"><span class="comment">; Listening IP for the communication between SDK clients.</span></span><br><span class="line"><span class="comment">; This IP is the same as p2p_ip for the physical host.</span></span><br><span class="line"><span class="comment">; But for virtual host e.g., VPS servers, it is usually different from p2p_ip.</span></span><br><span class="line"><span class="comment">; You can check accessible addresses of your network card.</span></span><br><span class="line"><span class="comment">; Please see https://tecadmin.net/check-ip-address-ubuntu-18-04-desktop/</span></span><br><span class="line"><span class="comment">; for more instructions.</span></span><br><span class="line"><span class="attr">rpc_ip</span>=<span class="number">127.0</span>.<span class="number">0.1</span></span><br><span class="line"><span class="attr">p2p_listen_port</span>=<span class="number">30300</span></span><br><span class="line"><span class="attr">channel_listen_port</span>=<span class="number">20200</span></span><br><span class="line"><span class="attr">jsonrpc_listen_port</span>=<span class="number">8545</span></span><br><span class="line"></span><br><span class="line"><span class="section">[node1]</span></span><br><span class="line"><span class="attr">p2p_ip</span>=<span class="number">127.0</span>.<span class="number">0.1</span></span><br><span class="line"><span class="attr">rpc_ip</span>=<span class="number">127.0</span>.<span class="number">0.1</span></span><br><span class="line"><span class="attr">p2p_listen_port</span>=<span class="number">30301</span></span><br><span class="line"><span class="attr">channel_listen_port</span>=<span class="number">20201</span></span><br><span class="line"><span class="attr">jsonrpc_listen_port</span>=<span class="number">8546</span></span><br></pre></td></tr></table></figure>
+<p>根据实际配置，实际几个节点就配置几个。注意此处的P2P IP地址，需要其他节点可访问的地址。</p>
+<p>配置完成之后就可以生成节点证书了，</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./generator --generate_all_certificates ./agency_node_info</span><br></pre></td></tr></table></figure>
+<p>会在目录下生成类似下面的文件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cert_127.0.0.1_30300.crt cert_127.0.0.1_30301.crt peers.txt</span><br></pre></td></tr></table></figure>
+<p>至此必须的信息已经产生了，需要统一操作，在此协商某个组织担任群组的领导组织，该组织负责协调和生成群组信息。</p>
+<p>所有其他群组将刚产生的 <code>agency_node_info</code> 目录下的文件统一提交给这个协商出来的领导组织来负责统一处理。</p>
+<h4 id="群组领导者操作"><a href="#群组领导者操作" class="headerlink" title="群组领导者操作"></a>群组领导者操作</h4><p>将获取到的 <code>peers.txt</code> 文件（含自己的）合并，形成 <code>peers_all.txt</code>。</p>
+<p>将收集到的 <code>crt</code> 文件统一存放到 <code>meta</code> 目录下。</p>
+<p>修改 <code>conf/group_genesis.ini</code> 文件，把所有节点信息填入，群组ID根据实际规划填写</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[group]</span></span><br><span class="line"><span class="attr">group_id</span>=<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="section">[nodes]</span></span><br><span class="line"><span class="attr">node0</span>=<span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">30300</span></span><br><span class="line"><span class="attr">node1</span>=<span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">30301</span></span><br><span class="line"><span class="attr">node2</span>=<span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">30302</span></span><br><span class="line"><span class="attr">node3</span>=<span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">30303</span></span><br></pre></td></tr></table></figure>
+<p>然后执行下面的命令生成群组文件</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./generator --create_group_genesis ./group</span><br></pre></td></tr></table></figure>
+<p>会在 <code>group</code> 目录下生成群组文件 <code>group.1.genesis</code> (1是群组号，根据实际可能不同)</p>
+<p>现在将 <code>group.1.genesis</code> 和 <code>peers_all.txt</code> 下发给所有群组内的组织。</p>
+<h4 id="所有组织的操作-含组织领导"><a href="#所有组织的操作-含组织领导" class="headerlink" title="所有组织的操作(含组织领导)"></a>所有组织的操作(含组织领导)</h4><p>各个组织将 <code>group.1.genesis</code> 和 <code>peers_all.txt</code> 放到 <code>meta</code>下，然后复制一份 <code>peers_all.txt</code> 为 <code>peers_others.txt</code> 并将本组织的节点从中删除，然后执行生成节点</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./generator --build_install_package ./meta/other_peers.txt ./node</span><br></pre></td></tr></table></figure>
+<p>然后就在 <code>node</code> 目录生成了可运行的节点以及配置，并且提供了启动所有的功能，执行</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">bash node/start_all.sh</span><br></pre></td></tr></table></figure>
+<h4 id="新增组织的操作"><a href="#新增组织的操作" class="headerlink" title="新增组织的操作"></a>新增组织的操作</h4><p>这里有必要说一下，如果区块链已经运营了，而需要新增某个组织进入，此时该组织按照上面所有组织的操作进行，不同之处在于执行完成之后，需要领导节点的配合。操作如下（有本节点和领导节点的配合操作，请注意）：</p>
+<ul>
+<li><p>新组织查看 <code>node/node_x.x.x.x_xxx/conf/node.nodeid</code> 将获取的节点ID提交给领导组织，大概128字节长。</p>
+</li>
+<li><p>领导组织获取节点ID之后，通过控制台注册</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">addSealer &#123;nodeid&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>控制台操作稍微附录介绍</p>
+</blockquote>
+<h3 id="节点扩容与退出"><a href="#节点扩容与退出" class="headerlink" title="节点扩容与退出"></a>节点扩容与退出</h3><h4 id="节点扩容"><a href="#节点扩容" class="headerlink" title="节点扩容"></a>节点扩容</h4><p>扩容节点的方案是生成节点，然后在其他节点加入P2P网络，之后在链上注册。</p>
+<p>首先下载节点生成脚本</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -LO https://raw.githubusercontent.com/FISCO-BCOS/FISCO-BCOS/master/tools/gen_node_cert.sh &amp;&amp; chmod u+x gen_node_cert.sh</span><br></pre></td></tr></table></figure>
+<p>然后执行生成新节点命令，假设生成到 <code>node_new</code> 目录</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./gen_node_cert.sh -c ./meta -o node_new</span><br></pre></td></tr></table></figure>
+<p>然后将生成的节点目录拷贝到 <code>node</code> 目录下重命名(按其他节点命名规则)</p>
+<p>然后将群组内其他节点的 <code>config.ini</code> <code>start.sh</code> <code>stop.sh</code> 等文件拷贝到新节点目录下</p>
+<p>然后修改 <code>config.ini</code> 根据本节点实际情况填写</p>
+<p>再拷贝群组内其他节点的 <code>group.X.genesis</code> <code>group.X.ini</code> 文件到 <code>conf</code> 目录，不修改</p>
+<p>然后执行节点目录内的 <code>start.sh</code> 即可启动节点。</p>
+<p>注意：因为新节点接入，建议群组内其他节点的P2P 列表添加新节点并重启。</p>
+<p>接下来该新节点参照前述内容进行链上注册。</p>
+<h4 id="节点退出"><a href="#节点退出" class="headerlink" title="节点退出"></a>节点退出</h4><p>节点退出与节点扩容操作相反，大致需要以下几步</p>
+<ul>
+<li><p>首先在有权限的控制台上将该节点设置为游离节点</p>
+</li>
+<li><p>然后在群组内其他节点将该节点P2P信息删除</p>
+</li>
+<li><p>然后重启群组内节点，如果某个节点没有配置过该P2P，可不用重启</p>
+</li>
+</ul>
+<h3 id="黑白名单"><a href="#黑白名单" class="headerlink" title="黑白名单"></a>黑白名单</h3><p>默认未做设置的话，没有任何限制，当启用任意黑名单或白名单，功能就启用了。</p>
+<p>在配置文件的 <code>config.ini</code> 中有黑白名单配置，其中</p>
+<ul>
+<li><code>certificate_blacklist</code> 是黑名单</li>
+<li><code>certificate_whitelist</code> 是白名单配置</li>
+</ul>
+<p>其中黑名单优先（黑白名单都有的节点，黑名单生效）</p>
+<h3 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h3><h4 id="控制台下载"><a href="#控制台下载" class="headerlink" title="控制台下载"></a>控制台下载</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./generator --download_console ./ --cdn</span><br></pre></td></tr></table></figure>
+<p>下载完成之后，修改 <code>console/conf/applicationContext.xml</code> 内节点信息，并将节点的证书和CA证书等拷贝到目录，进入控制台需要权限，命令如下</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> console</span><br><span class="line">sh start.sh 1 -pem xxxx.pem</span><br></pre></td></tr></table></figure>
+<p>PKCS账号使用 <code>-p12</code> 参数。账号见账号生成，同时请注意账号权限。</p>
+<h4 id="账号生成"><a href="#账号生成" class="headerlink" title="账号生成"></a>账号生成</h4><p>区块链使用的是公私钥认证的方式，因此所有的操作都基于此。</p>
+<p>针对账号创建，由于 <code>OpenSSL</code> 的操作较为繁琐，此处有集成的脚本实现</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -LO https://raw.githubusercontent.com/FISCO-BCOS/console/master/tools/get_account.sh &amp;&amp; chmod u+x get_account.sh &amp;&amp; bash get_account.sh -h</span><br></pre></td></tr></table></figure>
+<p>直接执行shell可以默认生成PEM格式的公钥私钥和地址，见输出内容。</p>
+<p>如果需要带密码的PKCS12格式，使用下面的命令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">bash ./get_account.sh -p</span><br></pre></td></tr></table></figure>
+<p>请务必保存好私钥。</p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2020/05/12/hik-camera-ptz-rotation/" title="精确控制海康摄像头PTZ">精确控制海康摄像头PTZ</a></h2>
+                <p class="excerpt">
+                
+                项目中需要定时抓取摄像头不同角度的视频图像，也就是要精确控制海康摄像头PTZ旋转指定的角度，比如像我们的需求应该是90°，旋转完成之后刷屏，然后继续旋转。这种需求第一个想到的就是控制预置点，这个也是一个非常不错的方法，因为可以对真实情况进行调整，但是由于摄像头数据太大，一个个调整不太现实。
+PTZ旋
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2020-05-12T09:38:00.000Z" class="post-list__meta--date date">2020-05-12</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2020/05/12/hik-camera-ptz-rotation/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2020/04/27/blockchain-fisco-bcos-ca/" title="FISCOBCOS~自建CA及实现认证">FISCOBCOS~自建CA及实现认证</a></h2>
+                <p class="excerpt">
+                
+                最近在调试区块链，开始调研了很多区块链平台，包括百度京东的，最终还是觉得微众银行的FISCO BCOS最好用。至于各个平台的差异，大家可自行百度对比。顺便说一句，FISCO BCOS(以下称FB)的社区还不错，官方支持nice！
+关于FISCO BCOS自建区块链，基本比较合适的方式是联盟链。因为使
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2020-04-27T13:55:00.000Z" class="post-list__meta--date date">2020-04-27</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2020/04/27/blockchain-fisco-bcos-ca/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

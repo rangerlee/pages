@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>SetConsoleCtrlHandler实现资源释放 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="今天决定对程序产生的不完整的临时文件进行下优化，当然这些临时文件是非预期的，在程序中都进行了处理，但是在某些情况下确实是发生了。
+现象分析首先可以确认的是这些临时文件都是程序在退出时候未处理生成的。当然程序全部是正常退出的，并没有异常崩溃，但是退出的方法有多种，比如Ctrl+C按键，比如直接点击控制台的关闭按钮，但是程序却没有在退出的时候调用析构进行资源释放。
+诚然很多资源在进程关闭后可以被操作系">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="SetConsoleCtrlHandler实现资源释放 | xilixili.net">
+    <meta name="twitter:description" content="今天决定对程序产生的不完整的临时文件进行下优化，当然这些临时文件是非预期的，在程序中都进行了处理，但是在某些情况下确实是发生了。
+现象分析首先可以确认的是这些临时文件都是程序在退出时候未处理生成的。当然程序全部是正常退出的，并没有异常崩溃，但是退出的方法有多种，比如Ctrl+C按键，比如直接点击控制台的关闭按钮，但是程序却没有在退出的时候调用析构进行资源释放。
+诚然很多资源在进程关闭后可以被操作系">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="SetConsoleCtrlHandler实现资源释放 | xilixili.net">
+    <meta property="og:description" content="今天决定对程序产生的不完整的临时文件进行下优化，当然这些临时文件是非预期的，在程序中都进行了处理，但是在某些情况下确实是发生了。
+现象分析首先可以确认的是这些临时文件都是程序在退出时候未处理生成的。当然程序全部是正常退出的，并没有异常崩溃，但是退出的方法有多种，比如Ctrl+C按键，比如直接点击控制台的关闭按钮，但是程序却没有在退出的时候调用析构进行资源释放。
+诚然很多资源在进程关闭后可以被操作系">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2017/12/26/resource-release-with-setconsolectrlhandler/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2017-12-26T08:26:00.000Z" class="post-list__meta--date date">2017-12-26</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">SetConsoleCtrlHandler实现资源释放</h1>
+  </header>
+
+  <section class="post">
+    <p>今天决定对程序产生的不完整的临时文件进行下优化，当然这些临时文件是非预期的，在程序中都进行了处理，但是在某些情况下确实是发生了。</p>
+<h3 id="现象分析"><a href="#现象分析" class="headerlink" title="现象分析"></a>现象分析</h3><p>首先可以确认的是这些临时文件都是程序在退出时候未处理生成的。当然程序全部是正常退出的，并没有异常崩溃，但是退出的方法有多种，比如Ctrl+C按键，比如直接点击控制台的关闭按钮，但是程序却没有在退出的时候调用析构进行资源释放。</p>
+<p>诚然很多资源在进程关闭后可以被操作系统回收（先不谈规范性），比如内存、线程等。但是并非所有的资源都是系统默认资源，比如我们的应用中，程序是实时的写MP4媒体文件，如果结尾处不进行文件更新，那么文件肯定是不可用的。不过我们很多的释放都在析构函数也实现了一份，很大程度上都可以保证得到运行。不过仔细观察日志，可以发现确实是程序在某些情况下退出的时候没有处理释放。</p>
+<p>从Win32的机制讲，处理程序退出的方法就是<code>SetConsoleCtrlHandler</code>,一般我们的处理逻辑大概如下</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">BOOL WINAPI <span class="title">ConsoleHandler</span><span class="params">(DWORD event)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">switch</span>(event) &#123;</span><br><span class="line">        <span class="keyword">case</span> CTRL_C_EVENT:</span><br><span class="line">        <span class="keyword">case</span> CTRL_BREAK_EVENT:</span><br><span class="line">        <span class="keyword">case</span> CTRL_CLOSE_EVENT:</span><br><span class="line">        <span class="keyword">case</span> CTRL_LOGOFF_EVENT:</span><br><span class="line">        <span class="keyword">case</span> CTRL_SHUTDOWN_EVENT: &#123;</span><br><span class="line">            <span class="built_in">log</span>(<span class="string">"catch signal %d"</span>, event);</span><br><span class="line">            PostThreadMessage(appid, WM_QUIT, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>基本上就是在获取事件后给进程发消息，通知进程退出，逻辑大概如下</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>* argv[])</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    SetConsoleCtrlHandler((PHANDLER_ROUTINE)ConsoleHandler,TRUE);</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">if</span>(app.InitApp()) &#123;</span><br><span class="line">        app.Run();</span><br><span class="line">    &#125;</span><br><span class="line">    app.ExitApp();</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="深入排查"><a href="#深入排查" class="headerlink" title="深入排查"></a>深入排查</h3><p>上面的代码基本都是比较通用的代码，在程序退出的时候基本都是可以看到日志中打印的catch日志的，说明这个机制是没有问题的。然后继续在程序退出过程中添加日志，这个时候就可以发现在Ctrl+C等情况下，退出日志基本是完整的，不过在直接关闭控制台按钮等方式下，日志却只打印了部分就结束了。这说明直接关闭程序应该是来不及释放资源就结束了的。仔细阅读下MSDN文档 <a href="https://docs.microsoft.com/zh-cn/windows/console/setconsolectrlhandler" target="_blank" rel="noopener">SetConsoleCtrlHandler</a> ，并不能获取到特别有用的信息。</p>
+<p>直接写一段测试代码测试验证下</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> pid = <span class="number">0</span>;</span><br><span class="line">HANDLE g_handle = CreateEvent(<span class="literal">NULL</span>,FALSE,FALSE,<span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line"><span class="function">BOOL WINAPI <span class="title">ConsoleHandler</span><span class="params">(DWORD event)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"收到 %d 信号\n"</span>, event);</span><br><span class="line">    PostThreadMessage(pid, WM_QUIT, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    WaitForSingleObject(g_handle,INFINITE);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> TRUE;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> _tmain(<span class="keyword">int</span> argc, _TCHAR* argv[])</span><br><span class="line">&#123;</span><br><span class="line">    pid = GetCurrentThreadId();</span><br><span class="line">    SetConsoleCtrlHandler((PHANDLER_ROUTINE)ConsoleHandler, TRUE);</span><br><span class="line"></span><br><span class="line">    MSG tMsg;</span><br><span class="line">    <span class="keyword">while</span>(GetMessage(&amp;tMsg, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>))</span><br><span class="line">    &#123;&#125;</span><br><span class="line"></span><br><span class="line">    MessageBoxA(<span class="number">0</span>, <span class="string">"OnExit"</span>, <span class="string">"test"</span>, <span class="number">0</span>);</span><br><span class="line">    SetEvent(g_handle);</span><br><span class="line">    CloseHandle(g_handle);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>分别通过Ctrl+C、关闭按钮关闭，任务管理器中结束进程，仔细观察就可以发现，Ctrl+C方式基本可以保证程序正常结束。但是后面两种，在不操作的情况下，在几秒后会被系统Kill。看来有些信号是有时限的啊，但是如果没有<code>WaitForSingleObject</code>的阻塞，除了Ctrl+C方式外，其他两种情况程序迅速就结束了。</p>
+<p>从网上提供的资料得到以下结论：</p>
+<ul>
+<li><code>CTRL_CLOSE_EVENT</code> 超时时间为5秒</li>
+<li><code>CTRL_LOGOFF_EVENT</code> 和 <code>CTRL_SHUTDOWN_EVENT</code> 超时时间为20秒</li>
+</ul>
+<p>注销关机没测试，不过<code>CTRL_CLOSE_EVENT</code>确实是大概在5秒的样子。</p>
+<h3 id="优化程序"><a href="#优化程序" class="headerlink" title="优化程序"></a>优化程序</h3><p>知道了原因，接下来就是修改了，直接根据上面的测试例子改改就行，不过由于关键的<code>CTRL_CLOSE_EVENT</code>时间只有5秒，也就意味着尽量把特别重要的释放优先进行。并且一定要在信号函数内部阻塞，而且为了确保程序不会阻塞卡死在信号函数内(毕竟还有Ctrl+C等情况)，根据上面的超时时间，20秒是个不错的选择，即</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">WaitForSingleObject(g_handle, <span class="number">20000</span>);</span><br></pre></td></tr></table></figure>
+<p>修改完成之后测试，之前会产生临时文件的场景基本已经OK了，当然这其中某些情况下只有5秒，并不能保证100%的可靠，不过应该也只能做到这个地步了。</p>
+<p>PS：看到关机事件的超时是20秒，想到好多人吐槽关机慢就禁不住呵呵一笑，想我大Linux的SIGKILL还真是简单暴力啊！</p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2018/01/04/winsw-with-nginx/" title="探究WinSW封装Nginx服务及日志清理">探究WinSW封装Nginx服务及日志清理</a></h2>
+                <p class="excerpt">
+                
+                如前述，我们项目中目前还在Win32平台，切换到了Nginx架构的RTMP服务器。当然也是长时间不规范的直接双击运行的，虽说Nginx的架构保证进程活着问题不大，但是无法应对突然的停电，停电之后无人去操作启动，造成了无人觉察的故障，这也是一个极大的风险。
+技术选型当然我们的目标是把nginx做成一个
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2018-01-04T03:44:00.000Z" class="post-list__meta--date date">2018-01-04</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2018/01/04/winsw-with-nginx/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2017/12/25/release-without-library-reference-on-visualstudio/" title="VC的Release版本无法找到入口问题">VC的Release版本无法找到入口问题</a></h2>
+                <p class="excerpt">
+                
+                在之前的版本上改了很多功能之后，一直用的Debug版本在本地调试，没有什么问题。今天给同事提供了老版本和新版本的Release的EXE程序，结果反馈新版本的程序运行不了。
+缘由按照惯例，肯定是没安装redist_x86.exe环境，转念一想我们打包可是自带了msvcrt.dll等CRT库的，况且测试
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-12-25T10:28:00.000Z" class="post-list__meta--date date">2017-12-25</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2017/12/25/release-without-library-reference-on-visualstudio/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

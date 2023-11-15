@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>用ffmpeg从MP4提取H264裸流 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="MP4的格式封装比较复杂，想取出来H264裸流比较麻烦，因此借助ffmpeg工具比较方便。通常一般都是使用ffmpeg进行编解码较多，但是当我们视频是H264编码时候，直接提取比较合适。
+提取H264H264编码的MP4文件，使用ffmpeg提取相对比较方便，直接使用ffmpeg标准的媒体文件读取流程，通过读取AVPacket出来不需要解码，直接从其data数据域中即可获取到H264数据，通过观察">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="用ffmpeg从MP4提取H264裸流 | xilixili.net">
+    <meta name="twitter:description" content="MP4的格式封装比较复杂，想取出来H264裸流比较麻烦，因此借助ffmpeg工具比较方便。通常一般都是使用ffmpeg进行编解码较多，但是当我们视频是H264编码时候，直接提取比较合适。
+提取H264H264编码的MP4文件，使用ffmpeg提取相对比较方便，直接使用ffmpeg标准的媒体文件读取流程，通过读取AVPacket出来不需要解码，直接从其data数据域中即可获取到H264数据，通过观察">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="用ffmpeg从MP4提取H264裸流 | xilixili.net">
+    <meta property="og:description" content="MP4的格式封装比较复杂，想取出来H264裸流比较麻烦，因此借助ffmpeg工具比较方便。通常一般都是使用ffmpeg进行编解码较多，但是当我们视频是H264编码时候，直接提取比较合适。
+提取H264H264编码的MP4文件，使用ffmpeg提取相对比较方便，直接使用ffmpeg标准的媒体文件读取流程，通过读取AVPacket出来不需要解码，直接从其data数据域中即可获取到H264数据，通过观察">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2018/08/20/ffmpeg-got-raw-h264/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2018-08-20T08:51:00.000Z" class="post-list__meta--date date">2018-08-20</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">用ffmpeg从MP4提取H264裸流</h1>
+  </header>
+
+  <section class="post">
+    <p>MP4的格式封装比较复杂，想取出来H264裸流比较麻烦，因此借助ffmpeg工具比较方便。通常一般都是使用ffmpeg进行编解码较多，但是当我们视频是H264编码时候，直接提取比较合适。</p>
+<h3 id="提取H264"><a href="#提取H264" class="headerlink" title="提取H264"></a>提取H264</h3><p>H264编码的MP4文件，使用ffmpeg提取相对比较方便，直接使用ffmpeg标准的媒体文件读取流程，通过读取AVPacket出来不需要解码，直接从其data数据域中即可获取到H264数据，通过观察就可以发现，这个H264并不是我们需要的，因为H264数据有两种方式</p>
+<ul>
+<li>MP4编码方式，也就是开始四个字节表示数据长度</li>
+<li>ANNEXB编码方式，也就是常见的 <code>00 00 00 01</code> 开头的方式</li>
+</ul>
+<p>因此此处需要将MP4方式的数据转换成ANNEXB方式的，转换方式比较简单，一般ffmpeg读取一包是一帧数据，因此只需要自己写入 <code>00 00 00 01</code> 之后写入 <code>AVPacket.data</code> 偏移4位即可，相应的 <code>AVPacket.size</code> 也要减少4位。这样就可以了。当然ffmpeg也为我们准备了相对应的filter，我们直接利用即可，代码如下</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">AVBitStreamFilterContext* h264bsfc =  av_bitstream_filter_init(<span class="string">"h264_mp4toannexb"</span>); </span><br><span class="line"></span><br><span class="line">AVPacket packet;</span><br><span class="line"><span class="keyword">while</span>( av_read_frame(format_ctx_, &amp;packet) &gt;= <span class="number">0</span> ) &#123;</span><br><span class="line">    <span class="keyword">if</span>( packet.stream_index == video_stream_index_ ) &#123;</span><br><span class="line">        av_bitstream_filter_filter(h264bsfc, codec_ctx_, <span class="literal">NULL</span>, &amp;packet.data, &amp;packet.size, packet.data, packet.size, <span class="number">0</span>);</span><br><span class="line">        fwrite(packet.data, packet.size, <span class="number">1</span>, fp);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    av_free_packet(&amp;packet);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">av_bitstream_filter_close(h264bsfc);</span><br></pre></td></tr></table></figure>
+<p>相比较简洁的多。</p>
+<h4 id="2019-03-28-更新：关于上面方法产生内存泄漏的问题"><a href="#2019-03-28-更新：关于上面方法产生内存泄漏的问题" class="headerlink" title="2019/03/28 更新：关于上面方法产生内存泄漏的问题"></a>2019/03/28 更新：关于上面方法产生内存泄漏的问题</h4><p>（为什么不直接修改前面内容呢？前事不忘后事之师，并且可以给他人和已经阅读过的人以提示）</p>
+<p>最近在调试代码的时候，发现使用了上面的代码存在内存泄漏，然后查看使用版本的官方源码，其中各个函数的定义中很容易分析出问题，这其中 <code>av_bitstream_filter_filter</code> 的关键代码如下：</p>
+<p>代码在 <a href="https://github.com/FFmpeg/FFmpeg/blob/release/3.3/libavcodec/bitstream_filter.c" target="_blank" rel="noopener">bitstream_filter.c</a> 中，这里使用了 FFMPEG 3.3 分支代码分析。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">av_bitstream_filter_filter</span><span class="params">(AVBitStreamFilterContext *bsfc,</span></span></span><br><span class="line"><span class="function"><span class="params">                               AVCodecContext *avctx, <span class="keyword">const</span> <span class="keyword">char</span> *args,</span></span></span><br><span class="line"><span class="function"><span class="params">                               <span class="keyword">uint8_t</span> **poutbuf, <span class="keyword">int</span> *poutbuf_size,</span></span></span><br><span class="line"><span class="function"><span class="params">                               <span class="keyword">const</span> <span class="keyword">uint8_t</span> *buf, <span class="keyword">int</span> buf_size, <span class="keyword">int</span> keyframe)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    pkt.data = buf;</span><br><span class="line">    pkt.size = buf_size;</span><br><span class="line"></span><br><span class="line">    ret = av_bsf_send_packet(priv-&gt;ctx, &amp;pkt);</span><br><span class="line">    <span class="keyword">if</span> (ret &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line"></span><br><span class="line">    *poutbuf      = <span class="literal">NULL</span>;</span><br><span class="line">    *poutbuf_size = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    ret = av_bsf_receive_packet(priv-&gt;ctx, &amp;pkt);</span><br><span class="line">    <span class="keyword">if</span> (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (ret &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line"></span><br><span class="line">    *poutbuf = av_malloc(pkt.size + AV_INPUT_BUFFER_PADDING_SIZE);</span><br><span class="line">    <span class="keyword">if</span> (!*poutbuf) &#123;</span><br><span class="line">        av_packet_unref(&amp;pkt);</span><br><span class="line">        <span class="keyword">return</span> AVERROR(ENOMEM);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    *poutbuf_size = pkt.size;</span><br><span class="line">    <span class="built_in">memcpy</span>(*poutbuf, pkt.data, pkt.size);</span><br><span class="line"></span><br><span class="line">    av_packet_unref(&amp;pkt);</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>里面的逻辑暂时先不管，关注 <code>poutbuf</code>  这个变量，为什么要关注这个变量呢，</p>
+<ul>
+<li>其一，整个循环流程只有2个处理函数，而且 <code>av_read_frame</code> 明确返回的包是要释放的</li>
+<li>其二， <code>av_bitstream_filter_filter</code> 函数入参只有 <code>poutbuf</code> 是指向指针的指针</li>
+</ul>
+<p>其中 <code>poutbuf</code> 是传入的内存，也就是最终的处理结果，在源码内部明显可以看到为这个变量申请了新内存（注意变量类型），而这个变量却是传的 <code>AVPacket</code> 的变量地址，也就是说最终内部改变了 <code>AVPacket</code> 的内部内存，那么原来 <code>AVPacket</code> 的内存则丢掉了，也就是泄漏了。</p>
+<p>根源找到了，修改起来也比较简单</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">AVBitStreamFilterContext* h264bsfc =  av_bitstream_filter_init(<span class="string">"h264_mp4toannexb"</span>); </span><br><span class="line"></span><br><span class="line">AVPacket packet;</span><br><span class="line"><span class="keyword">while</span>( av_read_frame(format_ctx_, &amp;packet) &gt;= <span class="number">0</span> ) &#123;</span><br><span class="line">    <span class="keyword">if</span>( packet.stream_index == video_stream_index_ ) &#123;</span><br><span class="line">        <span class="keyword">uint8_t</span>* outbuf = <span class="literal">nullptr</span>;</span><br><span class="line">        <span class="keyword">int</span> outlen = <span class="number">0</span>;</span><br><span class="line">        av_bitstream_filter_filter(h264bsfc, codec_ctx_, <span class="literal">NULL</span>, </span><br><span class="line">            &amp;outbuf, &amp;outlen, packet.data, packet.size, <span class="number">0</span>);</span><br><span class="line">        fwrite(packet.data, packet.size, <span class="number">1</span>, fp);</span><br><span class="line">        <span class="keyword">if</span>(outbuf)&#123;</span><br><span class="line">            av_free(outbuf);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    av_free_packet(&amp;packet);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">av_bitstream_filter_close(h264bsfc);</span><br></pre></td></tr></table></figure>
+<h3 id="提取SPS和PPS"><a href="#提取SPS和PPS" class="headerlink" title="提取SPS和PPS"></a>提取SPS和PPS</h3><p>有时候需要取得H264的SPS和PPS，但是又不想去分析NALU去查找，毕竟相对操作起来比较麻烦。有个比较简单的办法是在视频的 <code>AVCodecContext.extradata</code>， 里面保存的是 <code>avcC</code> 类型的数据，其规范定义如下</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">aligned(<span class="number">8</span>) <span class="class"><span class="keyword">class</span> <span class="title">AVCDecoderConfigurationRecord</span> &#123;</span>   </span><br><span class="line">   <span class="function"><span class="keyword">unsigned</span> <span class="title">int</span><span class="params">(<span class="number">8</span>)</span> configurationVersion </span>= <span class="number">1</span>;   </span><br><span class="line">   <span class="function"><span class="keyword">unsigned</span> <span class="title">int</span><span class="params">(<span class="number">8</span>)</span> AVCProfileIndication</span>;   </span><br><span class="line">   <span class="function"><span class="keyword">unsigned</span> <span class="title">int</span><span class="params">(<span class="number">8</span>)</span> profile_compatibility</span>;   </span><br><span class="line">   <span class="function"><span class="keyword">unsigned</span> <span class="title">int</span><span class="params">(<span class="number">8</span>)</span> AVCLevelIndication</span>;   </span><br><span class="line">   bit(6) reserved = '111111'b;   </span><br><span class="line">   <span class="function"><span class="keyword">unsigned</span> <span class="title">int</span><span class="params">(<span class="number">2</span>)</span> lengthSizeMinusOne</span>;   </span><br><span class="line">   bit(3) reserved = '111'b;   </span><br><span class="line">   <span class="function"><span class="keyword">unsigned</span> <span class="title">int</span><span class="params">(<span class="number">5</span>)</span> numOfSequenceParameterSets</span>;   </span><br><span class="line">   <span class="keyword">for</span> (i=<span class="number">0</span>; i&lt; numOfSequenceParameterSetsispan&gt;  </span><br><span class="line">       <span class="keyword">unsigned</span> <span class="keyword">int</span>(<span class="number">16</span>) sequenceParameterSetLength ;   </span><br><span class="line">       bit(<span class="number">8</span>*sequenceParameterSetLength) sequenceParameterSetNALUnit;   </span><br><span class="line">   &#125;   </span><br><span class="line">   <span class="keyword">unsigned</span> <span class="keyword">int</span>(<span class="number">8</span>) numOfPictureParameterSets;   </span><br><span class="line">   <span class="keyword">for</span> (i=<span class="number">0</span>; i&lt; numOfPictureParameterSetsispan&gt;  </span><br><span class="line">       <span class="keyword">unsigned</span> <span class="keyword">int</span>(<span class="number">16</span>) pictureParameterSetLength;   </span><br><span class="line">       bit(<span class="number">8</span>*pictureParameterSetLength) pictureParameterSetNALUnit;   </span><br><span class="line">   &#125;   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第7,8位表示SPS的长度，后续跟SPS数据，结束之后，首先是1位 <code>numOfPictureParameterSets</code>，跳过，接着是2位PPS的长度，然后跟着PPS数据，那么提取就相对比较简单。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">char</span> kNalStart[] = &#123;<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>&#125;;</span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">short</span> sps_len = ntohs(*(<span class="keyword">unsigned</span> <span class="keyword">short</span>*)(codec_ctx_-&gt;extradata + <span class="number">6</span>));</span><br><span class="line">fwrite(kNalStart, <span class="number">4</span>, <span class="number">1</span>, fp); </span><br><span class="line">fwrite(codec_ctx_-&gt;extradata + <span class="number">8</span>, sps_len, <span class="number">1</span>, fp);</span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">short</span> pps_len = ntohs(*(<span class="keyword">unsigned</span> <span class="keyword">short</span>*)(codec_ctx_-&gt;extradata + <span class="number">9</span> + sps_len));</span><br><span class="line">fwrite(kNalStart, <span class="number">4</span>, <span class="number">1</span>, fp); </span><br><span class="line">fwrite(codec_ctx_-&gt;extradata + <span class="number">11</span> + sps_len, pps_len, <span class="number">1</span>, fp);</span><br></pre></td></tr></table></figure>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2018/09/04/centos-update-gcc/" title="CentOS升级GCC">CentOS升级GCC</a></h2>
+                <p class="excerpt">
+                
+                一般的Linux都是企业应用相对的发行版的软件包相对较旧，而现在C++11逐渐普及，支持C++11的编译器在Linux上的GCC稍微完整点的都至少是4.8版本，反观CentOS 6的GCC版本为4.4，即使是最新的CentOS 7也才仅为4.7。因此很多时候需要升级系统自带的编译器（注意，千万不要从
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2018-09-04T08:51:00.000Z" class="post-list__meta--date date">2018-09-04</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2018/09/04/centos-update-gcc/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2018/07/02/srs-systemd-config/" title="CentOS7配置SRS服务及日志">CentOS7配置SRS服务及日志</a></h2>
+                <p class="excerpt">
+                
+                最近将RTMP服务器转移到Linux平台下，同时也想使用下SRS服务器。但是SRS默认只提供了CentOS 6的RPM安装包，其他平台需自己编译，同时SRS也只提供了SysV方式的服务脚本，故在systemd架构下需要自己开发相对应的脚本，以下记录下本人在CentOS 7上安装配置SRS。
+编译SR
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2018-07-02T08:38:00.000Z" class="post-list__meta--date date">2018-07-02</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2018/07/02/srs-systemd-config/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>VC编译安装SOCI(SQLITE后端) | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="SOCI 是C++中为数不多的非常方便访问数据库的工具，Poco.Data 库基本也是参考了该库实现，SOCI 在 Linux 各个版本均有开发包，VisualStudio 上还需要自己编译。
+以下为 SOCI 库添加 sqlite 后端为例的编译方法。
+编译前需求
+sqlite 开发包
+参考前文的第二或者第三种方法安装
+
+
+CMake 工具
+
+官网下载地址 https://cmake.org/d">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="VC编译安装SOCI(SQLITE后端) | xilixili.net">
+    <meta name="twitter:description" content="SOCI 是C++中为数不多的非常方便访问数据库的工具，Poco.Data 库基本也是参考了该库实现，SOCI 在 Linux 各个版本均有开发包，VisualStudio 上还需要自己编译。
+以下为 SOCI 库添加 sqlite 后端为例的编译方法。
+编译前需求
+sqlite 开发包
+参考前文的第二或者第三种方法安装
+
+
+CMake 工具
+
+官网下载地址 https://cmake.org/d">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="VC编译安装SOCI(SQLITE后端) | xilixili.net">
+    <meta property="og:description" content="SOCI 是C++中为数不多的非常方便访问数据库的工具，Poco.Data 库基本也是参考了该库实现，SOCI 在 Linux 各个版本均有开发包，VisualStudio 上还需要自己编译。
+以下为 SOCI 库添加 sqlite 后端为例的编译方法。
+编译前需求
+sqlite 开发包
+参考前文的第二或者第三种方法安装
+
+
+CMake 工具
+
+官网下载地址 https://cmake.org/d">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2019/11/29/install-soci-development-for-visual-studio/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2019-11-29T06:02:00.000Z" class="post-list__meta--date date">2019-11-29</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">VC编译安装SOCI(SQLITE后端)</h1>
+  </header>
+
+  <section class="post">
+    <p>SOCI 是C++中为数不多的非常方便访问数据库的工具，Poco.Data 库基本也是参考了该库实现，SOCI 在 Linux 各个版本均有开发包，VisualStudio 上还需要自己编译。</p>
+<p>以下为 SOCI 库添加 sqlite 后端为例的编译方法。</p>
+<h3 id="编译前需求"><a href="#编译前需求" class="headerlink" title="编译前需求"></a>编译前需求</h3><ul>
+<li>sqlite 开发包<ul>
+<li>参考前文的第二或者第三种方法安装</li>
+</ul>
+</li>
+<li><p>CMake 工具</p>
+<ul>
+<li>官网下载地址 <a href="https://cmake.org/download/" target="_blank" rel="noopener">https://cmake.org/download/</a></li>
+</ul>
+</li>
+<li><p>Boost</p>
+<ul>
+<li>官网下载地址 <a href="https://sourceforge.net/projects/boost/" target="_blank" rel="noopener">https://sourceforge.net/projects/boost/</a> </li>
+<li>下载安装对应MSVC的版本安装包安装，避免漫长的编译过程</li>
+</ul>
+</li>
+<li>SOCI 源码 <ul>
+<li>官网下载地址 <a href="https://sourceforge.net/projects/soci/files/" target="_blank" rel="noopener">https://sourceforge.net/projects/soci/files/</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h3><p>假设当前一切环境就绪，解压源码并进入到源码目录，执行以下命令</p>
+<figure class="highlight bat"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> build</span><br><span class="line"><span class="built_in">cd</span> build</span><br><span class="line">cmake -G "Visual Studio <span class="number">15</span> <span class="number">2017</span> Win64" -DCMAKE_INSTALL_PREFIX=f:\msvc\soci \</span><br><span class="line">-DWITH_BOOST=ON -DWITH_SQLITE3=ON -DSQLITE3_INCLUDE_DIR=f:\msvc\sqlite3\include \</span><br><span class="line">-DSQLITE3_LIBRARIES=f:\msvc\sqlite3\lib\sqlite3.lib ..</span><br></pre></td></tr></table></figure>
+<p>这其中，需要根据实际情况修改部分参数，比如 <code>编译器</code>，<code>sqlite目录</code> 以及 <code>SOCI安装目录</code></p>
+<p>另外如果命令执行失败，有可能是系统安装了 <code>Windows SDK 8</code>，卸载安装更高的版本。</p>
+<p>至此在 <code>build</code> 目录下生成了 <code>SOCI.sln</code> 工程，打开后修改编译到 <code>Release</code> 然后编译 <code>ALL_BUILD</code> 项目</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>如果编译没有什么错误，可以编译 <code>INSTALL</code> 项目，头文件和开发库等均会安装到 <code>CMAKE_INSTALL_PREFIX</code> 目录去，结构类似于 Linux 风格。</p>
+<p>另外默认情况下自动编译了 <code>ODBC</code> 支持，同时如果需要其他数据库支持，均按照类似方式进行，具体可参考下面的官网文档，里面有详细的参数说明</p>
+<p><a href="http://soci.sourceforge.net/doc/index.html" target="_blank" rel="noopener">http://soci.sourceforge.net/doc/index.html</a></p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2020/01/02/win32-nginx-autoindex-support-chinese/" title="NGINX支持中文目录索引(Win32)">NGINX支持中文目录索引(Win32)</a></h2>
+                <p class="excerpt">
+                
+                Windows平台上在使用Nginx的时候无法支持中文路径，哪怕是直接访问一个中文路径，也无法访问到，访问文件是404，访问目录是500。
+解决方案思考正常情况下先访问一个内部有中文文件或目录的目录，Nginx会显示为乱码(调整网页编码能正确)，而且其中的链接是直接编码的，什么意思，就是这个链接是G
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2020-01-02T01:10:00.000Z" class="post-list__meta--date date">2020-01-02</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2020/01/02/win32-nginx-autoindex-support-chinese/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2019/11/29/install-sqlite3-development-for-visual-studio/" title="VC安装SQLITE开发库">VC安装SQLITE开发库</a></h2>
+                <p class="excerpt">
+                
+                sqlite 是一个非常小巧易于使用的 SQL 数据库，并且是嵌入式的，更容易使用部署。在实际使用中有多种引用方式。
+直接加入项目中使用从 sqlite3官网 下载源码压缩包
+
+sqlite-amalgamation-3300100.zip 
+
+将其中的 .h 和 .c 通通加入到需要引用的工程中直
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2019-11-29T05:45:00.000Z" class="post-list__meta--date date">2019-11-29</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/11/29/install-sqlite3-development-for-visual-studio/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>Hexo引用显示本地图片 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="使用Hexo的同学都知道，Hexo的博客使用本地图片真的是非常麻烦，经常显示不出来，虽然本站最开始都固定死位置的，即本地位置和上传到服务器后位置不一样，文档里面地址适配具体位置，时间长了根目录下面的图片文件夹图片越来越多，也不好管理。鉴于博客本身生成后产生了一个目录，应该是可以使用的。
+使用的问题先简单说下Hexo博客图片的问题，当我们写博客的时候，如果不是绝对的网址方式，如图床等方式，那么我们在">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Hexo引用显示本地图片 | xilixili.net">
+    <meta name="twitter:description" content="使用Hexo的同学都知道，Hexo的博客使用本地图片真的是非常麻烦，经常显示不出来，虽然本站最开始都固定死位置的，即本地位置和上传到服务器后位置不一样，文档里面地址适配具体位置，时间长了根目录下面的图片文件夹图片越来越多，也不好管理。鉴于博客本身生成后产生了一个目录，应该是可以使用的。
+使用的问题先简单说下Hexo博客图片的问题，当我们写博客的时候，如果不是绝对的网址方式，如图床等方式，那么我们在">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Hexo引用显示本地图片 | xilixili.net">
+    <meta property="og:description" content="使用Hexo的同学都知道，Hexo的博客使用本地图片真的是非常麻烦，经常显示不出来，虽然本站最开始都固定死位置的，即本地位置和上传到服务器后位置不一样，文档里面地址适配具体位置，时间长了根目录下面的图片文件夹图片越来越多，也不好管理。鉴于博客本身生成后产生了一个目录，应该是可以使用的。
+使用的问题先简单说下Hexo博客图片的问题，当我们写博客的时候，如果不是绝对的网址方式，如图床等方式，那么我们在">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2019/03/26/hexo-markdown-use-images/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2019-03-26T09:20:00.000Z" class="post-list__meta--date date">2019-03-26</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">Hexo引用显示本地图片</h1>
+  </header>
+
+  <section class="post">
+    <p>使用Hexo的同学都知道，Hexo的博客使用本地图片真的是非常麻烦，经常显示不出来，虽然本站最开始都固定死位置的，即本地位置和上传到服务器后位置不一样，文档里面地址适配具体位置，时间长了根目录下面的图片文件夹图片越来越多，也不好管理。鉴于博客本身生成后产生了一个目录，应该是可以使用的。</p>
+<h3 id="使用的问题"><a href="#使用的问题" class="headerlink" title="使用的问题"></a>使用的问题</h3><p>先简单说下Hexo博客图片的问题，当我们写博客的时候，如果不是绝对的网址方式，如图床等方式，那么我们在引用本地图片的时候，对应的代码大概如此</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">![<span class="string">comment</span>](<span class="link">xxx.png</span>)</span><br></pre></td></tr></table></figure>
+<p>但是这个图片经过Hexo生成之后，并不会将图片拷贝到最终目录，而且如果图片没有一定的存放规则，最终会非常难管理。</p>
+<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>首先参考了官网 <a href="https://hexo.io/zh-cn/docs/asset-folders.html" target="_blank" rel="noopener">https://hexo.io/zh-cn/docs/asset-folders.html</a></p>
+<p>里面有解决方案，但是这种不是markdown的语法的东西非常恶心，弃之。</p>
+<p>继续搜索，发现 <code>hexo-asset-image</code> 这个插件是实现这个功能的，那么直接通过NPM安装这个插件，总结一下，首先启用资源拷贝功能，在 <code>_config.yml</code> 中，修改</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">post_asset_folder:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<p>然后在使用的时候，首先需要通过 <code>hexo n xxx</code> 创建新博客的时候，会创建同名 <code>xxx</code> 的目录，相关的资源文件放里面即可，当然这个目录也可以手动创建，最终大概目录结构如下</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">./test.md</span><br><span class="line">./test/</span><br><span class="line">./test/bg.png</span><br></pre></td></tr></table></figure>
+<p>在博客中引用的时候，就按正常的引用方式引用即可，如</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">![](test/bg.png)</span><br></pre></td></tr></table></figure>
+<p>但是直接这么实现，我发现并没有成功，然后参考 <a href="https://www.jianshu.com/p/3db6a61d3782" target="_blank" rel="noopener">https://www.jianshu.com/p/3db6a61d3782</a></p>
+<p>原来是兼容性问题，卸载刚安装的插件，安装参考中作者的修改版本</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm uninstall hexo-asset-image</span><br><span class="line">npm install https://github.com/7ym0n/hexo-asset-image --save</span><br><span class="line">hexo clean &amp;&amp; hexo g</span><br></pre></td></tr></table></figure>
+<p>然后基本OK了，然后F12查看了地址，虽然可以访问了，但是地址却是带域名方式的，通用性不好，查看了作者的实现逻辑，确认是字符串切割问题，然后在 <code>_config.yml</code> 中修改网站地址从 <code>https://xilixili.net</code> 修改为 <code>xilixili.net</code>，不带 http(s) 头，重新生成就好了。 </p>
+<h3 id="本站遗留问题"><a href="#本站遗留问题" class="headerlink" title="本站遗留问题"></a>本站遗留问题</h3><p>前面博客 <strong>网页自适应显示WebP图片</strong> <a href="https://xilixili.net/2017/02/07/webp/">https://xilixili.net/2017/02/07/webp/</a> 中对WebP的支持实现了特殊的处理，因此这个插件还需要再特殊处理一下，在 Github 上 fork 源码修改一下，在原代码处理 <code>img</code> 标签的后面复制一份相同的处理方法，进行对应的修改，如下</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">$(<span class="string">'source'</span>).each(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> ($(<span class="keyword">this</span>).attr(<span class="string">'srcset'</span>)) &#123;</span><br><span class="line">        <span class="keyword">var</span> src = $(<span class="keyword">this</span>).attr(<span class="string">'srcset'</span>).replace(<span class="string">'\\'</span>, <span class="string">'/'</span>);</span><br><span class="line">        <span class="keyword">if</span> (!<span class="regexp">/http[s]*.*|\/\/.*/</span>.test(src) &amp;&amp; !<span class="regexp">/^\s*\//</span>.test(src)) &#123;</span><br><span class="line">            <span class="keyword">var</span> linkArray = link.split(<span class="string">'/'</span>).filter(<span class="function"><span class="keyword">function</span>(<span class="params">elem</span>) </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> elem != <span class="string">''</span>;</span><br><span class="line">            &#125;);</span><br><span class="line">            <span class="keyword">var</span> srcArray = src.split(<span class="string">'/'</span>).filter(<span class="function"><span class="keyword">function</span>(<span class="params">elem</span>) </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> elem != <span class="string">''</span> &amp;&amp; elem != <span class="string">'.'</span>;</span><br><span class="line">            &#125;);</span><br><span class="line">            <span class="keyword">if</span> (srcArray.length &gt; <span class="number">1</span>) srcArray.shift();</span><br><span class="line">            src = srcArray.join(<span class="string">'/'</span>);</span><br><span class="line">            $(<span class="keyword">this</span>).attr(<span class="string">'srcset'</span>, config.root + link + src);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>也可以直接安装我修改后的版本，支持 <code>img</code> 和 <code>source</code> 标签等</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install https://github.com/rangerlee/hexo-asset-image --save</span><br></pre></td></tr></table></figure>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2019/04/04/about-float-number/" title="关于浮点数的精度问题">关于浮点数的精度问题</a></h2>
+                <p class="excerpt">
+                
+                最近在调试 Jsoncpp 输出 Json 时候的浮点数问题，起因还是 Jsoncpp 输出精度的问题。又想起之前 java 开发同事竟然信心满满的告诉我说 double 不存在精度问题，真是感慨非C程序员对底层技术的掌握甚少。
+关于浮点数一般我们把数字称为整数、小数等，但是在计算机里面我们却称呼小
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2019-04-04T08:36:00.000Z" class="post-list__meta--date date">2019-04-04</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/04/04/about-float-number/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2019/03/20/more-effective-sqlite-skills/" title="SQLite一些技巧">SQLite一些技巧</a></h2>
+                <p class="excerpt">
+                
+                SQLite是简单的嵌入式关系型数据，因而与其他大型的关系型数据库的操作规则有很大的区别，本文是持续更新的关于SQLite的一些规则总结。
+定义方面自增字段SQLite的自增字段只支持 INTEGER 类型，使用 AUTOINCREMENT 关键字
+create table t1(id INTEGE
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2019-03-20T09:19:00.000Z" class="post-list__meta--date date">2019-03-20</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/03/20/more-effective-sqlite-skills/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

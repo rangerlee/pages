@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>Nginx监听多端口并根据端口代理 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="一般使用nginx做代理的时候，基本都是使用的是域名的方式，但是在某些情况下，无法使用域名和路径进行负载代理，使用的是端口进行区分，也是有办法的。
+多端口监听监听多端口不是什么问题，但是很多人其实不知道怎么简化配置，特别是像上面的情况下，一个一个server节点配置难道要复制很多份吗，这样其实也太复杂了，nginx其实是支持多端口监听的，直接多写几个即可，比如类似下面的配置
+server &amp;#12">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Nginx监听多端口并根据端口代理 | xilixili.net">
+    <meta name="twitter:description" content="一般使用nginx做代理的时候，基本都是使用的是域名的方式，但是在某些情况下，无法使用域名和路径进行负载代理，使用的是端口进行区分，也是有办法的。
+多端口监听监听多端口不是什么问题，但是很多人其实不知道怎么简化配置，特别是像上面的情况下，一个一个server节点配置难道要复制很多份吗，这样其实也太复杂了，nginx其实是支持多端口监听的，直接多写几个即可，比如类似下面的配置
+server &amp;#12">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Nginx监听多端口并根据端口代理 | xilixili.net">
+    <meta property="og:description" content="一般使用nginx做代理的时候，基本都是使用的是域名的方式，但是在某些情况下，无法使用域名和路径进行负载代理，使用的是端口进行区分，也是有办法的。
+多端口监听监听多端口不是什么问题，但是很多人其实不知道怎么简化配置，特别是像上面的情况下，一个一个server节点配置难道要复制很多份吗，这样其实也太复杂了，nginx其实是支持多端口监听的，直接多写几个即可，比如类似下面的配置
+server &amp;#12">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2019/01/30/nginx-listen-multi-port-and-proxy/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2019-01-30T13:53:00.000Z" class="post-list__meta--date date">2019-01-30</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">Nginx监听多端口并根据端口代理</h1>
+  </header>
+
+  <section class="post">
+    <p>一般使用nginx做代理的时候，基本都是使用的是域名的方式，但是在某些情况下，无法使用域名和路径进行负载代理，使用的是端口进行区分，也是有办法的。</p>
+<h3 id="多端口监听"><a href="#多端口监听" class="headerlink" title="多端口监听"></a>多端口监听</h3><p>监听多端口不是什么问题，但是很多人其实不知道怎么简化配置，特别是像上面的情况下，一个一个server节点配置难道要复制很多份吗，这样其实也太复杂了，nginx其实是支持多端口监听的，直接多写几个即可，比如类似下面的配置</p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">8080</span>;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">9090</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>按照需要配置，特别简单省事，相同的配置只需要配置一份即可</p>
+<h3 id="多端口代理"><a href="#多端口代理" class="headerlink" title="多端口代理"></a>多端口代理</h3><p>如上，如果使用的是多个端口，代理在无法采用路径等方式进行区分的时候，只能根据本地端口进行区分。好在nginx有很多的内部变量使用，其中就包含了本地端口 <code>$server_port</code>，代理就可以这样配置了</p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">http</span> &#123;</span><br><span class="line">    <span class="attribute">upstream</span> ai&#123;</span><br><span class="line">        <span class="attribute">server</span> <span class="number">192.168.1.200</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">upstream</span> xi&#123;</span><br><span class="line">        <span class="attribute">server</span> xilixili.net;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="section">server</span> &#123;</span><br><span class="line">        <span class="attribute">listen</span> <span class="number">9090</span>;</span><br><span class="line">        <span class="attribute">listen</span> <span class="number">9999</span>;</span><br><span class="line">        <span class="attribute">location</span> / &#123;</span><br><span class="line">            <span class="attribute">if</span> (<span class="variable">$server_port</span> = <span class="number">9090</span>) &#123;</span><br><span class="line">               <span class="attribute">proxy_pass</span> http://xi;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="attribute">if</span> (<span class="variable">$server_port</span> = <span class="number">9999</span>) &#123;</span><br><span class="line">                <span class="attribute">proxy_pass</span> http://ai;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面在规则中根据本地端口进行代理转发，此处仅进行基本的功能演示，实现根据端口进行代理的功能，实际上的需求可能比较复杂，可能还需要配置很多其他的配置，请自行补齐。</p>
+<blockquote>
+<p>特别需要注意的是，上面的 if 语句的语法，中间有空格（就是if关键字和括号之间），否则测试的时候报配置文件语法错误。</p>
+</blockquote>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2019/03/06/install-scrapy-with-python3/" title="Python3安装Scrapy爬虫引擎">Python3安装Scrapy爬虫引擎</a></h2>
+                <p class="excerpt">
+                
+                因最近在使用Scrapy框架，但是最终系统需要部署到Linux上，故记录下在Windows上和Linux上安装Scrapy爬虫引擎的。
+安装Python3现在Python3逐渐开始流行，因此我们直接使用Python3.6版本，在Window上安装Python的方法比较简单，在官网下载对应的安装包安装
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2019-03-06T10:01:00.000Z" class="post-list__meta--date date">2019-03-06</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/03/06/install-scrapy-with-python3/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2018/12/13/systemd-with-path-permission-denied/" title="Systemd服务无目录访问权限问题">Systemd服务无目录访问权限问题</a></h2>
+                <p class="excerpt">
+                
+                记录一下，在系统安装 Systemd 服务无法访问某些目录的问题。
+问题出现CentOS7已经采用Systemd机制了，比如使用 Caddy 服务器，使用YUM即可安装。
+
+Caddy 是一个优秀的Web服务器，支持 HTTP2.0 以及 QUIC 协议，另外也支持代理功能。同时这个服务器还支持自动
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2018-12-13T13:03:00.000Z" class="post-list__meta--date date">2018-12-13</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2018/12/13/systemd-with-path-permission-denied/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

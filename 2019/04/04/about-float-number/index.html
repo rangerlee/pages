@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>关于浮点数的精度问题 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="最近在调试 Jsoncpp 输出 Json 时候的浮点数问题，起因还是 Jsoncpp 输出精度的问题。又想起之前 java 开发同事竟然信心满满的告诉我说 double 不存在精度问题，真是感慨非C程序员对底层技术的掌握甚少。
+关于浮点数一般我们把数字称为整数、小数等，但是在计算机里面我们却称呼小数为浮点数，而非小数，那么为什么叫浮点数，这就涉及到小数在计算机内的存储了。
+早期计算机存储小数采用">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="关于浮点数的精度问题 | xilixili.net">
+    <meta name="twitter:description" content="最近在调试 Jsoncpp 输出 Json 时候的浮点数问题，起因还是 Jsoncpp 输出精度的问题。又想起之前 java 开发同事竟然信心满满的告诉我说 double 不存在精度问题，真是感慨非C程序员对底层技术的掌握甚少。
+关于浮点数一般我们把数字称为整数、小数等，但是在计算机里面我们却称呼小数为浮点数，而非小数，那么为什么叫浮点数，这就涉及到小数在计算机内的存储了。
+早期计算机存储小数采用">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="关于浮点数的精度问题 | xilixili.net">
+    <meta property="og:description" content="最近在调试 Jsoncpp 输出 Json 时候的浮点数问题，起因还是 Jsoncpp 输出精度的问题。又想起之前 java 开发同事竟然信心满满的告诉我说 double 不存在精度问题，真是感慨非C程序员对底层技术的掌握甚少。
+关于浮点数一般我们把数字称为整数、小数等，但是在计算机里面我们却称呼小数为浮点数，而非小数，那么为什么叫浮点数，这就涉及到小数在计算机内的存储了。
+早期计算机存储小数采用">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2019/04/04/about-float-number/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2019-04-04T08:36:00.000Z" class="post-list__meta--date date">2019-04-04</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">关于浮点数的精度问题</h1>
+  </header>
+
+  <section class="post">
+    <p>最近在调试 <code>Jsoncpp</code> 输出 Json 时候的浮点数问题，起因还是 <code>Jsoncpp</code> 输出精度的问题。又想起之前 java 开发同事竟然信心满满的告诉我说 <code>double</code> 不存在精度问题，真是感慨非C程序员对底层技术的掌握甚少。</p>
+<h3 id="关于浮点数"><a href="#关于浮点数" class="headerlink" title="关于浮点数"></a>关于浮点数</h3><p>一般我们把数字称为整数、小数等，但是在计算机里面我们却称呼小数为浮点数，而非小数，那么为什么叫浮点数，这就涉及到小数在计算机内的存储了。</p>
+<p>早期计算机存储小数采用的是固定小数点（Fixed Point Number）的方式，比如规定前多少bit是整数部分，剩余bit是小数部分，但是这样的表示方法非常有限，于是后来出现了 <strong>IEEE浮点数算术标准</strong>，也就是小数点浮动变化，并不固定，这就是所谓的浮点数（Float Point Number）。</p>
+<p>在计算机存储中，一般采用科学计数法存储，即用一个有效数字。一个基数（Base）、一个指数（Exponent）以及一个表示正负的符号来表达实数。浮点数利用指数达到了浮动小数点的效果，从而可以灵活地表达更大范围的实数。从逻辑上讲，其结构大概如下（原理参考IEEE标准）</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">S(符号位) | E(指数位) | M(有效数字位)</span><br></pre></td></tr></table></figure>
+<p>由于存储全部是2进制方式，因此M位有效数字位分别表达的值是 1/2、1/4、1/8、1/16、… 、1/(2^N)，也就是说计算机存储的值只能是各个位值的总和，这也就造就了浮点数注定不可能全部精确。</p>
+<p>简单的，你可以使用任何语言进行DEBUG下面的代码，其他语言自行修改</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">float</span> f = <span class="number">0.0001</span>;</span><br><span class="line"><span class="keyword">if</span>(f == <span class="number">0.0001</span>)&#123;  </span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调试你会发现条件不相等，你会看到变量 <code>f</code> 的值类似为 <code>9.99999975e-05</code>，然后当你将 <code>float</code> 修改为 <code>double</code> 发现条件又能通过了。</p>
+<h3 id="开发关注点"><a href="#开发关注点" class="headerlink" title="开发关注点"></a>开发关注点</h3><p>我想 Java 开发者应该要明白，对浮点数有比较高需求的地方请尽量使用 <code>BigDecimal</code> 类型。那么C/C++语言只提供了单精度的<code>float</code> 和双精度的 <code>double</code>。基本大家都清楚的是的是单精度是4个字节，双精度是8个字节，主要的区别如下</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>float</th>
+<th>double</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>大小</td>
+<td>4字节</td>
+<td>8字节</td>
+</tr>
+<tr>
+<td>精度位</td>
+<td>6</td>
+<td>15</td>
+</tr>
+<tr>
+<td>取值</td>
+<td>-3.40E+38~3.40E+38</td>
+<td>-1.79E+308~-1.79E+308</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>上面的参数可参考浮点数头文件 &lt;float.h&gt;</p>
+</blockquote>
+<p>既然浮点数存储我们控制不了，在使用中基本就是两个方面，一个是浮点数的比较，需要注意精度问题，特别是默认的常量值的浮点数都是 <code>double</code> 类型，<code>float</code> 类型要加 <code>f</code> 后缀。在某些情况下的浮点数比较，可能还需要借助大小范围比较的方式确定。</p>
+<p>另一个就是输出了，以C\C++的格式化控制符为例</p>
+<table>
+<thead>
+<tr>
+<th>%f</th>
+<th>%lf</th>
+<th>%e</th>
+<th>%g</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>float类型</td>
+<td>double类型输出</td>
+<td>科学计数法输出</td>
+<td>%f和%e较短的输出</td>
+</tr>
+</tbody>
+</table>
+<p>这其中，还可以通过添加长度控制整数和小数部分的精度，比如 <code>%.3f</code> 表示小数点后输出控制在3位等，这都是C\C++的基础知识了，不再赘述。</p>
+<h3 id="应用举例"><a href="#应用举例" class="headerlink" title="应用举例"></a>应用举例</h3><p>在 <code>Jsoncpp</code> 库里面输出浮点类型的时候，采用了 <code>%.17g</code>，这个意思就是精度控制17位，但是这样基本输出很容易就变成了科学计数法了或者输出了不精确的值，仅仅一个 0.1 就输出科学计数法不太好，根据双精度浮点的小数位有效精度15位，根据我们的业务需要修改为15位，基本就不会输出科学计数法了，当然也可以直接修改为 <code>%lf</code>，只不过这样对第三方源码改动较大。</p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2019/04/11/insert-big-data-into-database-with-poco/" title="Poco插入大量数据到数据库的优化">Poco插入大量数据到数据库的优化</a></h2>
+                <p class="excerpt">
+                
+                最近在调试 Poco 操作数据库的性能问题，确实发现一些有意思的地方，不仅有事务方面的批量，还有容器实现的内部批量，当然先以最基础的事务模式作为开头，来进插入性能的对比测试
+事务操作一般插入数据没什么好说的，但是在数据量比较多的时候，总体的插入就会很慢，这个时候最基本的操作就是批量操作，也就是靠事务
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2019-04-11T03:38:00.000Z" class="post-list__meta--date date">2019-04-11</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/04/11/insert-big-data-into-database-with-poco/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2019/03/26/hexo-markdown-use-images/" title="Hexo引用显示本地图片">Hexo引用显示本地图片</a></h2>
+                <p class="excerpt">
+                
+                使用Hexo的同学都知道，Hexo的博客使用本地图片真的是非常麻烦，经常显示不出来，虽然本站最开始都固定死位置的，即本地位置和上传到服务器后位置不一样，文档里面地址适配具体位置，时间长了根目录下面的图片文件夹图片越来越多，也不好管理。鉴于博客本身生成后产生了一个目录，应该是可以使用的。
+使用的问题先
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2019-03-26T09:20:00.000Z" class="post-list__meta--date date">2019-03-26</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/03/26/hexo-markdown-use-images/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

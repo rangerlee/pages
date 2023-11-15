@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>xilixili.net | 生活と技术の杂记</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="xilixili.net | 生活と技术の杂记">
+    <meta name="twitter:description" content="">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="xilixili.net | 生活と技术の杂记">
+    <meta property="og:description" content="">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <div class="main-post-list">
+    
+  <ol class="post-list">
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2018/02/26/webrtc-with-28181-live/" title="阅读 通过28181与WebRTC直播摄像头">通过28181与WebRTC直播摄像头</a></h2>
+      <p class="excerpt">
+    
+      前文描述了WebRTC视频直播技术，后续应用到系统中，版本已经做出来了并封装了JS的SDK，实时性效果还是非常令人惊喜的，针对部分调整和问题进行记录。
+视频源项目使用的是海康摄像头，我打算取消本地服务器，直接让摄像头通过GB28181协议进行推流。为了让所有用户可以观看，将服务部署在公网，当然这里需要考虑NAT问题，部署在在公网与摄像头直连，基本可以忽略NAT问题，根据协议标准，摄像头主动注册到服
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2018-02-26T07:46:00.000Z" class="post-list__meta--date date">2018-02-26</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2018/02/26/webrtc-with-28181-live/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2018/01/04/winsw-with-nginx/" title="阅读 探究WinSW封装Nginx服务及日志清理">探究WinSW封装Nginx服务及日志清理</a></h2>
+      <p class="excerpt">
+    
+      如前述，我们项目中目前还在Win32平台，切换到了Nginx架构的RTMP服务器。当然也是长时间不规范的直接双击运行的，虽说Nginx的架构保证进程活着问题不大，但是无法应对突然的停电，停电之后无人去操作启动，造成了无人觉察的故障，这也是一个极大的风险。
+技术选型当然我们的目标是把nginx做成一个服务，不像Linux下那么方便。基本上就两种方法，自己写一个监控服务，另外一种就是使用第三方工具做成
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2018-01-04T03:44:00.000Z" class="post-list__meta--date date">2018-01-04</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2018/01/04/winsw-with-nginx/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2017/12/26/resource-release-with-setconsolectrlhandler/" title="阅读 SetConsoleCtrlHandler实现资源释放">SetConsoleCtrlHandler实现资源释放</a></h2>
+      <p class="excerpt">
+    
+      今天决定对程序产生的不完整的临时文件进行下优化，当然这些临时文件是非预期的，在程序中都进行了处理，但是在某些情况下确实是发生了。
+现象分析首先可以确认的是这些临时文件都是程序在退出时候未处理生成的。当然程序全部是正常退出的，并没有异常崩溃，但是退出的方法有多种，比如Ctrl+C按键，比如直接点击控制台的关闭按钮，但是程序却没有在退出的时候调用析构进行资源释放。
+诚然很多资源在进程关闭后可以被操作系
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2017-12-26T08:26:00.000Z" class="post-list__meta--date date">2017-12-26</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2017/12/26/resource-release-with-setconsolectrlhandler/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2017/12/25/release-without-library-reference-on-visualstudio/" title="阅读 VC的Release版本无法找到入口问题">VC的Release版本无法找到入口问题</a></h2>
+      <p class="excerpt">
+    
+      在之前的版本上改了很多功能之后，一直用的Debug版本在本地调试，没有什么问题。今天给同事提供了老版本和新版本的Release的EXE程序，结果反馈新版本的程序运行不了。
+缘由按照惯例，肯定是没安装redist_x86.exe环境，转念一想我们打包可是自带了msvcrt.dll等CRT库的，况且测试环境可是同时在测试两个版本的，老版本可以正常运行的，为啥新版本有问题呢，话说新版本也只是修改之前的逻
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2017-12-25T10:28:00.000Z" class="post-list__meta--date date">2017-12-25</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2017/12/25/release-without-library-reference-on-visualstudio/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2017/12/19/ffmpeg-decode-video-frame-lost/" title="阅读 ffmpeg视频解码丢帧问题">ffmpeg视频解码丢帧问题</a></h2>
+      <p class="excerpt">
+    
+      视频解码的时候，av_read_frame出来的包进行avcodec_decode_video2解码，有时候got_frame为0，即没有数据。一般来讲每一帧都是一帧图像，按道理肯定是有图像的，但却没有，依此下去最终在文件结尾处依然是少部分数据，难不成数据丢了？
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2017-12-19T03:16:00.000Z" class="post-list__meta--date date">2017-12-19</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2017/12/19/ffmpeg-decode-video-frame-lost/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2017/11/30/webrtc-live/" title="阅读 WebRTC直播技术">WebRTC直播技术</a></h2>
+      <p class="excerpt">
+    
+      前文描述了正常的浏览器端采用WebRTC进行视频通话的方法，也介绍了当前流行的RTMP架构的直播模式，及相关技术等。那么面对WebRTC这项技术，我们是否能够将两者结合呢，即采用WebRTC来进行直播。整好项目中有这样的需求，因此做了一段时间的技术预研，简单分享下。
+技术假设想使用WebRTC技术做直播，不可避免的只能采用中心服务器转发。那么问题来了，WebRTC技术中大量的如网络自适应等等优化基
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2017-11-30T09:52:00.000Z" class="post-list__meta--date date">2017-11-30</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2017/11/30/webrtc-live/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2017/11/16/about-webrtc-on-browser/" title="阅读 关于浏览器端WebRTC的使用">关于浏览器端WebRTC的使用</a></h2>
+      <p class="excerpt">
+    
+      WebRTC被开源后是越来越火，主要应该是第一是里面的各种音视频及通信技术，第二是浏览器无插件实现P2P模式的视频通话。之前很有兴趣玩这玩意，最终也是浅尝辄止。最近工作上也开始搞这块东西，又从头仔细研究了下，随便做点记录。
+起因虽然说浏览器端，但是标题这么起，其实肯定最终不是简单的JS API调用，因为我要做的是直播，肯定不是P2P的一对一，但好歹也是要在浏览器上做，就先记录下浏览器上测试使用的简单方法吧。
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2017-11-16T11:23:00.000Z" class="post-list__meta--date date">2017-11-16</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2017/11/16/about-webrtc-on-browser/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2017/11/01/nginx-live-stream/" title="阅读 Nginx架构下的直播">Nginx架构下的直播</a></h2>
+      <p class="excerpt">
+    
+      之前已经编译好了nginx的RTMP扩展，其实在这个扩展中已经默认增加支持了HLS和DASH功能，在使用RTMP功能的同时，也可以输出HLS和DASH。更关键的是RTMP只能在PC端播放，刚好采用HLS的方式可以在移动端播放。
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2017-11-01T08:41:00.000Z" class="post-list__meta--date date">2017-11-01</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2017/11/01/nginx-live-stream/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2017/10/26/build-nginx-rtmp-module-with-vistualstudio/" title="阅读 VisualStudio编译Nginx的RTMP扩展">VisualStudio编译Nginx的RTMP扩展</a></h2>
+      <p class="excerpt">
+    
+      AMS做RTMP服务还是存在各种问题，比如服务器压力过高会断流等，决定采用nginx架构。网上说Win10编译不了，亲测可以正常编译，另外OpenSSL高版本在VS2010下确实编译失败，网上有解决办法，比较麻烦且没有测试成功，直接采用较低可用的版本，请注意。
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2017-10-26T03:10:00.000Z" class="post-list__meta--date date">2017-10-26</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2017/10/26/build-nginx-rtmp-module-with-vistualstudio/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2017/10/17/about-new-operator/" title="阅读 深入C++的new">深入C++的new</a></h2>
+      <p class="excerpt">
+    
+      无事便来扯扯C++中的new，基本上都知晓C++的new和C的malloc的区别用伪码实现大概就是这么个意思
+T *p = (T*)malloc(sizeof(T));p-&amp;gt;T::T(...);return p;
+效果上好像就是这么个区别，但事实上new的内存分配失败后会调用new_handler进行内存分配处理，而C的malloc则不会。
+new的形态一般来说，C++的new有以下几种含义
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2017-10-17T09:17:00.000Z" class="post-list__meta--date date">2017-10-17</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2017/10/17/about-new-operator/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+  </ol>
+
+
+  <nav class="pagination" role="navigation">
+    
+      <a class="older-posts pagination__newer btn btn-small btn-tertiary" href="/tags/技术/page/6/">&larr; 最近</a>
+    
+    <span class="pagination__page-number">  7 / 9 </span>
+    
+      <a class="older-posts pagination__older btn btn-small btn-tertiary" href="/tags/技术/page/8/">更早 &rarr;</a>
+    
+  </nav>
+
+ <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+    
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</div>
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

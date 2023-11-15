@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>FFMPEG和SDL实现流媒体播放控件 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="之前为项目中使用ffmpeg与SDL封装了一个视频播放控件，用起来挺简单的，在此分享下大概的实现方法和效果。
+基本需求原本项目中被C#调用了一个第三方的播放RTMP的控件，但是呢问题特别多，而且不能再定制功能，因为我接手给实现了一个，大致的需求如下
+
+提供DLL供其他语言调用，主要是C#
+
+支持多窗口，即分屏
+
+支持双击全屏，再双击还原
+
+
+经过于接口人员了解，大概就是提供C接口DLL并且分屏由业">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="FFMPEG和SDL实现流媒体播放控件 | xilixili.net">
+    <meta name="twitter:description" content="之前为项目中使用ffmpeg与SDL封装了一个视频播放控件，用起来挺简单的，在此分享下大概的实现方法和效果。
+基本需求原本项目中被C#调用了一个第三方的播放RTMP的控件，但是呢问题特别多，而且不能再定制功能，因为我接手给实现了一个，大致的需求如下
+
+提供DLL供其他语言调用，主要是C#
+
+支持多窗口，即分屏
+
+支持双击全屏，再双击还原
+
+
+经过于接口人员了解，大概就是提供C接口DLL并且分屏由业">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="FFMPEG和SDL实现流媒体播放控件 | xilixili.net">
+    <meta property="og:description" content="之前为项目中使用ffmpeg与SDL封装了一个视频播放控件，用起来挺简单的，在此分享下大概的实现方法和效果。
+基本需求原本项目中被C#调用了一个第三方的播放RTMP的控件，但是呢问题特别多，而且不能再定制功能，因为我接手给实现了一个，大致的需求如下
+
+提供DLL供其他语言调用，主要是C#
+
+支持多窗口，即分屏
+
+支持双击全屏，再双击还原
+
+
+经过于接口人员了解，大概就是提供C接口DLL并且分屏由业">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2019/04/15/ffmpeg-and-sdl-win32-video-player-plugin/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2019-04-15T13:27:00.000Z" class="post-list__meta--date date">2019-04-15</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">FFMPEG和SDL实现流媒体播放控件</h1>
+  </header>
+
+  <section class="post">
+    <p>之前为项目中使用ffmpeg与SDL封装了一个视频播放控件，用起来挺简单的，在此分享下大概的实现方法和效果。</p>
+<h3 id="基本需求"><a href="#基本需求" class="headerlink" title="基本需求"></a>基本需求</h3><p>原本项目中被C#调用了一个第三方的播放RTMP的控件，但是呢问题特别多，而且不能再定制功能，因为我接手给实现了一个，大致的需求如下</p>
+<ul>
+<li><p>提供DLL供其他语言调用，主要是C#</p>
+</li>
+<li><p>支持多窗口，即分屏</p>
+</li>
+<li><p>支持双击全屏，再双击还原</p>
+</li>
+</ul>
+<p>经过于接口人员了解，大概就是提供C接口DLL并且分屏由业务根据实际需要创建多个窗口(控件)，将其原始的窗口句柄传给DLL即可，这么一聊基本就是使用SDL作为绘图层，由FFMPEG负责媒体的解码等，配合Win32 API实现周边功能。</p>
+<h3 id="基本绘图"><a href="#基本绘图" class="headerlink" title="基本绘图"></a>基本绘图</h3><p>基本绘图思想是外部调用接口创建一个内部的句柄，内部呢是直接起了一个对应线程，而且线程内主要负责使用FFMPEG进行媒体解码，然后调用SDL层进行图像的输出，这个逻辑代码网上可以找一堆，我实现的也是类似的，没什么好展示的。当然了如果读者对Win32开发比较清楚的话，就知道Windows的桌面控件都是可以获取句柄的，哪怕是一个按钮也好，只需要传递过来就可以安装窗口的方式去绘图，当然了SDL提供了直接从窗口创建SDL_WIndow的接口，具体的可参考这个API详情 <code>SDL_CreateWindowFrom(hwnd)</code></p>
+<p>这里面需要注意第一个是窗口大小的变化，在SDL的事件监听里面要监听这个事件，并且针对这个事件进行处理，当然了，在外部通知内部后，里面的绘图层需要调整FFMPEG输出图像的大小。这里我实现的是FFMPEG根据新的大小调整输出，然后SDL也根据新的大小重新调整输出层，也就是Surface，最终实现动态调整大小。注意多线程操作的安全性，大致逻辑如下</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">while</span>(!IsThreadExit() &amp;&amp; !reader_-&gt;eof())&#123;</span><br><span class="line">	<span class="comment">//FFMPEG读取网络包</span></span><br><span class="line"></span><br><span class="line">	AVFrame* f = reader_-&gt;DecodeVideo(p);</span><br><span class="line">	<span class="keyword">if</span>(<span class="literal">nullptr</span> == f)&#123; <span class="keyword">continue</span>; &#125;</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="function">AutoSpinLock <span class="title">lock</span><span class="params">(lock_)</span></span>;</span><br><span class="line">		AVFrame* yuv = sws_-&gt;scale(f);</span><br><span class="line">		</span><br><span class="line">                <span class="comment">//SDL绘图</span></span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span>(window_resized) &#123;</span><br><span class="line">			window_resized = <span class="literal">false</span>;</span><br><span class="line">			<span class="comment">//SDL更新</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>另外需要注意的是播放的稳定性问题，也就是输出要根据帧率进行换算，要适当的Sleep，逻辑大致如下</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">double</span> timestamp = reader_-&gt;video_timebase() * f-&gt;pts;</span><br><span class="line"><span class="keyword">if</span>(lastest_timestamp_ == <span class="number">0.0</span>) &#123;</span><br><span class="line">	lastest_timestamp_ = timestamp;				</span><br><span class="line">	SDL_Delay(<span class="number">200</span>);</span><br><span class="line">	lastest_timer_.reset();</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span>(cost_timer_.elapsed() &gt; <span class="number">0.1</span>)&#123;</span><br><span class="line">	lastest_timestamp_ = timestamp;				</span><br><span class="line">	SDL_Delay(<span class="number">200</span>);</span><br><span class="line">	lastest_timer_.reset();</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">	<span class="keyword">double</span> cost = lastest_timer_.elapsed();</span><br><span class="line">	<span class="keyword">double</span> ts = (timestamp - lastest_timestamp_) - lastest_timer_.elapsed();</span><br><span class="line">	<span class="keyword">if</span>(ts &gt; <span class="number">0.1</span>) ts = <span class="number">0.04</span>;</span><br><span class="line">	<span class="keyword">if</span>(ts &gt; <span class="number">0</span>) SDL_Delay(ts * <span class="number">1000</span>);					</span><br><span class="line">&#125;			</span><br><span class="line"></span><br><span class="line">cost_timer_.reset();</span><br></pre></td></tr></table></figure>
+<h3 id="全屏问题"><a href="#全屏问题" class="headerlink" title="全屏问题"></a>全屏问题</h3><p>当上面的功能实现以后，全屏如何实现呢，总该不会把窗口又大小缩放到全屏大小吧，估计应该是可以实现的，但是里面确实有很多的坑，而且创建的多了容易相互影响，大小管理等等，肯定也是非常麻烦，这里我想到的是单独创建一个单独的全屏窗口，正常情况下隐藏，需要的时候，按照上面的大小缩放逻辑替换掉窗口句柄为这个全屏窗口句柄，再双击恢复回去，也就是原来的窗口一直没有变化，由外部控制。</p>
+<p>由于封装的缘故，其实在SDL的事件监听中监听双击，然后控制对应的实例进行窗口替换并将窗口显示出来，但是对于那个实例，仅仅和普通的大小切换逻辑相同。对于全屏窗口只需要监听双击，然后通知实例进行窗口替换（使用原来的句柄）然后把本窗口隐藏即可。基本没有窗口的创建释放操作，非常的流畅，代码很简单，就不展示了。</p>
+<h3 id="结束通知"><a href="#结束通知" class="headerlink" title="结束通知"></a>结束通知</h3><p>正常情况下的文件播放在播放完成之后，应该需要一个回调通知，但是流媒体理论上讲直播情况下应该没有停止，即停止由业务控制，做为播放控件，提供接口是必要的，但是可以对流媒体类型进行过滤处理，比如RTMP和RTSP等</p>
+<h3 id="最终效果"><a href="#最终效果" class="headerlink" title="最终效果"></a>最终效果</h3><p>最终对外提供了几个API，C#调用也非常的简单，经测试单路的时候，CPU占用接近30%，很流畅，当开了几十个窗口之后依然30%多的CPU占用率，且流畅度非常好，对比的原来的播放控件，开5路已经基本界面操作很卡顿了，精巧完美的实现了需求。</p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2019/04/17/modbus-application/" title="Modbus协议应用的不足讨论">Modbus协议应用的不足讨论</a></h2>
+                <p class="excerpt">
+                
+                Modbus是工业设备的标准通信协议了，一般通过串口进行通信，为了适应现在互联网也支持通过网络传输的TCP版本，我司现在一般要求设备方提供TCP版本，毕竟部署方便，不过在现行的主从模式下，也并非能支持所有场景
+基本能力的不足Modbus/TCP 协议本身并不复杂，这里就不详解解释了，另开一篇讨论。这
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2019-04-17T07:48:00.000Z" class="post-list__meta--date date">2019-04-17</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/04/17/modbus-application/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2019/04/11/insert-big-data-into-database-with-poco/" title="Poco插入大量数据到数据库的优化">Poco插入大量数据到数据库的优化</a></h2>
+                <p class="excerpt">
+                
+                最近在调试 Poco 操作数据库的性能问题，确实发现一些有意思的地方，不仅有事务方面的批量，还有容器实现的内部批量，当然先以最基础的事务模式作为开头，来进插入性能的对比测试
+事务操作一般插入数据没什么好说的，但是在数据量比较多的时候，总体的插入就会很慢，这个时候最基本的操作就是批量操作，也就是靠事务
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2019-04-11T03:38:00.000Z" class="post-list__meta--date date">2019-04-11</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/04/11/insert-big-data-into-database-with-poco/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

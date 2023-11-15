@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>VC的Release版本无法找到入口问题 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="在之前的版本上改了很多功能之后，一直用的Debug版本在本地调试，没有什么问题。今天给同事提供了老版本和新版本的Release的EXE程序，结果反馈新版本的程序运行不了。
+缘由按照惯例，肯定是没安装redist_x86.exe环境，转念一想我们打包可是自带了msvcrt.dll等CRT库的，况且测试环境可是同时在测试两个版本的，老版本可以正常运行的，为啥新版本有问题呢，话说新版本也只是修改之前的逻">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="VC的Release版本无法找到入口问题 | xilixili.net">
+    <meta name="twitter:description" content="在之前的版本上改了很多功能之后，一直用的Debug版本在本地调试，没有什么问题。今天给同事提供了老版本和新版本的Release的EXE程序，结果反馈新版本的程序运行不了。
+缘由按照惯例，肯定是没安装redist_x86.exe环境，转念一想我们打包可是自带了msvcrt.dll等CRT库的，况且测试环境可是同时在测试两个版本的，老版本可以正常运行的，为啥新版本有问题呢，话说新版本也只是修改之前的逻">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="VC的Release版本无法找到入口问题 | xilixili.net">
+    <meta property="og:description" content="在之前的版本上改了很多功能之后，一直用的Debug版本在本地调试，没有什么问题。今天给同事提供了老版本和新版本的Release的EXE程序，结果反馈新版本的程序运行不了。
+缘由按照惯例，肯定是没安装redist_x86.exe环境，转念一想我们打包可是自带了msvcrt.dll等CRT库的，况且测试环境可是同时在测试两个版本的，老版本可以正常运行的，为啥新版本有问题呢，话说新版本也只是修改之前的逻">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2017/12/25/release-without-library-reference-on-visualstudio/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2017-12-25T10:28:00.000Z" class="post-list__meta--date date">2017-12-25</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">VC的Release版本无法找到入口问题</h1>
+  </header>
+
+  <section class="post">
+    <p>在之前的版本上改了很多功能之后，一直用的Debug版本在本地调试，没有什么问题。今天给同事提供了老版本和新版本的Release的EXE程序，结果反馈新版本的程序运行不了。</p>
+<h3 id="缘由"><a href="#缘由" class="headerlink" title="缘由"></a>缘由</h3><p>按照惯例，肯定是没安装redist_x86.exe环境，转念一想我们打包可是自带了msvcrt.dll等CRT库的，况且测试环境可是同时在测试两个版本的，老版本可以正常运行的，为啥新版本有问题呢，话说新版本也只是修改之前的逻辑而已，并没有任何新增第三方库依赖抑或是编译配置上的改变，或者是lib库文件的变化，而且也不是程序运行起来之后崩溃的。</p>
+<h3 id="尝试"><a href="#尝试" class="headerlink" title="尝试"></a>尝试</h3><p>看来事情并没有那么简单，自己测试一下，果然是无法定位到一个第三方的dll中。好吧，先不管什么原因了，反正就一个dll的问题，首先确认Debug版本和Release版本是正确编译且正确的链接了对应版本，然后直接源码编译了下第三方库，顺便做成静态库再链接。BUT，再运行又报另外一个第三方dll无法定位到，到这我的内心是崩溃的，VS你都干了啥！</p>
+<h3 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h3><p>既然不是自身问题，那么还是求助网络。按照网上的解释，修改Release版本配置的优化链接的<code>引用</code>，也就是在编译器优化的时候，如果不需要某些函数，链接的时候就丢弃掉，可以大大减少生成文件的体积。当然这是个不错的优化，但是为什么明明被引用的函数也被优化了呢，之前怎么没优化掉，无法解释。只好将该选项修改为<code>/OPT:NOREF</code>。</p>
+<p>图就不放了，修改位置为<code>项目属性</code> -&gt; <code>配置Release</code> -&gt; <code>链接器</code> -&gt; <code>优化</code> -&gt; <code>引用</code> 。</p>
+<h3 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h3><p>虽然说这么配置就解决了问题，但这算不算是编译器的BUG呢。</p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2017/12/26/resource-release-with-setconsolectrlhandler/" title="SetConsoleCtrlHandler实现资源释放">SetConsoleCtrlHandler实现资源释放</a></h2>
+                <p class="excerpt">
+                
+                今天决定对程序产生的不完整的临时文件进行下优化，当然这些临时文件是非预期的，在程序中都进行了处理，但是在某些情况下确实是发生了。
+现象分析首先可以确认的是这些临时文件都是程序在退出时候未处理生成的。当然程序全部是正常退出的，并没有异常崩溃，但是退出的方法有多种，比如Ctrl+C按键，比如直接点击控制
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-12-26T08:26:00.000Z" class="post-list__meta--date date">2017-12-26</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2017/12/26/resource-release-with-setconsolectrlhandler/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2017/12/19/ffmpeg-decode-video-frame-lost/" title="ffmpeg视频解码丢帧问题">ffmpeg视频解码丢帧问题</a></h2>
+                <p class="excerpt">
+                
+                视频解码的时候，av_read_frame出来的包进行avcodec_decode_video2解码，有时候got_frame为0，即没有数据。一般来讲每一帧都是一帧图像，按道理肯定是有图像的，但却没有，依此下去最终在文件结尾处依然是少部分数据，难不成数据丢了？
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-12-19T03:16:00.000Z" class="post-list__meta--date date">2017-12-19</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2017/12/19/ffmpeg-decode-video-frame-lost/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

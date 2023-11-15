@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>禁用PIP安装到用户目录 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="当前使用的 CentOS 7 系统上， 在某些脚本中自动安装一些软件竟然安装到root的用户的目录下了，其他用户根本用不了，因此针对该现象进行了分析。
+问题基本分析正常情况下软件包是安装到系统目录下的，也就是安装目录下的  site-packages 目录，但是不知道为啥会安装到用户目录，不管什么情况了，总之将其改掉，全部安装到系统目录下。
+经常上网搜索发现了其有一个这样的命令
+pip -m si">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="禁用PIP安装到用户目录 | xilixili.net">
+    <meta name="twitter:description" content="当前使用的 CentOS 7 系统上， 在某些脚本中自动安装一些软件竟然安装到root的用户的目录下了，其他用户根本用不了，因此针对该现象进行了分析。
+问题基本分析正常情况下软件包是安装到系统目录下的，也就是安装目录下的  site-packages 目录，但是不知道为啥会安装到用户目录，不管什么情况了，总之将其改掉，全部安装到系统目录下。
+经常上网搜索发现了其有一个这样的命令
+pip -m si">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="禁用PIP安装到用户目录 | xilixili.net">
+    <meta property="og:description" content="当前使用的 CentOS 7 系统上， 在某些脚本中自动安装一些软件竟然安装到root的用户的目录下了，其他用户根本用不了，因此针对该现象进行了分析。
+问题基本分析正常情况下软件包是安装到系统目录下的，也就是安装目录下的  site-packages 目录，但是不知道为啥会安装到用户目录，不管什么情况了，总之将其改掉，全部安装到系统目录下。
+经常上网搜索发现了其有一个这样的命令
+pip -m si">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2020/02/13/python-disable-pip-install-user-site-package/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2020-02-13T05:48:00.000Z" class="post-list__meta--date date">2020-02-13</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">禁用PIP安装到用户目录</h1>
+  </header>
+
+  <section class="post">
+    <p>当前使用的 <strong>CentOS 7</strong> 系统上， 在某些脚本中自动安装一些软件竟然安装到root的用户的目录下了，其他用户根本用不了，因此针对该现象进行了分析。</p>
+<h3 id="问题基本分析"><a href="#问题基本分析" class="headerlink" title="问题基本分析"></a>问题基本分析</h3><p>正常情况下软件包是安装到系统目录下的，也就是安装目录下的  <code>site-packages</code> 目录，但是不知道为啥会安装到用户目录，不管什么情况了，总之将其改掉，全部安装到系统目录下。</p>
+<p>经常上网搜索发现了其有一个这样的命令</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pip -m site</span><br></pre></td></tr></table></figure>
+<p>其输出也很有意思</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">sys.path = [</span><br><span class="line">    <span class="string">'/root'</span>,</span><br><span class="line">    <span class="string">'/usr/lib64/python27.zip'</span>,</span><br><span class="line">    <span class="string">'/usr/lib64/python2.7'</span>,</span><br><span class="line">    <span class="string">'/usr/lib64/python2.7/plat-linux2'</span>,</span><br><span class="line">    <span class="string">'/usr/lib64/python2.7/lib-tk'</span>,</span><br><span class="line">    <span class="string">'/usr/lib64/python2.7/lib-old'</span>,</span><br><span class="line">    <span class="string">'/usr/lib64/python2.7/lib-dynload'</span>,</span><br><span class="line">    <span class="string">'/root/.local/lib/python2.7/site-packages'</span>,</span><br><span class="line">    <span class="string">'/usr/lib64/python2.7/site-packages'</span>,</span><br><span class="line">    <span class="string">'/usr/lib/python2.7/site-packages'</span>,</span><br><span class="line">]</span><br><span class="line">USER_BASE: <span class="string">'/root/.local'</span> (exists)</span><br><span class="line">USER_SITE: <span class="string">'/root/.local/lib/python2.7/site-packages'</span> (exists)</span><br><span class="line">ENABLE_USER_SITE: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<p>从这个输出能看出原因，但是此处并没有修改的方法。</p>
+<h3 id="寻找解决方案"><a href="#寻找解决方案" class="headerlink" title="寻找解决方案"></a>寻找解决方案</h3><p>上面分析确实是一个类似环境变量的东西，我找了一遍所有配置环境变量的地方，均没有收获。不过在仔细研究刚才那条命令的时候，意味发现了端倪</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]<span class="meta"># python -m site --help</span></span><br><span class="line">/usr/lib64/python2<span class="number">.7</span>/site.py [--user-base] [--user-site]</span><br><span class="line"></span><br><span class="line">Without arguments print some useful information</span><br><span class="line">With arguments print the value of USER_BASE <span class="keyword">and</span>/<span class="keyword">or</span> USER_SITE separated</span><br><span class="line">by <span class="string">':'</span>.</span><br><span class="line"></span><br><span class="line">Exit codes with --user-base <span class="keyword">or</span> --user-site:</span><br><span class="line">  <span class="number">0</span> - user site directory is enabled</span><br><span class="line">  <span class="number">1</span> - user site directory is disabled by user</span><br><span class="line">  <span class="number">2</span> - uses site directory is disabled by super user</span><br><span class="line">      <span class="keyword">or</span> <span class="keyword">for</span> security reasons</span><br><span class="line"> &gt;<span class="number">2</span> - unknown error</span><br></pre></td></tr></table></figure>
+<p>原来该配置在  <code>/usr/lib64/python2.7/site.py</code> 里面，打开文件开头就有定义，而且在后面的处理逻辑中是根据这个值为 <code>None</code> 的时候进行检测，当不是的时候不检测。</p>
+<p>我们根据需要将该值设置为 <code>False</code> 即可</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Enable per user site-packages directory</span></span><br><span class="line"><span class="comment"># set it to False to disable the feature or True to force the feature</span></span><br><span class="line">ENABLE_USER_SITE = <span class="keyword">False</span></span><br></pre></td></tr></table></figure>
+<h3 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h3><p>这个功能虽然我不需要，但是完全可以更改用户自己的路径上去，有需要的可以参考。</p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2020/04/27/blockchain-fisco-bcos-ca/" title="FISCOBCOS~自建CA及实现认证">FISCOBCOS~自建CA及实现认证</a></h2>
+                <p class="excerpt">
+                
+                最近在调试区块链，开始调研了很多区块链平台，包括百度京东的，最终还是觉得微众银行的FISCO BCOS最好用。至于各个平台的差异，大家可自行百度对比。顺便说一句，FISCO BCOS(以下称FB)的社区还不错，官方支持nice！
+关于FISCO BCOS自建区块链，基本比较合适的方式是联盟链。因为使
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2020-04-27T13:55:00.000Z" class="post-list__meta--date date">2020-04-27</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2020/04/27/blockchain-fisco-bcos-ca/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2020/01/02/win32-nginx-autoindex-support-chinese/" title="NGINX支持中文目录索引(Win32)">NGINX支持中文目录索引(Win32)</a></h2>
+                <p class="excerpt">
+                
+                Windows平台上在使用Nginx的时候无法支持中文路径，哪怕是直接访问一个中文路径，也无法访问到，访问文件是404，访问目录是500。
+解决方案思考正常情况下先访问一个内部有中文文件或目录的目录，Nginx会显示为乱码(调整网页编码能正确)，而且其中的链接是直接编码的，什么意思，就是这个链接是G
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2020-01-02T01:10:00.000Z" class="post-list__meta--date date">2020-01-02</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2020/01/02/win32-nginx-autoindex-support-chinese/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

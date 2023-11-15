@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>xilixili.net | 生活と技术の杂记</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="xilixili.net | 生活と技术の杂记">
+    <meta name="twitter:description" content="">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="xilixili.net | 生活と技术の杂记">
+    <meta property="og:description" content="">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover ">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <div class="main-post-list">
+    
+  <ol class="post-list">
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2018/11/14/gcc4.8-with-regex-problem/" title="阅读 GCC4.8正则异常问题">GCC4.8正则异常问题</a></h2>
+      <p class="excerpt">
+    
+      之前在做28181服务开发的时候有意使用了boost库，以及VS 2010以及CentOS 7 自带 GCC都能支持的C++11的特性，月初发现程序好像不正常工作了。日志拉取还真是一个漫长的过程，好的一点是之前日志还算打的足够详细，特别是异常错误部分，所以很容易就找到了出错日志。
+关于正则的使用直接定位到最初出问题的时间点，发现程序已经不打日志了，而且工作线程捕获了 regex_error 异常，
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2018-11-14T06:55:00.000Z" class="post-list__meta--date date">2018-11-14</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2018/11/14/gcc4.8-with-regex-problem/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2018/10/17/tensorflow-optimization/" title="阅读 Tensorflow加速">Tensorflow加速</a></h2>
+      <p class="excerpt">
+    
+      最近在研究学习Tensorflow的图像的物体识别功能，Python迁移学习用起来爽的不要不要的，但是机器才是2G的750Ti显卡，不说训练了，就是检测识别i7 6700也是十几二十秒，效果很差。当然一般深度学习是用GPU，1060显卡起且显存至少8G起，但是我木有显卡啊，自从挖矿导致的显卡涨价之后，还是那么贵，暂无预算，此路不通。因此只能研究下CPU的加速了。
+Python环境加速一般当我们训练
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2018-10-17T07:24:00.000Z" class="post-list__meta--date date">2018-10-17</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2018/10/17/tensorflow-optimization/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2018/09/04/centos-update-gcc/" title="阅读 CentOS升级GCC">CentOS升级GCC</a></h2>
+      <p class="excerpt">
+    
+      一般的Linux都是企业应用相对的发行版的软件包相对较旧，而现在C++11逐渐普及，支持C++11的编译器在Linux上的GCC稍微完整点的都至少是4.8版本，反观CentOS 6的GCC版本为4.4，即使是最新的CentOS 7也才仅为4.7。因此很多时候需要升级系统自带的编译器（注意，千万不要从高版本的Linux上GCC编译的程序拿到低版本的服务器上来，因为GLIBC不支持，也不能直接替换）。
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2018-09-04T08:51:00.000Z" class="post-list__meta--date date">2018-09-04</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2018/09/04/centos-update-gcc/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2018/08/20/ffmpeg-got-raw-h264/" title="阅读 用ffmpeg从MP4提取H264裸流">用ffmpeg从MP4提取H264裸流</a></h2>
+      <p class="excerpt">
+    
+      MP4的格式封装比较复杂，想取出来H264裸流比较麻烦，因此借助ffmpeg工具比较方便。通常一般都是使用ffmpeg进行编解码较多，但是当我们视频是H264编码时候，直接提取比较合适。
+提取H264H264编码的MP4文件，使用ffmpeg提取相对比较方便，直接使用ffmpeg标准的媒体文件读取流程，通过读取AVPacket出来不需要解码，直接从其data数据域中即可获取到H264数据，通过观察
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2018-08-20T08:51:00.000Z" class="post-list__meta--date date">2018-08-20</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2018/08/20/ffmpeg-got-raw-h264/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2018/07/02/srs-systemd-config/" title="阅读 CentOS7配置SRS服务及日志">CentOS7配置SRS服务及日志</a></h2>
+      <p class="excerpt">
+    
+      最近将RTMP服务器转移到Linux平台下，同时也想使用下SRS服务器。但是SRS默认只提供了CentOS 6的RPM安装包，其他平台需自己编译，同时SRS也只提供了SysV方式的服务脚本，故在systemd架构下需要自己开发相对应的脚本，以下记录下本人在CentOS 7上安装配置SRS。
+编译SRS安装SRS按照官方的办法下载源码并编译即可，暂时别安装，如下
+
+由于github的代码clone的
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2018-07-02T08:38:00.000Z" class="post-list__meta--date date">2018-07-02</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2018/07/02/srs-systemd-config/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2018/06/19/ffmpeg-push-rtmp-for-camera/" title="阅读 FFMPEG推流摄像头">FFMPEG推流摄像头</a></h2>
+      <p class="excerpt">
+    
+      一般的直播网站都使用OBS推流，其实ffmpeg也可以推流，在无界面环境下就可以推流使用。本文以Windows下为例，简单介绍下使用ffmpeg工具推流的方法和步骤。
+下载安装下载地址：https://ffmpeg.zeranoe.com/builds/ 
+选择版本（默认即可），选择自己系统架构，Linking 选择 static，点击Download Build下载压缩包。解压bin目录的三个e
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2018-06-19T08:40:00.000Z" class="post-list__meta--date date">2018-06-19</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2018/06/19/ffmpeg-push-rtmp-for-camera/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2018/05/30/use-mmap-as-cache/" title="阅读 使用内存映射实现本地缓存">使用内存映射实现本地缓存</a></h2>
+      <p class="excerpt">
+    
+      本来程序中一些数据需要在下次重启后能够恢复继续使用，一般比较好的办法是直接嵌入sqlite数据库或者嵌入leveldb，但是需要引入第三方库，略麻烦，因此打算自己实现。
+实现思路自己实现最简单就是使用WinAPI操作INI文件，一个读API一个写API，非常简单方便，但是曾经出现过一个项被写两次的问题，心有余悸，另外也可以预见这种频繁的API操作肯定对磁盘性能有影响。
+另外一种自定义格式写文件，将
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2018-05-30T07:14:00.000Z" class="post-list__meta--date date">2018-05-30</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2018/05/30/use-mmap-as-cache/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2018/05/11/parse-hikvision-camera-ps-stream/" title="阅读 简单解析海康PS流获取H264">简单解析海康PS流获取H264</a></h2>
+      <p class="excerpt">
+    
+      在用海康SDK获取H264视频流的时候，其实从海康的SDK里面基本是没有的，海康的SDK介绍使用是通过自身的PlayM4解码成图片的，并非我们想要的H264。项目里面使用的是海康提供的AnalyzeData库，但是我并没有从海康官网找到下载，应该是PS格式解析库。
+分析其实通过Wireshark本地抓包，抓摄像头IP的包，在程序请求后会发现确实是TCP连接上的PS格式的流，在设置了视频格式为H26
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2018-05-11T08:23:00.000Z" class="post-list__meta--date date">2018-05-11</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2018/05/11/parse-hikvision-camera-ps-stream/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2018/04/13/28181-ptz-code/" title="阅读 GB28181云台控制">GB28181云台控制</a></h2>
+      <p class="excerpt">
+    
+      最近完成了GB28181的云台控制功能，记录下相关代码。
+参考要实现GB28181的云台控制，基本不用参考其他文档了，直接查看标准文档即可，当然COPY别人现成代码也是很爽的，不过百度相关代码其实也不多，是不是搞这块的人不多呢。这里主要要说的是，云台控制就是发送了消息，相机会一直执行，直到其他命令或者发送了停止命令，切记要考虑这个机制。
+代码其他不说了，具体格式参考文档，此次就不贴图了，直接上代码
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2018-04-13T10:30:00.000Z" class="post-list__meta--date date">2018-04-13</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2018/04/13/28181-ptz-code/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2018/03/07/cpp-format-library/" title="阅读 C++字符串格式化库">C++字符串格式化库</a></h2>
+      <p class="excerpt">
+    
+      总的来说，C++可使用的字符串格式化库是非常少，基本可选用的如sprintf系列，boost.format等，诚然stringstream也可以，但是和其他库有明显使用上的区别，不是很方便。
+自实现的格式化库曾经因为项目日志打印问题，比如申请多少缓冲区问题，为了防止越界等问题，多方考虑自己实现了一个格式化库
+详见 跨平台的STL字符串格式化库（码云） 
+其中GNU的版本采用了特别底层的函数实现，基
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2018-03-07T09:00:00.000Z" class="post-list__meta--date date">2018-03-07</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2018/03/07/cpp-format-library/">继续阅读</a></div>
+      <hr class="post-list__divider">
+    </li>
+  
+    
+  </ol>
+
+
+  <nav class="pagination" role="navigation">
+    
+      <a class="older-posts pagination__newer btn btn-small btn-tertiary" href="/page/5/">&larr; 最近</a>
+    
+    <span class="pagination__page-number">  6 / 9 </span>
+    
+      <a class="older-posts pagination__older btn btn-small btn-tertiary" href="/page/7/">更早 &rarr;</a>
+    
+  </nav>
+
+ <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+    
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</div>
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

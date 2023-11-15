@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>FFMPEG推流摄像头 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="一般的直播网站都使用OBS推流，其实ffmpeg也可以推流，在无界面环境下就可以推流使用。本文以Windows下为例，简单介绍下使用ffmpeg工具推流的方法和步骤。
+下载安装下载地址：https://ffmpeg.zeranoe.com/builds/ 
+选择版本（默认即可），选择自己系统架构，Linking 选择 static，点击Download Build下载压缩包。解压bin目录的三个e">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="FFMPEG推流摄像头 | xilixili.net">
+    <meta name="twitter:description" content="一般的直播网站都使用OBS推流，其实ffmpeg也可以推流，在无界面环境下就可以推流使用。本文以Windows下为例，简单介绍下使用ffmpeg工具推流的方法和步骤。
+下载安装下载地址：https://ffmpeg.zeranoe.com/builds/ 
+选择版本（默认即可），选择自己系统架构，Linking 选择 static，点击Download Build下载压缩包。解压bin目录的三个e">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="FFMPEG推流摄像头 | xilixili.net">
+    <meta property="og:description" content="一般的直播网站都使用OBS推流，其实ffmpeg也可以推流，在无界面环境下就可以推流使用。本文以Windows下为例，简单介绍下使用ffmpeg工具推流的方法和步骤。
+下载安装下载地址：https://ffmpeg.zeranoe.com/builds/ 
+选择版本（默认即可），选择自己系统架构，Linking 选择 static，点击Download Build下载压缩包。解压bin目录的三个e">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2018/06/19/ffmpeg-push-rtmp-for-camera/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2018-06-19T08:40:00.000Z" class="post-list__meta--date date">2018-06-19</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">FFMPEG推流摄像头</h1>
+  </header>
+
+  <section class="post">
+    <p>一般的直播网站都使用OBS推流，其实ffmpeg也可以推流，在无界面环境下就可以推流使用。本文以Windows下为例，简单介绍下使用ffmpeg工具推流的方法和步骤。</p>
+<h3 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h3><p>下载地址：<a href="https://ffmpeg.zeranoe.com/builds/" target="_blank" rel="noopener">https://ffmpeg.zeranoe.com/builds/</a> </p>
+<p>选择版本（默认即可），选择自己系统架构，<strong>Linking</strong> 选择 <code>static</code>，点击<strong>Download Build</strong>下载压缩包。解压bin目录的三个exe程序到任意目录</p>
+<ul>
+<li>ffmpeg.exe   <code>ffmpeg主程序，转码工具</code></li>
+<li>ffplay.exe  <code>媒体播放工具，可播放本地视频以及网络视频</code></li>
+<li>ffprobe.exe  <code>媒体探测工具，可探测媒体信息，如编码信息等</code></li>
+</ul>
+<p>CMD切换到 EXE 该目录即可使用。也可以将三个exe解压到系统 <code>Windows</code> 目录下，方便全局访问。</p>
+<h3 id="命令行推流"><a href="#命令行推流" class="headerlink" title="命令行推流"></a>命令行推流</h3><p>推流摄像头，首先需要本机有音视频采集设备，可通过查询本机音视频设备名称</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">ffmpeg.exe -list_devices true -f dshow -i dummy</span><br></pre></td></tr></table></figure>
+<p>查询后类似以下输出</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[dshow @ 0496a480] DirectShow video devices</span><br><span class="line">[dshow @ 0496a480]  <span class="string">"USB2.0 PC CAMERA"</span></span><br><span class="line">[dshow @ 0496a480]     Alternative name <span class="string">"@device_pnp_\\?\usb#vid_1908..."</span></span><br><span class="line">[dshow @ 0496a480] DirectShow audio devices</span><br><span class="line">[dshow @ 0496a480]  <span class="string">"楹﹀厠椋?(USB2.0 MIC)"</span></span><br><span class="line">[dshow @ 0496a480]     Alternative name <span class="string">"@device_cm_&#123;33D9A762-90C8-...&#125;"</span></span><br></pre></td></tr></table></figure>
+<p>注意上面的音频设备名称 <code>楹﹀厠椋?(USB2.0 MIC)</code> 乱码(字符编码不同导致，实为 ‘麦克风’ )，如果乱码可在设备管理器查询，最终可知当前机器的音视频设备名称为 <code>USB2.0 PC CAMERA</code> 及 <code>麦克风 (USB2.0 MIC)</code> 。</p>
+<p>使用上述设备进行推流，命令如下</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">ffmpeg -f dshow -i video=<span class="string">"USB2.0 PC CAMERA"</span>:audio=<span class="string">"麦克风 (USB2.0 MIC)"</span> \</span><br><span class="line">-vcodec libx264 -acodec aac -f flv rtmp://<span class="number">127.0</span>.<span class="number">0.1</span>/live/test</span><br></pre></td></tr></table></figure>
+<p>不需要音频的命令如下</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">ffmpeg -f dshow -i video=<span class="string">"USB2.0 PC CAMERA"</span> -vcodec libx264 \</span><br><span class="line">-f flv rtmp://<span class="number">127.0</span>.<span class="number">0.1</span>/live/test</span><br></pre></td></tr></table></figure>
+<p>上述推流默认参数可能比较低，如果需要对某些参数进行配置优化，相应的命令行参数如下</p>
+<ul>
+<li><strong>-r</strong>   设置帧率，命令为 <code>-r 25</code>，全拼写为 <code>-framerate 25</code></li>
+<li><strong>-s</strong>   设置分辨率，命令为 <code>-s 640x480</code>，全拼为 <code>-video_size 640x480</code></li>
+<li><strong>-b</strong>   设置码率，命令为 <code>-b 1M</code> ，相当于1024kbps，全拼为 <code>-bitrate 1M</code>，可配置小数<ul>
+<li>其中 <strong>-b:a</strong> 可单独设置音频  <strong>-b:v</strong> 可单独设置视频</li>
+</ul>
+</li>
+<li><strong>-bufsize </strong>  设置码率控制缓冲器的大小 ，让码率非常平稳，如设置尽量与 <code>-b</code> 相同<ul>
+<li>需要视频码流平稳的使用此参数，不需要设置 <strong>maxrate</strong> 和 <strong>minrate</strong></li>
+<li>同理，需要抖动的话设置 <strong>maxrate</strong> 和 <strong>minrate</strong>，不需要设置 <strong>bufsize</strong></li>
+</ul>
+</li>
+<li><strong>-maxrate</strong>  可设置最大码率，可配置小数，如 <code>-maxrate 1.5M</code></li>
+<li><strong>-minrate</strong>   可设置最小码率，可配置小数，如 <code>-minrate 1.5M</code></li>
+<li><strong>-preset:v</strong>   视频H264配置参数，如 <code>-preset:v ultrafast</code></li>
+<li><strong>-tune:v</strong>   视频H264配置参数，如 <code>-tune:v zerolatency</code></li>
+<li><strong>-g</strong>  设置H264的GoP大小，即I帧间隔，如 <code>-g 50</code></li>
+</ul>
+<p>比如以25帧推送640x480分辨率的摄像头</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">ffmpeg -r <span class="number">25</span> -f dshow -i video=<span class="string">"USB2.0 PC CAMERA"</span>:audio=<span class="string">"麦克风 (USB2.0 MIC)"</span> \</span><br><span class="line">-vcodec libx264 -s <span class="number">640</span>x480 -tune:v zerolatency \</span><br><span class="line">-acodec aac -f flv rtmp://<span class="number">127.0</span>.<span class="number">0.1</span>/live/test</span><br></pre></td></tr></table></figure>
+<p>带控制码率(码率波动平稳)的命令行示例如下</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">ffmpeg -r <span class="number">25</span> -f dshow -i video=<span class="string">"USB2.0 PC CAMERA"</span>:audio=<span class="string">"麦克风 (USB2.0 MIC)"</span> \</span><br><span class="line">-vcodec libx264 -b <span class="number">1</span>M -bufsize <span class="number">1</span>M -s <span class="number">1280</span>x720 -tune:v zerolatency \</span><br><span class="line">-acodec aac -b:a <span class="number">64</span>k -f flv rtmp://<span class="number">127.0</span>.<span class="number">0.1</span>/live/test</span><br></pre></td></tr></table></figure>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>在推流时候，有时候设置自定义帧率后发现ffmpeg会产生大量警告，如</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Past duration 0.xxxxx too large</span><br></pre></td></tr></table></figure>
+<p>出现这种现象只需要将指定帧率的命令放到设备之前，如 <code>ffmpeg.exe -r 25 -fdshow -i ...</code></p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2018/07/02/srs-systemd-config/" title="CentOS7配置SRS服务及日志">CentOS7配置SRS服务及日志</a></h2>
+                <p class="excerpt">
+                
+                最近将RTMP服务器转移到Linux平台下，同时也想使用下SRS服务器。但是SRS默认只提供了CentOS 6的RPM安装包，其他平台需自己编译，同时SRS也只提供了SysV方式的服务脚本，故在systemd架构下需要自己开发相对应的脚本，以下记录下本人在CentOS 7上安装配置SRS。
+编译SR
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2018-07-02T08:38:00.000Z" class="post-list__meta--date date">2018-07-02</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2018/07/02/srs-systemd-config/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2018/05/30/use-mmap-as-cache/" title="使用内存映射实现本地缓存">使用内存映射实现本地缓存</a></h2>
+                <p class="excerpt">
+                
+                本来程序中一些数据需要在下次重启后能够恢复继续使用，一般比较好的办法是直接嵌入sqlite数据库或者嵌入leveldb，但是需要引入第三方库，略麻烦，因此打算自己实现。
+实现思路自己实现最简单就是使用WinAPI操作INI文件，一个读API一个写API，非常简单方便，但是曾经出现过一个项被写两次的问
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2018-05-30T07:14:00.000Z" class="post-list__meta--date date">2018-05-30</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2018/05/30/use-mmap-as-cache/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

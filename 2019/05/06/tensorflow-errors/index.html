@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>Tensorflow常见错误 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="最近重新安装了Tensorflow的训练环境，并不是一帆风顺，比起PyTorch的安装，Tensorflow还是问题多多，比如字符编码、PyCocoTools等，在此记录下安装和使用过程中的常见问题，但并不对安装过程进行详细记录
+无法加载Tensorflow在使用GPU版本情况下，目前我直接pip安装之后，安装的是1.13.1版本，但是可能并没有去查询下1.13.1版本支持的CUDA版本，任意安装">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Tensorflow常见错误 | xilixili.net">
+    <meta name="twitter:description" content="最近重新安装了Tensorflow的训练环境，并不是一帆风顺，比起PyTorch的安装，Tensorflow还是问题多多，比如字符编码、PyCocoTools等，在此记录下安装和使用过程中的常见问题，但并不对安装过程进行详细记录
+无法加载Tensorflow在使用GPU版本情况下，目前我直接pip安装之后，安装的是1.13.1版本，但是可能并没有去查询下1.13.1版本支持的CUDA版本，任意安装">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Tensorflow常见错误 | xilixili.net">
+    <meta property="og:description" content="最近重新安装了Tensorflow的训练环境，并不是一帆风顺，比起PyTorch的安装，Tensorflow还是问题多多，比如字符编码、PyCocoTools等，在此记录下安装和使用过程中的常见问题，但并不对安装过程进行详细记录
+无法加载Tensorflow在使用GPU版本情况下，目前我直接pip安装之后，安装的是1.13.1版本，但是可能并没有去查询下1.13.1版本支持的CUDA版本，任意安装">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2019/05/06/tensorflow-errors/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2019-05-06T05:45:00.000Z" class="post-list__meta--date date">2019-05-06</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">Tensorflow常见错误</h1>
+  </header>
+
+  <section class="post">
+    <p>最近重新安装了Tensorflow的训练环境，并不是一帆风顺，比起PyTorch的安装，Tensorflow还是问题多多，比如字符编码、PyCocoTools等，在此记录下安装和使用过程中的常见问题，但并不对安装过程进行详细记录</p>
+<h3 id="无法加载Tensorflow"><a href="#无法加载Tensorflow" class="headerlink" title="无法加载Tensorflow"></a>无法加载Tensorflow</h3><p>在使用GPU版本情况下，目前我直接pip安装之后，安装的是1.13.1版本，但是可能并没有去查询下1.13.1版本支持的CUDA版本，任意安装了最新的版本，结果导致简单验证 <code>import tensorflow</code> 报无法加载的问题，错误就不贴了，基本就是CUDA版本不对应的问题。后续查询了在1.13版本之前的几个版本支持的是CUDA 9，而1.13开始支持CUDA 10。因此按照对应关系去下载安装对应的CUDA版本即可，cuDNN下载页面有和CUDA对应的版本。</p>
+<h3 id="安装pycocotools"><a href="#安装pycocotools" class="headerlink" title="安装pycocotools"></a>安装pycocotools</h3><p>安装成功之后，随便跑一下训练，就会缺失一些库，一般pip安装即可，但是有些库在有些平台会有问题，比如下面的pycocotools在Windows平台就不能直接安装，需要单独的安装方式，首先必须安装VC 2015 编译器，其次不能使用官方的代码，因此还需要确保系统安装了git工具，一切就绪后就可以使用下面的命令安装了</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pip install git+https://github.com/philferriere/cocoapi.git#subdirectory=PythonAPI</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>如果你本机没有VC，且不想安装巨大的IDE，可以考虑安装编译器即可，下载 <a href="https://go.microsoft.com/fwlink/?LinkId=691126" target="_blank" rel="noopener">https://go.microsoft.com/fwlink/?LinkId=691126</a> 安装纯编译器即可。</p>
+</blockquote>
+<h3 id="UnicodeDecodeError"><a href="#UnicodeDecodeError" class="headerlink" title="UnicodeDecodeError"></a>UnicodeDecodeError</h3><p>在上面的pycocotools的安装过程中，可能会遇到类似下面的错误</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Traceback (most recent call last):</span><br><span class="line">  File &quot;...site-packages\pip\compat\__init__.py&quot;, line 73, in console_to_str</span><br><span class="line">    return s.decode(sys.__stdout__.encoding)</span><br><span class="line">UnicodeDecodeError: &apos;utf-8&apos; codec can&apos;t decode byte 0xa1 in position 42: invalid start byte</span><br></pre></td></tr></table></figure>
+<p>这其实是文件字符集和控制台的字符集转换导致的问题，因为Windows上的控制台字符集一般都是936，也就是GBK，因此需要修改Python目录下的 <code>Lib/site-packages/pip/compat/__init__.py</code> 大概在75行，将 <code>utf-8</code> 修改为 <code>gbk</code> 即可，类似</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> sys.version_info &gt;= (<span class="number">3</span>,):</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">console_to_str</span><span class="params">(s)</span>:</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="keyword">return</span> s.decode(sys.__stdout__.encoding)</span><br><span class="line">        <span class="keyword">except</span> UnicodeDecodeError:</span><br><span class="line">            <span class="keyword">return</span> s.decode(<span class="string">'gbk'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">native_str</span><span class="params">(s, replace=False)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> isinstance(s, bytes):</span><br><span class="line">            <span class="keyword">return</span> s.decode(<span class="string">'utf-8'</span>, <span class="string">'replace'</span> <span class="keyword">if</span> replace <span class="keyword">else</span> <span class="string">'strict'</span>)</span><br><span class="line">        <span class="keyword">return</span> s</span><br></pre></td></tr></table></figure>
+<h3 id="can’t-pickle-dict-values-objects"><a href="#can’t-pickle-dict-values-objects" class="headerlink" title="can’t pickle dict_values objects"></a>can’t pickle dict_values objects</h3><p>在训练 object detection 的预训练模型的时候，可能会产生下面的报错</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">Invalid argument: TypeError: can't pickle dict_values objects</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line"></span><br><span class="line">  ...</span><br><span class="line"></span><br><span class="line">  File "object_detection\metrics\coco_tools.py", line 118, in LoadAnnotations</span><br><span class="line">    results.dataset['categories'] = copy.deepcopy(self.dataset['categories'])</span><br><span class="line"></span><br><span class="line">  File "C:\Program Files\Python36\lib\copy.py", line 169, in deepcopy</span><br><span class="line">    rv = reductor(4)</span><br><span class="line"></span><br><span class="line">TypeError: can't pickle dict_values objects</span><br></pre></td></tr></table></figure>
+<p>按照提示将 <code>object_detection\metrics\coco_tools.py</code> 的118行加上 list 即可，如下</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">results.dataset[<span class="string">'categories'</span>] = copy.deepcopy(list(self.dataset[<span class="string">'categories'</span>]))</span><br></pre></td></tr></table></figure>
+<h3 id="Failed-to-create-a-directory"><a href="#Failed-to-create-a-directory" class="headerlink" title="Failed to create a directory"></a>Failed to create a directory</h3><p>训练时报错，最后打印的错误日志如下</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tensorflow.python.framework.errors_impl.NotFoundError: Failed to create a directory: </span><br><span class="line">./train\export\Servo\temp-b&apos;1557132706&apos;; No such file or directory</span><br></pre></td></tr></table></figure>
+<p>应该是无法创建目录的问题，修改Tensorflow安装目录下的 <code>tensorflow\python\saved_model\builder_impl.py</code> 中，将原来的代码</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">file_io.recursive_create_dir(self._export_dir)</span><br></pre></td></tr></table></figure>
+<p>替换为下面的代码</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">os.makedirs(compat.as_str(self._export_dir), exist_ok=<span class="keyword">True</span>)</span><br></pre></td></tr></table></figure>
+<p>应该有两处。</p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2019/05/24/deploy-apprtc/" title="部署AppRTC服务">部署AppRTC服务</a></h2>
+                <p class="excerpt">
+                
+                AppRTC是WebRTC视频通话的服务程序，一般可以将其作为参考实现，搭建AppRTC服务受限于很多条件，并不是太容易。在参考了官方操作和大量的博客之后，根据自己操作实践排除了很多网络博客上的错误方法，终于部署成功了一套环境。测试环境为阿里云的CentOS 7服务器，带公网IP和域名。
+部署前的必
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2019-05-24T01:01:00.000Z" class="post-list__meta--date date">2019-05-24</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/05/24/deploy-apprtc/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2019/04/19/modbus-analysis/" title="Modbus协议规范">Modbus协议规范</a></h2>
+                <p class="excerpt">
+                
+                MODBUS协议目前最常用的是Modbus RTU和Modbus TCP，分别对应串口和网络。二者核心是相同的，仅封包格式略有区别。以下以Modbus RTU 和 Modbus TCP为例总结。
+
+协议中所有的16bit及以上数值均按大端字节序存储
+
+通用帧定义本节主要讲的是Modbus RTU和M
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2019-04-19T06:58:00.000Z" class="post-list__meta--date date">2019-04-19</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/04/19/modbus-analysis/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

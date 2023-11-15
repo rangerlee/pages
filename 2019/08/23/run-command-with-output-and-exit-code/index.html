@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>C/C++执行命令并获取输出结果 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="在C/C++中执行指定命令是比较常见的功能，但是其输出对调用者来讲是非常重要的参考，亦或者通过获知调用程序运行成功与否做下一步处理。
+Win32平台方法Win32平台上的程序员貌似总不是对返回码那么感兴趣，不像Linux程序员随随便便在脚本都是 $?，但事实上确实是有专门的API提供了方法，而且总体上API功能很强大，也使用起来较复杂，此处只以最简单的功能作为介绍，读者可自行参考修改。
+int R">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="C/C++执行命令并获取输出结果 | xilixili.net">
+    <meta name="twitter:description" content="在C/C++中执行指定命令是比较常见的功能，但是其输出对调用者来讲是非常重要的参考，亦或者通过获知调用程序运行成功与否做下一步处理。
+Win32平台方法Win32平台上的程序员貌似总不是对返回码那么感兴趣，不像Linux程序员随随便便在脚本都是 $?，但事实上确实是有专门的API提供了方法，而且总体上API功能很强大，也使用起来较复杂，此处只以最简单的功能作为介绍，读者可自行参考修改。
+int R">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="C/C++执行命令并获取输出结果 | xilixili.net">
+    <meta property="og:description" content="在C/C++中执行指定命令是比较常见的功能，但是其输出对调用者来讲是非常重要的参考，亦或者通过获知调用程序运行成功与否做下一步处理。
+Win32平台方法Win32平台上的程序员貌似总不是对返回码那么感兴趣，不像Linux程序员随随便便在脚本都是 $?，但事实上确实是有专门的API提供了方法，而且总体上API功能很强大，也使用起来较复杂，此处只以最简单的功能作为介绍，读者可自行参考修改。
+int R">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2019/08/23/run-command-with-output-and-exit-code/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2019-08-23T03:49:00.000Z" class="post-list__meta--date date">2019-08-23</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">C/C++执行命令并获取输出结果</h1>
+  </header>
+
+  <section class="post">
+    <p>在C/C++中执行指定命令是比较常见的功能，但是其输出对调用者来讲是非常重要的参考，亦或者通过获知调用程序运行成功与否做下一步处理。</p>
+<h3 id="Win32平台方法"><a href="#Win32平台方法" class="headerlink" title="Win32平台方法"></a>Win32平台方法</h3><p>Win32平台上的程序员貌似总不是对返回码那么感兴趣，不像Linux程序员随随便便在脚本都是 <code>$?</code>，但事实上确实是有专门的API提供了方法，而且总体上API功能很强大，也使用起来较复杂，此处只以最简单的功能作为介绍，读者可自行参考修改。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">RunCmd</span><span class="params">(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span>&amp; cmd, <span class="keyword">int</span>&amp; code, <span class="built_in">std</span>::<span class="built_in">string</span>&amp; out)</span> </span>&#123;</span><br><span class="line">	SECURITY_ATTRIBUTES sa;</span><br><span class="line">	HANDLE hRead, hWrite;</span><br><span class="line">	sa.nLength = <span class="keyword">sizeof</span>(SECURITY_ATTRIBUTES);</span><br><span class="line">	sa.lpSecurityDescriptor = <span class="literal">NULL</span>;</span><br><span class="line">	sa.bInheritHandle = TRUE;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (!CreatePipe(&amp;hRead, &amp;hWrite, &amp;sa, <span class="number">0</span>)) &#123;</span><br><span class="line">		DWORD ret = GetLastError();</span><br><span class="line">		<span class="keyword">return</span> ret ? ret : <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	STARTUPINFO si;</span><br><span class="line">	PROCESS_INFORMATION pi;</span><br><span class="line">	ZeroMemory(&amp;si, <span class="keyword">sizeof</span>(STARTUPINFO));</span><br><span class="line"></span><br><span class="line">	si.cb = <span class="keyword">sizeof</span>(STARTUPINFO);</span><br><span class="line">	GetStartupInfo(&amp;si);</span><br><span class="line">	si.hStdError = hWrite;</span><br><span class="line">	si.hStdOutput = hWrite;</span><br><span class="line">	si.wShowWindow = SW_HIDE;</span><br><span class="line">	si.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">char</span> cmdline[<span class="number">200</span>] = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">	<span class="built_in">sprintf</span>(cmdline, <span class="string">"%s"</span>, cmd.c_str());</span><br><span class="line">	<span class="keyword">if</span> (!CreateProcess(<span class="literal">NULL</span>, cmdline, <span class="literal">NULL</span>, <span class="literal">NULL</span>, TRUE, <span class="literal">NULL</span>, </span><br><span class="line">						<span class="literal">NULL</span>, <span class="literal">NULL</span>, &amp;si, &amp;pi)) &#123;</span><br><span class="line">		DWORD ret = GetLastError();</span><br><span class="line">		CloseHandle(hRead);</span><br><span class="line">		CloseHandle(hWrite);</span><br><span class="line">		<span class="keyword">return</span> ret ? ret : <span class="number">-1</span>;</span><br><span class="line">	&#125;	</span><br><span class="line"></span><br><span class="line">	CloseHandle(hWrite);</span><br><span class="line">	<span class="keyword">char</span> buffer[<span class="number">4096</span>] = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">	DWORD bytesRead;</span><br><span class="line">	<span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">		<span class="keyword">if</span> (!ReadFile(hRead, buffer, <span class="number">4095</span>, &amp;bytesRead, <span class="literal">NULL</span>)) <span class="keyword">break</span>;</span><br><span class="line">		out.append(buffer, bytesRead);</span><br><span class="line">		Sleep(<span class="number">100</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	DWORD exitCode = <span class="number">0</span>;</span><br><span class="line">	GetExitCodeProcess(pi.hProcess, &amp;exitCode);</span><br><span class="line">	code = exitCode;</span><br><span class="line">	CloseHandle(hRead);	</span><br><span class="line">	CloseHandle(pi.hThread);</span><br><span class="line">	CloseHandle(pi.hProcess);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中接口的各个参数如下</p>
+<ul>
+<li>返回值，如果调用使用返回 <code>-1</code> 或者错误码，调用成功返回 <code>0</code></li>
+<li>参数 <code>cmd</code>，是要执行的命令行命令</li>
+<li>参数 <code>code</code>，是执行命令的返回码，一般 <code>0</code> 表示成功(当然取决于程序自己的退出定义了)</li>
+<li>参数 <code>out</code>，执行命令的标准输出和错误输出，即该程序输出的信息内容</li>
+</ul>
+<h3 id="Linux平台方法"><a href="#Linux平台方法" class="headerlink" title="Linux平台方法"></a>Linux平台方法</h3><p>POSIX平台上实现这种功能其实就非常简单了，API也更容易使用，直接上代码</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">RunCmd</span><span class="params">(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span>&amp; cmd, <span class="keyword">int</span>&amp; code, <span class="built_in">std</span>::<span class="built_in">string</span>&amp; out)</span> </span>&#123;</span><br><span class="line">	FILE* fp = popen(cmd.c_str(), <span class="string">"r"</span>);</span><br><span class="line">	<span class="keyword">if</span> (!fp) &#123;</span><br><span class="line">		<span class="keyword">return</span> errno == <span class="number">0</span> ? <span class="number">-1</span> : errno;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">char</span> buffer[<span class="number">4096</span>] = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">	<span class="keyword">while</span>(!feof(fp))&#123;</span><br><span class="line">		<span class="keyword">size_t</span> len = fread(buffer, <span class="number">1</span>, <span class="number">4096</span>, fp);</span><br><span class="line">		<span class="keyword">if</span>(len &gt; <span class="number">0</span>) out.append(buffer, len);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> pclose(fp);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接口参数和意义说明见上面。</p>
+<h3 id="测试验证和其他问题"><a href="#测试验证和其他问题" class="headerlink" title="测试验证和其他问题"></a>测试验证和其他问题</h3><p>函数实现了，可以进行测试了，测试使用上面的代码，最简单的使用Shell脚本（Win下的批处理），比如</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/sh  <span class="comment">#这是Linux上的，Win下不需要</span></span></span><br><span class="line">exit 1</span><br></pre></td></tr></table></figure>
+<p>上面仅提供了退出码操作，正常执行的程序都有退出码的，跟上面其实类似，想想C语言的 <code>main</code> 函数，比如</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>; <span class="comment">//这就是返回退出码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>写个程序调用验证一下，代码简单，功能齐全。</p>
+<p>上面程序执行命令并没有其他方面的设置，比如切换运行目录等等，如果确实需要这样的功能，</p>
+<ul>
+<li>WinAPI直接有参数定义</li>
+<li>Linux下可能需要自己 <code>fork</code> 和处理程序</li>
+</ul>
+<p>另外一般的程序可以考虑设置一个超时参数，通过异步处理或者起线程读取，并通过定时关闭实现功能。</p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2019/09/10/bat-request-admin-rights-and-others/" title="BAT脚本自动获取管理员权限等功能">BAT脚本自动获取管理员权限等功能</a></h2>
+                <p class="excerpt">
+                
+                偶尔可能会用到Windows下批处理脚本，虽然对BAT脚本使用的少，但是确实很有用，在此记录下一些常用的功能实现代码，长期更新。
+自动获取管理员权限在Windows上很多操作需要管理员权限，比如创建服务等。但是在批处理在需要管理器权限的时候，一般要求操作人员切换到管理器 CMD 或 PS 下，进行执
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2019-09-10T07:22:00.000Z" class="post-list__meta--date date">2019-09-10</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/09/10/bat-request-admin-rights-and-others/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2019/07/18/android-studio-failed-connect-phone/" title="AS无法连接真机的解决方案">AS无法连接真机的解决方案</a></h2>
+                <p class="excerpt">
+                
+                调试Android程序的时候，如果需要摄像头了，虚拟机就用不上了，需要连接真机。虽然连接真机很容易，但是后续因为Win10系统原因造成又无法连接成功，因此针对连接问题总结其解决方案。
+基本方法一般来说，当我们将手机插入电脑后，如果之前没安装过驱动，则基本是会出现设备管理器有不可识别的设备。这种情况下
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2019-07-18T02:33:00.000Z" class="post-list__meta--date date">2019-07-18</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/07/18/android-studio-failed-connect-phone/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

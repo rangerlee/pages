@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>CentOS升级GCC | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="一般的Linux都是企业应用相对的发行版的软件包相对较旧，而现在C++11逐渐普及，支持C++11的编译器在Linux上的GCC稍微完整点的都至少是4.8版本，反观CentOS 6的GCC版本为4.4，即使是最新的CentOS 7也才仅为4.7。因此很多时候需要升级系统自带的编译器（注意，千万不要从高版本的Linux上GCC编译的程序拿到低版本的服务器上来，因为GLIBC不支持，也不能直接替换）。">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="CentOS升级GCC | xilixili.net">
+    <meta name="twitter:description" content="一般的Linux都是企业应用相对的发行版的软件包相对较旧，而现在C++11逐渐普及，支持C++11的编译器在Linux上的GCC稍微完整点的都至少是4.8版本，反观CentOS 6的GCC版本为4.4，即使是最新的CentOS 7也才仅为4.7。因此很多时候需要升级系统自带的编译器（注意，千万不要从高版本的Linux上GCC编译的程序拿到低版本的服务器上来，因为GLIBC不支持，也不能直接替换）。">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="CentOS升级GCC | xilixili.net">
+    <meta property="og:description" content="一般的Linux都是企业应用相对的发行版的软件包相对较旧，而现在C++11逐渐普及，支持C++11的编译器在Linux上的GCC稍微完整点的都至少是4.8版本，反观CentOS 6的GCC版本为4.4，即使是最新的CentOS 7也才仅为4.7。因此很多时候需要升级系统自带的编译器（注意，千万不要从高版本的Linux上GCC编译的程序拿到低版本的服务器上来，因为GLIBC不支持，也不能直接替换）。">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2018/09/04/centos-update-gcc/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2018-09-04T08:51:00.000Z" class="post-list__meta--date date">2018-09-04</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">CentOS升级GCC</h1>
+  </header>
+
+  <section class="post">
+    <p>一般的Linux都是企业应用相对的发行版的软件包相对较旧，而现在C++11逐渐普及，支持C++11的编译器在Linux上的GCC稍微完整点的都至少是4.8版本，反观CentOS 6的GCC版本为4.4，即使是最新的CentOS 7也才仅为4.7。因此很多时候需要升级系统自带的编译器（注意，千万不要从高版本的Linux上GCC编译的程序拿到低版本的服务器上来，因为GLIBC不支持，也不能直接替换）。</p>
+<h3 id="源码编译升级"><a href="#源码编译升级" class="headerlink" title="源码编译升级"></a>源码编译升级</h3><p>一般来讲，Linux下大多数软件都是编译安装的，有了仓库之后安装就变的简单了，但是我们需要升级的就是默认仓库下的软件，比如我们升级到4.9版本去。一般的办法就是通过下载源码，解决依赖，编译等。这个方法我们测试使用过，但是好像在字符编码转换方面好像是存在问题的。具体编译方法可自行百度。</p>
+<h3 id="在线仓库安装"><a href="#在线仓库安装" class="headerlink" title="在线仓库安装"></a>在线仓库安装</h3><p>其实软件仓库里面是有更高版本的GCC的，只是一般没有配置而已，而且是准备了好多个版本，叫 <code>devtoolset</code> 因此会有如 <code>devtoolset-3</code> 对应4.9.2版本，<code>devtoolset-6</code> 对应6.3.1版本等等，现在最新的最高版本是7了，对应的是GCC的7版本，想要在线安装，简单的处理办法是在repo文件中添加，比如我的阿里云服务器使用的是CentOS的6版本(7版本类似)，编辑 <code>/etc/yum.repo.d/CentOS-Base.repo</code> 在最后添加</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">[centos-sclo-rh]</span><br><span class="line">name=CentOS<span class="number">-6</span> - SCLo rh</span><br><span class="line">baseurl=http:<span class="comment">//mirrors.aliyun.com/centos/6/sclo/$basearch/rh/</span></span><br><span class="line">gpgcheck=<span class="number">0</span></span><br><span class="line">enabled=<span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>添加完成之后，就可以安装软件了，一般安装GCC和G++就可以了，查看网页发现软件也不多，因此我安装了6版本的所有软件，因为这样GDB等都可以使用</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum update</span><br><span class="line">yum install devtoolset-6</span><br></pre></td></tr></table></figure>
+<p>升级完成之后，软件安装到了 <code>/opt/rh</code> 目录，要使用高版本的时候，更新环境变量即可</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">source</span> /opt/rh/devtoolset-6/<span class="built_in">enable</span></span><br></pre></td></tr></table></figure>
+<p>本来想安装的是4.9.2版本的，无奈安装 <code>devtoolset-3</code> 在服务端是有相应的软件的，但是YUM却不能扫到，不知道为何。</p>
+<p>另：网络上有通过YUM方式安装仓库的方式来在线安装，原理是一样的，结果应该也是一样的，如下</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install centos-release-scl-rh centos-release-scl</span><br></pre></td></tr></table></figure>
+<p>相应的会在 <code>/etc/yum.repo.d/</code> 目录下生成两个repo文件。</p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2018/10/17/tensorflow-optimization/" title="Tensorflow加速">Tensorflow加速</a></h2>
+                <p class="excerpt">
+                
+                最近在研究学习Tensorflow的图像的物体识别功能，Python迁移学习用起来爽的不要不要的，但是机器才是2G的750Ti显卡，不说训练了，就是检测识别i7 6700也是十几二十秒，效果很差。当然一般深度学习是用GPU，1060显卡起且显存至少8G起，但是我木有显卡啊，自从挖矿导致的显卡涨价之后
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2018-10-17T07:24:00.000Z" class="post-list__meta--date date">2018-10-17</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2018/10/17/tensorflow-optimization/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2018/08/20/ffmpeg-got-raw-h264/" title="用ffmpeg从MP4提取H264裸流">用ffmpeg从MP4提取H264裸流</a></h2>
+                <p class="excerpt">
+                
+                MP4的格式封装比较复杂，想取出来H264裸流比较麻烦，因此借助ffmpeg工具比较方便。通常一般都是使用ffmpeg进行编解码较多，但是当我们视频是H264编码时候，直接提取比较合适。
+提取H264H264编码的MP4文件，使用ffmpeg提取相对比较方便，直接使用ffmpeg标准的媒体文件读取流
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2018-08-20T08:51:00.000Z" class="post-list__meta--date date">2018-08-20</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2018/08/20/ffmpeg-got-raw-h264/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>Tornado静态文件跨域设置 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="最近用 Python 做了 Tensorflow 的服务，搭建web服务框架，就使用了比较熟悉的 Tornado 框架，框架用起来非常简单快捷，一般最终使用的时候是个单独的服务，因此顺手给简单的加了跨域的头。
+自以为的设置直接找个DEMO看一下，就开始实现代码，由于是图像识别，因此分了两步，第一步是请求识别，返回识别结果，同时识别结果里面包含了一个本地识别打标图片的下载地址，一般这个图片就是客户端">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Tornado静态文件跨域设置 | xilixili.net">
+    <meta name="twitter:description" content="最近用 Python 做了 Tensorflow 的服务，搭建web服务框架，就使用了比较熟悉的 Tornado 框架，框架用起来非常简单快捷，一般最终使用的时候是个单独的服务，因此顺手给简单的加了跨域的头。
+自以为的设置直接找个DEMO看一下，就开始实现代码，由于是图像识别，因此分了两步，第一步是请求识别，返回识别结果，同时识别结果里面包含了一个本地识别打标图片的下载地址，一般这个图片就是客户端">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Tornado静态文件跨域设置 | xilixili.net">
+    <meta property="og:description" content="最近用 Python 做了 Tensorflow 的服务，搭建web服务框架，就使用了比较熟悉的 Tornado 框架，框架用起来非常简单快捷，一般最终使用的时候是个单独的服务，因此顺手给简单的加了跨域的头。
+自以为的设置直接找个DEMO看一下，就开始实现代码，由于是图像识别，因此分了两步，第一步是请求识别，返回识别结果，同时识别结果里面包含了一个本地识别打标图片的下载地址，一般这个图片就是客户端">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2018/12/05/tornado-crossdomain-static-files-setting/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2018-12-05T09:44:00.000Z" class="post-list__meta--date date">2018-12-05</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">Tornado静态文件跨域设置</h1>
+  </header>
+
+  <section class="post">
+    <p>最近用 Python 做了 Tensorflow 的服务，搭建web服务框架，就使用了比较熟悉的 Tornado 框架，框架用起来非常简单快捷，一般最终使用的时候是个单独的服务，因此顺手给简单的加了跨域的头。</p>
+<h3 id="自以为的设置"><a href="#自以为的设置" class="headerlink" title="自以为的设置"></a>自以为的设置</h3><p>直接找个DEMO看一下，就开始实现代码，由于是图像识别，因此分了两步，第一步是请求识别，返回识别结果，同时识别结果里面包含了一个本地识别打标图片的下载地址，一般这个图片就是客户端会直接加载的图，疏于对图片跨域测试，本地测试没问题。</p>
+<p>大概的框架如下</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DetectStaticFileHandler</span><span class="params">(tornado.web.StaticFileHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.set_header(<span class="string">'Access-Control-Allow-Origin'</span>, <span class="string">"*"</span>)</span><br><span class="line">        super().get()</span><br><span class="line">        </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DetectDataHandler</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.set_header(<span class="string">'Access-Control-Allow-Origin'</span>, <span class="string">"*"</span>)</span><br><span class="line">        ...</span><br><span class="line">        </span><br><span class="line">tornado.web.Application(</span><br><span class="line">        [(<span class="string">r"/vege/data"</span>, DetectDataHandler),</span><br><span class="line">         (<span class="string">r"/(.*\.jpg)"</span>, DetectStaticFileHandler, ｛<span class="string">'path'</span>:<span class="string">'static'</span>&#125;)],</span><br><span class="line">        **settings,</span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+<p>大概是这么个原理，下载图片也是没问题的。但是真正到跨域的时候，图片下不来，也就是说跨域没生效，同样的接口跨域却成功了，直接调试了下代码，惊奇的发现程序并没用进入到自定义的处理器中。</p>
+<h3 id="正确的可用配置"><a href="#正确的可用配置" class="headerlink" title="正确的可用配置"></a>正确的可用配置</h3><p>去跟踪了一会代码，发现怎么配置都无法进入自定义处理器中，并且 <code>tornado.web.StaticFileHandler</code> 的注释也写了是支持继承的，那到底哪不对了。网上也是这个问题很多，都没什么解决办法。无意间发现 <code>static_handler_class</code> 及其在线文档说明地址：</p>
+<p><a href="https://www.tornadoweb.org/en/stable/web.html" target="_blank" rel="noopener">https://www.tornadoweb.org/en/stable/web.html</a></p>
+<p>里面有明确说明</p>
+<blockquote>
+<p>You can serve static files by sending the <code>static_path</code> setting as a keyword argument. We will serve those files from the <code>/static/</code> URI (this is configurable with the <code>static_url_prefix</code>setting), and we will serve <code>/favicon.ico</code> and <code>/robots.txt</code> from the same directory. A custom subclass of <a href="https://www.tornadoweb.org/en/stable/web.html?highlight=static_handler_class#tornado.web.StaticFileHandler" target="_blank" rel="noopener"><code>StaticFileHandler</code></a> can be specified with the <code>static_handler_class</code> setting.</p>
+</blockquote>
+<p>原来是通过配置的方式，而且貌似上面能访问完全是因为 <code>static</code> 重名的原因。具体的静态文档配置参数如下</p>
+<ul>
+<li><code>static_hash_cache</code>: Default is <code>True</code>; if <code>False</code> static urls will be recomputed on every request. This option is new in Tornado 3.2; previously this functionality was controlled by the <code>debug</code> setting.</li>
+<li><code>static_path</code>: Directory from which static files will be served.</li>
+<li><code>static_url_prefix</code>: Url prefix for static files, defaults to <code>&quot;/static/&quot;</code>.</li>
+<li><code>static_handler_class</code>, <code>static_handler_args</code>: May be set to use a different handler for static files instead of the default <a href="https://www.tornadoweb.org/en/stable/web.html?highlight=static_handler_class#tornado.web.StaticFileHandler" target="_blank" rel="noopener"><code>tornado.web.StaticFileHandler</code></a>.<code>static_handler_args</code>, if set, should be a dictionary of keyword arguments to be passed to the handler’s <code>initialize</code> method.</li>
+</ul>
+<p>按照官方文档进行修改即可</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">settings = &#123;</span><br><span class="line">        <span class="string">"static_path"</span>: <span class="string">'static_images'</span>,</span><br><span class="line">        <span class="string">"static_handler_class"</span>: DetectStaticFileHandler</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">tornado.web.Application(</span><br><span class="line">        [(<span class="string">r"/vege/data"</span>, DetectDataHandler)],</span><br><span class="line">        **settings</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>虽然通过 <code>/static/xxxx.jpg</code> 请求到图片了，但是却只能用默认的 <code>static_url_prefix</code> 参数（<code>static</code>）访问，修改为其他值也没效果，只好暂时先使用 <code>static</code> 路径了，毕竟暂时也没什么影响。</p>
+<p>关于跨域设置，<code>StaticFileHandler</code> 的源代码里面有设置头域的重载方法，重载该方法并设置跨域的头即可</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DetectStaticFileHandler</span><span class="params">(tornado.web.StaticFileHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">set_extra_headers</span><span class="params">(self, path)</span>:</span></span><br><span class="line">        self.set_header(<span class="string">'Access-Control-Allow-Origin'</span>, <span class="string">"*"</span>)</span><br></pre></td></tr></table></figure>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2018/12/13/systemd-with-path-permission-denied/" title="Systemd服务无目录访问权限问题">Systemd服务无目录访问权限问题</a></h2>
+                <p class="excerpt">
+                
+                记录一下，在系统安装 Systemd 服务无法访问某些目录的问题。
+问题出现CentOS7已经采用Systemd机制了，比如使用 Caddy 服务器，使用YUM即可安装。
+
+Caddy 是一个优秀的Web服务器，支持 HTTP2.0 以及 QUIC 协议，另外也支持代理功能。同时这个服务器还支持自动
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2018-12-13T13:03:00.000Z" class="post-list__meta--date date">2018-12-13</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2018/12/13/systemd-with-path-permission-denied/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2018/11/14/gcc4.8-with-regex-problem/" title="GCC4.8正则异常问题">GCC4.8正则异常问题</a></h2>
+                <p class="excerpt">
+                
+                之前在做28181服务开发的时候有意使用了boost库，以及VS 2010以及CentOS 7 自带 GCC都能支持的C++11的特性，月初发现程序好像不正常工作了。日志拉取还真是一个漫长的过程，好的一点是之前日志还算打的足够详细，特别是异常错误部分，所以很容易就找到了出错日志。
+关于正则的使用直接
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2018-11-14T06:55:00.000Z" class="post-list__meta--date date">2018-11-14</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2018/11/14/gcc4.8-with-regex-problem/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

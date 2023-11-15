@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>Plog日志库 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="C\C++程序员最喜欢干的事情就是写个日志库了，基本上所有人都干过。在实际项目中基本上，各个项目都会有自己的日志要求等等，另外由于写一个日志框架也不是很难，所以有大量的日志框架可供选择（相比起来Java就少的多）。最近应用了一个新的日志框架plog，感觉非常好，特此推荐一下。">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Plog日志库 | xilixili.net">
+    <meta name="twitter:description" content="C\C++程序员最喜欢干的事情就是写个日志库了，基本上所有人都干过。在实际项目中基本上，各个项目都会有自己的日志要求等等，另外由于写一个日志框架也不是很难，所以有大量的日志框架可供选择（相比起来Java就少的多）。最近应用了一个新的日志框架plog，感觉非常好，特此推荐一下。">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Plog日志库 | xilixili.net">
+    <meta property="og:description" content="C\C++程序员最喜欢干的事情就是写个日志库了，基本上所有人都干过。在实际项目中基本上，各个项目都会有自己的日志要求等等，另外由于写一个日志框架也不是很难，所以有大量的日志框架可供选择（相比起来Java就少的多）。最近应用了一个新的日志框架plog，感觉非常好，特此推荐一下。">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2016/10/10/plog/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2016-10-10T14:00:00.000Z" class="post-list__meta--date date">2016-10-10</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">Plog日志库</h1>
+  </header>
+
+  <section class="post">
+    <p>C\C++程序员最喜欢干的事情就是写个日志库了，基本上所有人都干过。在实际项目中基本上，各个项目都会有自己的日志要求等等，另外由于写一个日志框架也不是很难，所以有大量的日志框架可供选择（相比起来Java就少的多）。最近应用了一个新的日志框架plog，感觉非常好，特此推荐一下。</p>
+<a id="more"></a>
+<p>此处推荐的plog是Github上的开源C++日志库，非百度搜索的OSC的python的plog库，大家注意！</p>
+<p>plog地址 <a href="https://github.com/SergiusTheBest/plog/" title="https://github.com/SergiusTheBest/plog/" target="_blank" rel="noopener">https://github.com/SergiusTheBest/plog/</a></p>
+<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><p>首先说一下这个框架的特点</p>
+<ul>
+<li>使用简单，C++流式方式</li>
+<li>跨平台，PC + Android</li>
+<li>header only, 无第三方依赖，无C++11依赖</li>
+<li>txt,csv等多种输出格式</li>
+<li>多种输出类型，如文件，控制台，android等</li>
+<li>可扩展性强</li>
+</ul>
+<p>说这么多，其实最有特色的就是可扩展性，好比是Java的logback，这个稍后说。</p>
+<h3 id="简单使用"><a href="#简单使用" class="headerlink" title="简单使用"></a>简单使用</h3><p>看一个最简单的例子吧</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> plog::RollingFileAppender&lt;plog::TxtFormatter&gt; file(<span class="string">"test.log"</span>, <span class="number">1048576</span>, <span class="number">20</span>);</span><br><span class="line">plog::init(plog::debug, &amp;file);</span><br><span class="line"></span><br><span class="line">LOG_INFO &lt;&lt; <span class="string">"hello world!"</span>;</span><br></pre></td></tr></table></figure>
+<p>当然只需要添加一个 <code>&lt;plog/Log.h&gt;</code> 即可。上面日志绑定了一个分割文件的文件appender，第二个参数意思是文件打印多大进行分割，第三个意思就最多分割多少个文件。</p>
+<p>打日志大家经常用其他库比如glog等可能都比较熟悉了（比如输出，条件输出等），此处就不再列举了，下面主要说说扩展性，这个确实让我眼前一亮。</p>
+<h3 id="可扩展性"><a href="#可扩展性" class="headerlink" title="可扩展性"></a>可扩展性</h3><p>说到可扩展性，需要先了解下plog的架构，这个库有单例的logger，logger绑定appender，当然可以实现各种不同形式的appender，每个appender附加一个格式化对象formatter以及使用编码转换的converter。基本结构就是这样，那么可扩展性就体现在这四个对象上面。</p>
+<h4 id="为什么说logger也有可扩展性？"><a href="#为什么说logger也有可扩展性？" class="headerlink" title="为什么说logger也有可扩展性？"></a>为什么说logger也有可扩展性？</h4><p>这么所说的logger的扩展性其实是指可以存在多个logger，各个logger干各个logger的事情，比如第一个打正常日志，第二个可能是记录其他信息，而且记录的策略也不一样。多个logger的使用也很方便，在plog中，默认logger的实例为0，扩展的话就从1开始吧，当然规范点就是枚举，比如</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">enum</span> &#123;</span><br><span class="line">    SecondLog = <span class="number">1</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    plog::init(plog::debug, <span class="string">"MultiInstance-default.txt"</span>); </span><br><span class="line">    plog::init&lt;SecondLog&gt;(plog::debug, <span class="string">"MultiInstance-second.txt"</span>); </span><br><span class="line"></span><br><span class="line">    LOGD &lt;&lt; <span class="string">"Hello default log!"</span>;</span><br><span class="line"></span><br><span class="line">    LOGD_(SecondLog) &lt;&lt; <span class="string">"Hello second log!"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果觉得上面的 <code>LOGD_(SecondLog)</code> 不是很好，那么宏定义一下就美观了。</p>
+<h4 id="formatter如何扩展？"><a href="#formatter如何扩展？" class="headerlink" title="formatter如何扩展？"></a>formatter如何扩展？</h4><p>自定义扩展formater很容易,定义实现header和format方法，其中header方法就是日志开始怎么格式化（如打印日期等），format是日志如何格式化。下面是一个原样打印日志的format（当然是包括了换行）。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;plog/Log.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> plog &#123;</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">MyFormatter</span> &#123;</span></span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        <span class="keyword">static</span> util::<span class="function">nstring <span class="title">header</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> util::nstring();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">static</span> util::<span class="function">nstring <span class="title">format</span><span class="params">(<span class="keyword">const</span> Record&amp; record)</span> </span>&#123;</span><br><span class="line">            util::nstringstream ss;</span><br><span class="line">            ss &lt;&lt; record.getMessage().c_str() &lt;&lt; <span class="string">"\n"</span>; </span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> ss.str();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    plog::init&lt;plog::MyFormatter&gt;(plog::debug, <span class="string">"CustomFormatter.txt"</span>); </span><br><span class="line"></span><br><span class="line">    LOGD &lt;&lt; <span class="string">"A debug message!"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="appender如何扩展？"><a href="#appender如何扩展？" class="headerlink" title="appender如何扩展？"></a>appender如何扩展？</h4><p>简单理解，appender目的是如何存储日志，扩展的话只需要继承IAppender。下面是将日志存储到内存的简单扩展例子。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;plog/Log.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;plog/Formatters/FuncMessageFormatter.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;list&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> plog &#123;</span><br><span class="line">    <span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">Formatter</span>&gt; </span></span><br><span class="line"><span class="class">    <span class="title">class</span> <span class="title">MyAppender</span> :</span> <span class="keyword">public</span> IAppender &#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">write</span><span class="params">(<span class="keyword">const</span> Record&amp; record)</span> </span>&#123;</span><br><span class="line">            util::nstring str = Formatter::format(record); </span><br><span class="line"></span><br><span class="line">            m_messageList.push_back(str); </span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">std</span>::<span class="built_in">list</span>&lt;util::nstring&gt;&amp; getMessageList() &#123;</span><br><span class="line">            <span class="keyword">return</span> m_messageList;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span>:</span><br><span class="line">        <span class="built_in">std</span>::<span class="built_in">list</span>&lt;util::nstring&gt; m_messageList;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> plog::MyAppender&lt;plog::FuncMessageFormatter&gt; myAppender; </span><br><span class="line">    plog::init(plog::debug, &amp;myAppender); </span><br><span class="line"></span><br><span class="line">    LOGD &lt;&lt; <span class="string">"A debug message!"</span>;</span><br><span class="line"></span><br><span class="line">    myAppender.getMessageList(); </span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>更多的内容大家还是去看看plog的sample和doc吧，有了这么灵活的自定义，完美适配我们所有需求！赞！</p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2016/11/23/resiprocate-add-history-info/" title="扩展reSIProcate库">扩展reSIProcate库</a></h2>
+                <p class="excerpt">
+                
+                reSIProcate是非常优秀的开源SIP协议栈，而且历史也很久了。在我们项目中很早引入之后，基本就没有再升级过，最近有需求要从History-Info中提取原被叫。仔细看了下我们的版本还没有支持，虽然新版本支持了，但是鉴于我们在源码中做了大量修改，不是很适合短期内能升级解决的，还是继续在源码实现
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2016-11-23T03:04:00.000Z" class="post-list__meta--date date">2016-11-23</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2016/11/23/resiprocate-add-history-info/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2016/09/23/linux-api-hook/" title="Linux下hook实现">Linux下hook实现</a></h2>
+                <p class="excerpt">
+                
+                项目中需要改变一个动态库的默认行为，但一般我们没有源码或者不可能通过修改源码的方式实现，因此需要用到hook。linux下hook函数实现一般用的比较少，但是比起win32要简单的多，下面介绍常用的一些方法。
+预加载预加载的方式如下，首先我们实现需要hook函数的同名函数，将相关代码编译成so，在程
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2016-09-23T02:09:00.000Z" class="post-list__meta--date date">2016-09-23</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2016/09/23/linux-api-hook/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

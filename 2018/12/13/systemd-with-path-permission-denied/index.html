@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>Systemd服务无目录访问权限问题 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="记录一下，在系统安装 Systemd 服务无法访问某些目录的问题。
+问题出现CentOS7已经采用Systemd机制了，比如使用 Caddy 服务器，使用YUM即可安装。
+
+Caddy 是一个优秀的Web服务器，支持 HTTP2.0 以及 QUIC 协议，另外也支持代理功能。同时这个服务器还支持自动申请开源免费的 SSL 证书，使得我们的服务支持 HTTPS，特别的方便。
+
+一般的Web服务器，静">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Systemd服务无目录访问权限问题 | xilixili.net">
+    <meta name="twitter:description" content="记录一下，在系统安装 Systemd 服务无法访问某些目录的问题。
+问题出现CentOS7已经采用Systemd机制了，比如使用 Caddy 服务器，使用YUM即可安装。
+
+Caddy 是一个优秀的Web服务器，支持 HTTP2.0 以及 QUIC 协议，另外也支持代理功能。同时这个服务器还支持自动申请开源免费的 SSL 证书，使得我们的服务支持 HTTPS，特别的方便。
+
+一般的Web服务器，静">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Systemd服务无目录访问权限问题 | xilixili.net">
+    <meta property="og:description" content="记录一下，在系统安装 Systemd 服务无法访问某些目录的问题。
+问题出现CentOS7已经采用Systemd机制了，比如使用 Caddy 服务器，使用YUM即可安装。
+
+Caddy 是一个优秀的Web服务器，支持 HTTP2.0 以及 QUIC 协议，另外也支持代理功能。同时这个服务器还支持自动申请开源免费的 SSL 证书，使得我们的服务支持 HTTPS，特别的方便。
+
+一般的Web服务器，静">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2018/12/13/systemd-with-path-permission-denied/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2018-12-13T13:03:00.000Z" class="post-list__meta--date date">2018-12-13</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">Systemd服务无目录访问权限问题</h1>
+  </header>
+
+  <section class="post">
+    <p>记录一下，在系统安装 Systemd 服务无法访问某些目录的问题。</p>
+<h3 id="问题出现"><a href="#问题出现" class="headerlink" title="问题出现"></a>问题出现</h3><p>CentOS7已经采用Systemd机制了，比如使用 Caddy 服务器，使用YUM即可安装。</p>
+<blockquote>
+<p>Caddy 是一个优秀的Web服务器，支持 HTTP2.0 以及 QUIC 协议，另外也支持代理功能。同时这个服务器还支持自动申请开源免费的 SSL 证书，使得我们的服务支持 HTTPS，特别的方便。</p>
+</blockquote>
+<p>一般的Web服务器，静态文件目录都在 <code>var</code> 下，不过有时候也会配置到某些用户目录下，使得特定用户操作方便，不需要切换管理员权限。比如，配置到普通用户账号目录下，只需要这个用户操作更新文件即可</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">xilixili.net www.xilixili.net &#123;</span><br><span class="line">        tls rangerlee@foxmail.com</span><br><span class="line">        root /home/user/webroot/</span><br><span class="line">        redir 301 &#123;</span><br><span class="line">                if &#123;&gt;X-Forwarded-Proto&#125; is http</span><br><span class="line">                /  https://&#123;host&#125;&#123;uri&#125;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当然了，访问权限也简单，Caddy默认使用caddy用户和caddy组来运行进程，因此把caddy用户加入到了那个用户的用户组里面，如将当前用户</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">usermod -a -G user caddy</span><br></pre></td></tr></table></figure>
+<p>然后保证那个目录有读和执行权限，即r+x权限，</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">chmod 750 -R webroot</span><br></pre></td></tr></table></figure>
+<p>改完之后，极大的概率启动服务会失败了，提示的是类似下面的语句</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Error during parsing: Unable to access root path &apos;...&apos;: stat ...: permission deny</span><br></pre></td></tr></table></figure>
+<h3 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h3><p>其实上面的配置是没用错误的，即使把各种权限单独验证一遍都是可以，除了在这个服务里面是失败的外，其他的测试都是正常的。打开 <code>/usr/lib/systemd/system/caddy.service</code> ，仔细看里面有好几个类似 <code>ProtectHome=true</code> 的不常见的配置项，大概概括如下：</p>
+<p><strong>ProtectHome</strong> 可以设置为 true/false/read-only。 设置为 true 的时候，/home、 /root、 /run/user 对应用不可见。设置为 read-only, 上述三个目录对应用只读。设置为 false, 则应用可以正常访问这三个目录。 默认值是 false。为了保证应用不能访问用户私有数据, 建议所有长时间运行的服务开启该选项。</p>
+<p><strong>ProtectSystem</strong> 可以设置为 true/false/full。 设置为 true、/usr、/boot 被设置为只读。 设置为 full、 /usr、 /boot、 /etc 被设置为只读。 设置为 false，则应用可以正常访问上述目录。这个选项可以保护系统目录不会被应用修改, 建议所有长时间运行的服务开启该选项。</p>
+<h3 id="问题修复"><a href="#问题修复" class="headerlink" title="问题修复"></a>问题修复</h3><p>如上，当前的需求是 <code>/home</code> 目录访问权限，则只需要修改 <code>ProtectHome</code> 参数为 <code>read-only</code> 即可。至此重启服务，一切功能正常。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl restart caddy</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>必须首先重新加载systemd的配置，否则不生效</p>
+</blockquote>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2019/01/30/nginx-listen-multi-port-and-proxy/" title="Nginx监听多端口并根据端口代理">Nginx监听多端口并根据端口代理</a></h2>
+                <p class="excerpt">
+                
+                一般使用nginx做代理的时候，基本都是使用的是域名的方式，但是在某些情况下，无法使用域名和路径进行负载代理，使用的是端口进行区分，也是有办法的。
+多端口监听监听多端口不是什么问题，但是很多人其实不知道怎么简化配置，特别是像上面的情况下，一个一个server节点配置难道要复制很多份吗，这样其实也太复
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2019-01-30T13:53:00.000Z" class="post-list__meta--date date">2019-01-30</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/01/30/nginx-listen-multi-port-and-proxy/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2018/12/05/tornado-crossdomain-static-files-setting/" title="Tornado静态文件跨域设置">Tornado静态文件跨域设置</a></h2>
+                <p class="excerpt">
+                
+                最近用 Python 做了 Tensorflow 的服务，搭建web服务框架，就使用了比较熟悉的 Tornado 框架，框架用起来非常简单快捷，一般最终使用的时候是个单独的服务，因此顺手给简单的加了跨域的头。
+自以为的设置直接找个DEMO看一下，就开始实现代码，由于是图像识别，因此分了两步，第一步是
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2018-12-05T09:44:00.000Z" class="post-list__meta--date date">2018-12-05</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2018/12/05/tornado-crossdomain-static-files-setting/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

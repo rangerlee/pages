@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>JAR使用JNA并打包dll | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="搞Java的同学应该都清楚，Java与C++交互方式是通过DLL，使用JNI技术，也就是现在Android上最常用的方式，但其实现在有更高层次的封装了，那就是JNA方式。虽然JNA使用很简单，但是发布却比较麻烦，特别是参考网上的文章基本很少有正确的方法，本文将详述正确的方法。
+JNA的使用JNA(Java Native Access)框架是一个开源的Java框架，是SUN公司主导开发的，建立在经典">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="JAR使用JNA并打包dll | xilixili.net">
+    <meta name="twitter:description" content="搞Java的同学应该都清楚，Java与C++交互方式是通过DLL，使用JNI技术，也就是现在Android上最常用的方式，但其实现在有更高层次的封装了，那就是JNA方式。虽然JNA使用很简单，但是发布却比较麻烦，特别是参考网上的文章基本很少有正确的方法，本文将详述正确的方法。
+JNA的使用JNA(Java Native Access)框架是一个开源的Java框架，是SUN公司主导开发的，建立在经典">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="JAR使用JNA并打包dll | xilixili.net">
+    <meta property="og:description" content="搞Java的同学应该都清楚，Java与C++交互方式是通过DLL，使用JNI技术，也就是现在Android上最常用的方式，但其实现在有更高层次的封装了，那就是JNA方式。虽然JNA使用很简单，但是发布却比较麻烦，特别是参考网上的文章基本很少有正确的方法，本文将详述正确的方法。
+JNA的使用JNA(Java Native Access)框架是一个开源的Java框架，是SUN公司主导开发的，建立在经典">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2019/06/20/jar-use-jna-with-dll/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2019-06-20T06:17:00.000Z" class="post-list__meta--date date">2019-06-20</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">JAR使用JNA并打包dll</h1>
+  </header>
+
+  <section class="post">
+    <p>搞Java的同学应该都清楚，Java与C++交互方式是通过DLL，使用JNI技术，也就是现在Android上最常用的方式，但其实现在有更高层次的封装了，那就是JNA方式。虽然JNA使用很简单，但是发布却比较麻烦，特别是参考网上的文章基本很少有正确的方法，本文将详述正确的方法。</p>
+<h3 id="JNA的使用"><a href="#JNA的使用" class="headerlink" title="JNA的使用"></a>JNA的使用</h3><p>JNA(Java Native Access)框架是一个开源的Java框架，是SUN公司主导开发的，建立在经典的JNI的基础之上的一个框架。JNA框架解决了JNI需要额外编写动态库代码与Java交互的工作，可以直接使用其他语言提供的动态库，开发人员只要在一个Java接口中描述目标native library的函数与结构，JNA将自动实现Java接口到native function的映射，大大降低了Java调用本体共享库的开发难度。</p>
+<p>使用JNA在引入JNA的JAR之后，只需要定义接口，类似如下</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Clibrary</span> <span class="keyword">extends</span> <span class="title">Library</span> </span>&#123;</span><br><span class="line">    <span class="comment">//加载libfoo.so或foo.dll链接库</span></span><br><span class="line">    Clibrary INSTANTCE = (Clibrary)Native.load(<span class="string">"foo"</span>, Clibrary.class);</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">foo</span><span class="params">()</span></span>;<span class="comment">//此方法为链接库中的方法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面是对接口的定义，其中加载的那行的库名称为 <code>foo</code>，在Linux平台上为 <code>libfoo.so</code> 在windows平台为 <code>foo.dll</code>，熟悉两个平台的开发的都应该比较清楚 。然后后面是具体的动态库导出函数的接口定义，注意一些数据类型的转换，比如C中的 <code>const char[]</code> 应该使用Java的 <code>byte[]</code> 类型，不能使用Java的 <code>char[]</code> 类型。</p>
+<p>调用方的代码也很简单，类似</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> ret = Clibrary.INSTANTCE.foo();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="JNA的封装"><a href="#JNA的封装" class="headerlink" title="JNA的封装"></a>JNA的封装</h3><p>一般我们希望在动态库的基础上封装Java接口，毕竟直接调用动态库接口不是太方便，包括一些错误处理什么的等等，都可以转换成Java的方式。然后最终将封装库额外加动态库一起封装成一个JAR对外提供。</p>
+<p>这里面涉及到两方面的问题，第一是打包动态库到JAR中，这个倒不是很难，网络上有大量的文章可参考，此处就不再赘述了。</p>
+<p>另外就是如何才能让JNA加载到动态库，我们知道JNA加载的方式有两种，第一种就是类似上面的直接给传递一个库名称，JNA自动在 <code>classpath</code> 查找，如果将动态库拷贝到运行环境的 <code>classpath</code> 上就能加载。另一种就是加载绝对路径的动态库。</p>
+<p>但是由于打包之后动态库实际上存在JAR包之中，并不存在于本地的文件系统上，因此只需要想办法将动态库释放出来，然后使用第二种方式加载即可。释放其实可以通过 <code>getResourceAsStream</code> 读取到文件，而 <code>Clibrary.class.getResourceAsStream</code> 就是从当前JAR读取文件，路径 <code>/</code> 表示JAR包根目录，参照真实路径进行修改，具体可以通过压缩软件把JAR打开查看目录结构。一般可以将文件释放到 temp 路径去，然后返回释放后的文件的绝对路径给JNA加载，我采用了类似下面的代码实现功能</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">synchronized</span> <span class="keyword">static</span> String <span class="title">extractLibrary</span><span class="params">(String libName)</span> </span>&#123;</span><br><span class="line">    String systemType = System.getProperty(<span class="string">"os.name"</span>);</span><br><span class="line">    String libPrefix = (systemType.toLowerCase().indexOf(<span class="string">"win"</span>)!=-<span class="number">1</span>) ? <span class="string">""</span> : <span class="string">"lib"</span>;</span><br><span class="line">    String libExtension = (systemType.toLowerCase().indexOf(<span class="string">"win"</span>)!=-<span class="number">1</span>) ? <span class="string">".dll"</span> : <span class="string">".so"</span>; </span><br><span class="line">    String libFullName = libPrefix + libName + libExtension;</span><br><span class="line">    String nativeTempDir = System.getProperty(<span class="string">"java.io.tmpdir"</span>); </span><br><span class="line"> </span><br><span class="line">    File extractedLibFile = <span class="keyword">new</span> File(nativeTempDir + File.separator + libFullName);</span><br><span class="line">    InputStream in = Clibrary.class.getResourceAsStream(<span class="string">"/lib/"</span> + libFullName);</span><br><span class="line">    <span class="keyword">if</span>(!extractedLibFile.exists())&#123;</span><br><span class="line">        <span class="keyword">try</span>(               </span><br><span class="line">            BufferedInputStream reader = <span class="keyword">new</span> BufferedInputStream(in);</span><br><span class="line">            FileOutputStream writer = <span class="keyword">new</span> FileOutputStream(extractedLibFile);</span><br><span class="line">        ) &#123;  </span><br><span class="line">            <span class="keyword">byte</span>[] buffer = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line">            <span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">                <span class="keyword">int</span> len = reader.read(buffer);</span><br><span class="line">                <span class="keyword">if</span>(len == <span class="number">0</span> || len == -<span class="number">1</span>)</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">                writer.write(buffer, <span class="number">0</span>, len);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> extractedLibFile.getAbsolutePath();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有上面这样的代码逻辑后，JNA加载动态库的代码相应变为</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Clibrary INSTANTCE = (Clibrary)Native.load(extractLibrary(<span class="string">"foo"</span>), Clibrary.class);</span><br></pre></td></tr></table></figure>
+<h3 id="其他一些问题"><a href="#其他一些问题" class="headerlink" title="其他一些问题"></a>其他一些问题</h3><p>上面实现了基本逻辑后，基本满足了对外提供功能的需要。但是Java是跨平台的语言，上面的做法只能满足一个平台，这其中的主要原因是我们提供的动态库，如果我们提供了Win32平台的dll，这个JAR就能在Win32系统上的Java上运行，类似的Java运行时对32位和64位还有要求，因此如果要满足大部分的需求，比较好的办法是将支持的平台的所有动态库打包到一起，在上面的释放代码处进行判断具体的平台来释放需要的文件，而且文件最终要路径唯一，就可以适应各种平台。</p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2019/07/18/android-studio-failed-connect-phone/" title="AS无法连接真机的解决方案">AS无法连接真机的解决方案</a></h2>
+                <p class="excerpt">
+                
+                调试Android程序的时候，如果需要摄像头了，虚拟机就用不上了，需要连接真机。虽然连接真机很容易，但是后续因为Win10系统原因造成又无法连接成功，因此针对连接问题总结其解决方案。
+基本方法一般来说，当我们将手机插入电脑后，如果之前没安装过驱动，则基本是会出现设备管理器有不可识别的设备。这种情况下
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2019-07-18T02:33:00.000Z" class="post-list__meta--date date">2019-07-18</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/07/18/android-studio-failed-connect-phone/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2019/06/18/android-studio-build-jni/" title="AndroidStudio编译JNI">AndroidStudio编译JNI</a></h2>
+                <p class="excerpt">
+                
+                以前使用其他IDE做JNI的时候还比较麻烦，特别是JNI和Java的操作是分开的，现在使用Android Studio做特别方便，还可以直接打包成 aar 格式对外提供。因为项目是对外提供开发包方式的，并不是自身App模式，因此打算直接创建一个简单的Android工程作为调用测试，再单独添加模块作为
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2019-06-18T07:03:00.000Z" class="post-list__meta--date date">2019-06-18</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/06/18/android-studio-build-jni/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>深入C++的new | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="无事便来扯扯C++中的new，基本上都知晓C++的new和C的malloc的区别用伪码实现大概就是这么个意思
+T *p = (T*)malloc(sizeof(T));p-&amp;gt;T::T(...);return p;
+效果上好像就是这么个区别，但事实上new的内存分配失败后会调用new_handler进行内存分配处理，而C的malloc则不会。
+new的形态一般来说，C++的new有以下几种含义">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="深入C++的new | xilixili.net">
+    <meta name="twitter:description" content="无事便来扯扯C++中的new，基本上都知晓C++的new和C的malloc的区别用伪码实现大概就是这么个意思
+T *p = (T*)malloc(sizeof(T));p-&amp;gt;T::T(...);return p;
+效果上好像就是这么个区别，但事实上new的内存分配失败后会调用new_handler进行内存分配处理，而C的malloc则不会。
+new的形态一般来说，C++的new有以下几种含义">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="深入C++的new | xilixili.net">
+    <meta property="og:description" content="无事便来扯扯C++中的new，基本上都知晓C++的new和C的malloc的区别用伪码实现大概就是这么个意思
+T *p = (T*)malloc(sizeof(T));p-&amp;gt;T::T(...);return p;
+效果上好像就是这么个区别，但事实上new的内存分配失败后会调用new_handler进行内存分配处理，而C的malloc则不会。
+new的形态一般来说，C++的new有以下几种含义">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2017/10/17/about-new-operator/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2017-10-17T09:17:00.000Z" class="post-list__meta--date date">2017-10-17</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">深入C++的new</h1>
+  </header>
+
+  <section class="post">
+    <p>无事便来扯扯C++中的new，基本上都知晓C++的new和C的malloc的区别用伪码实现大概就是这么个意思</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">T *p = (T*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(T));</span><br><span class="line">p-&gt;T::T(...);</span><br><span class="line"><span class="keyword">return</span> p;</span><br></pre></td></tr></table></figure>
+<p>效果上好像就是这么个区别，但事实上new的内存分配失败后会调用<strong>new_handler</strong>进行内存分配处理，而C的malloc则不会。</p>
+<h3 id="new的形态"><a href="#new的形态" class="headerlink" title="new的形态"></a>new的形态</h3><p>一般来说，C++的new有以下几种含义</p>
+<ul>
+<li>new operator</li>
+<li>operator new</li>
+<li>placement new</li>
+</ul>
+<p>这个<strong>new operator</strong>就是我们平时使用的new，它的逻辑行为大概也就是前述的行为，一般<strong>new operator</strong>通过<strong>operator new</strong>实现行为的第一步，即内存分配。分配成功返回，分配失败则调用<strong>new_handler</strong>，然后继续重复前面过程。如果对这个过程不满意则可以通过重载的方式实现</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">NewTest</span> &#123;</span></span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span>* <span class="keyword">operator</span> <span class="title">new</span><span class="params">(<span class="keyword">size_t</span> size)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"NewTest operator new\n"</span>);</span><br><span class="line">        <span class="keyword">return</span> ::<span class="keyword">operator</span> <span class="keyword">new</span>(size);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>这里通过<strong>::operator new</strong>调用了原有的全局的new，如果不是全局的new则会递归循环，当然也可以重载new operator用malloc实现</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span>* <span class="keyword">operator</span> <span class="title">new</span><span class="params">(<span class="keyword">size_t</span> size)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"global new\n"</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">malloc</span>(size);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>相应的，delete也有对应的<strong>delete operator</strong>和<strong>operator delete</strong>，与之类似。</p>
+<p><strong>placement new</strong>用来实现在指定内存实现构造，可以实现前述行为中的第二步，也就是在指定的内存上进行对象构造（没有内存分配）</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">char</span> s[<span class="keyword">sizeof</span>(TestClass)];</span><br><span class="line">TestClass* p = <span class="keyword">new</span>(s) TestClass();</span><br><span class="line">p-&gt;~TestClass(); <span class="comment">//!!!</span></span><br></pre></td></tr></table></figure>
+<p>在使用<strong>palcement new</strong>时，因为不是真正的申请了内存，因此不能调用delete，对象释放不会调用析构，需要显式调用。另外还需要添加头文件<code>#include &lt;new&gt;</code>。当在某些情况下需要手动管理内存时<strong>palcement new</strong>就非常有用(可参考STL内存管理)，否则尽量避免使用。</p>
+<h3 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h3><p>有了前面的知识，相信很多时候代码会去统计某个对象的申请释放次数，比如查内存泄漏</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">NewCounter</span> &#123;</span></span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span>* <span class="keyword">operator</span> <span class="title">new</span><span class="params">(<span class="keyword">size_t</span> size)</span> </span>&#123;        </span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">int</span> kTotalNewInstance = <span class="number">0</span>;</span><br><span class="line">        kTotalNewInstance++;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"NewCounter operator new %d\n"</span>, kTotalNewInstance);</span><br><span class="line">        <span class="keyword">return</span> ::<span class="keyword">operator</span> <span class="keyword">new</span>(size);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="keyword">operator</span> <span class="title">delete</span><span class="params">(<span class="keyword">void</span>* p)</span> </span>&#123;        </span><br><span class="line">        <span class="comment">//...		</span></span><br><span class="line">        <span class="keyword">return</span> ::<span class="keyword">operator</span> <span class="keyword">delete</span>(p);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>严格来说上面的代码是不对的，如果<code>::operator new(size)</code>失败了会抛出<strong>bad_alloc</strong>异常，但是统计却加一了，造成数据不准确，正确的方法应该是将计数放到new之后。这里关键的是new失败的情况，new失败默认行为是抛<strong>bad_alloc</strong>异常，当然系统也允许我们自定义处理函数。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MyNewHandler</span><span class="params">()</span> </span>&#123;</span><br><span class="line">   <span class="built_in">printf</span>(<span class="string">"New handler called!\n"</span>);</span><br><span class="line">   <span class="keyword">throw</span> <span class="built_in">std</span>::bad_alloc();</span><br><span class="line">&#125;</span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">std</span>::set_new_handler(MyNewHandler);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在<strong>new_handler</strong>中可以抛异常，结束程序，也可以释放一些内存从而使得下一次分配成功，也可以重设一个<strong>new_handler</strong>等等。<strong>new_handler</strong>在new的内部大概是一个循环逻辑，</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span>* <span class="keyword">operator</span> <span class="title">new</span><span class="params">(<span class="keyword">size_t</span> size)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">void</span>* p = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">while</span>(!(p = <span class="built_in">malloc</span>(size))) &#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="literal">NULL</span> == new_handler)</span><br><span class="line">            <span class="keyword">throw</span> bad_alloc();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            new_handler();</span><br><span class="line">        &#125; <span class="keyword">catch</span>(bad_alloc e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> e;</span><br><span class="line">        &#125; <span class="keyword">catch</span>(...) &#123;            </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> p;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>同时在<strong>new_handler</strong>中应该避免继续new，因为容易造成递归调用。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">foo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">   lock(mutex); </span><br><span class="line">   p = <span class="keyword">new</span> SomeClass();</span><br><span class="line">   unlock(mutex);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码如果new抛出了异常，那么mutex将永远无法解锁。</p>
+<h3 id="不抛异常的new"><a href="#不抛异常的new" class="headerlink" title="不抛异常的new"></a>不抛异常的new</h3><p>到底如何对待new的异常处理，很多人认为既然内存不够用了，默认崩溃也能接受，毕竟try/catch徒劳且增加开支，也有人认为在某些时候并不影响程序其他功能。总的来说，new给了我们很多选择，我们可以采用<strong>new_handler</strong>做一些处理，也可以默认崩溃，也可以如C语言般的判空。默认的new并不能像初学者想象的那样返回NULL，但是new也有一个返回NULL的版本，就是<strong>new operator</strong>的另一个版本 <strong>nothrow new</strong></p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> *<span class="keyword">operator</span> <span class="title">new</span><span class="params">(<span class="built_in">std</span>::<span class="keyword">size_t</span>,<span class="keyword">const</span> <span class="built_in">std</span>::<span class="keyword">nothrow_t</span>&amp;)</span> <span class="title">throw</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+<p>此版本的使用如下</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  MyClass()&#123;&#125;</span><br><span class="line">  ~MyClass()&#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line">    </span><br><span class="line">MyClass* p = <span class="keyword">new</span>(<span class="built_in">std</span>::nothrow) MyClass();</span><br><span class="line"><span class="keyword">if</span>(<span class="literal">NULL</span> == p) &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="带-的new"><a href="#带-的new" class="headerlink" title="带[]的new"></a>带[]的new</h3><p>这个应该都清楚，delete[]会调用数组中每个对象的析构函数进行释放，主要注意点就是配对，new/delete以及new[]/delete[]。这是正确的配对，在某些简单类型(如int)释放时，delete[]的作用相当于delete，否则可能是不正确的。</p>
+<p>这里的主要疑问是delete[]如何知道需要释放多少个对象？</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">MyClass* p = <span class="keyword">new</span> MyClass[<span class="number">2</span>];</span><br><span class="line"><span class="keyword">delete</span>[] p;</span><br></pre></td></tr></table></figure>
+<p>重载new[]就会发现比如<code>new MyClass[2]</code>在new[]的重载中传入的数值为6（空类的大小是1），比预期的要多4，估计你也猜到了这4个长度（int类型）就是记录对象个数的。但是有时候在申请某些对象或者简单类型时，比如上面的例子MyClass修改为int，打印日志直接是8，却并没有多4，这比较迷惑人。</p>
+<p>其实在C++中new[]是否记录长度取决于否需要调用析构函数，更准确的说是这个类是否需要调用析构函数，需要调用析构函数的类主要包含以下三种</p>
+<ul>
+<li>显式声明了析构函数</li>
+<li>拥有调用析构函数的类成员函数</li>
+<li>继承自需要调用析构函数的类</li>
+</ul>
+<p>也就是说只要不是需要调用析构函数的类，delete和delete[]效果相同，但是为了规范点还是配对调用。</p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2017/10/26/build-nginx-rtmp-module-with-vistualstudio/" title="VisualStudio编译Nginx的RTMP扩展">VisualStudio编译Nginx的RTMP扩展</a></h2>
+                <p class="excerpt">
+                
+                AMS做RTMP服务还是存在各种问题，比如服务器压力过高会断流等，决定采用nginx架构。网上说Win10编译不了，亲测可以正常编译，另外OpenSSL高版本在VS2010下确实编译失败，网上有解决办法，比较麻烦且没有测试成功，直接采用较低可用的版本，请注意。
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-10-26T03:10:00.000Z" class="post-list__meta--date date">2017-10-26</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2017/10/26/build-nginx-rtmp-module-with-vistualstudio/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2017/09/13/function-call-once/" title="如何保证函数只被调用一次">如何保证函数只被调用一次</a></h2>
+                <p class="excerpt">
+                
+                经常会有一些函数全局只需要调用一次，如WSAStartup等，一般这种都会在程序入口处统一单独调用，但也容易忘记，封装在其他地方难免多次初始化，在C++中可以考虑采用一些技巧来实现。
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-09-13T08:00:00.000Z" class="post-list__meta--date date">2017-09-13</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2017/09/13/function-call-once/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

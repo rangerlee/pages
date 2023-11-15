@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>Modbus协议应用的不足讨论 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="Modbus是工业设备的标准通信协议了，一般通过串口进行通信，为了适应现在互联网也支持通过网络传输的TCP版本，我司现在一般要求设备方提供TCP版本，毕竟部署方便，不过在现行的主从模式下，也并非能支持所有场景
+基本能力的不足Modbus/TCP 协议本身并不复杂，这里就不详解解释了，另开一篇讨论。这里要说的是其通信模型，在正常的场景下，其包含2个角色，即设备端为Modbus从机，控制端(开发的程序">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Modbus协议应用的不足讨论 | xilixili.net">
+    <meta name="twitter:description" content="Modbus是工业设备的标准通信协议了，一般通过串口进行通信，为了适应现在互联网也支持通过网络传输的TCP版本，我司现在一般要求设备方提供TCP版本，毕竟部署方便，不过在现行的主从模式下，也并非能支持所有场景
+基本能力的不足Modbus/TCP 协议本身并不复杂，这里就不详解解释了，另开一篇讨论。这里要说的是其通信模型，在正常的场景下，其包含2个角色，即设备端为Modbus从机，控制端(开发的程序">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Modbus协议应用的不足讨论 | xilixili.net">
+    <meta property="og:description" content="Modbus是工业设备的标准通信协议了，一般通过串口进行通信，为了适应现在互联网也支持通过网络传输的TCP版本，我司现在一般要求设备方提供TCP版本，毕竟部署方便，不过在现行的主从模式下，也并非能支持所有场景
+基本能力的不足Modbus/TCP 协议本身并不复杂，这里就不详解解释了，另开一篇讨论。这里要说的是其通信模型，在正常的场景下，其包含2个角色，即设备端为Modbus从机，控制端(开发的程序">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2019/04/17/modbus-application/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2019-04-17T07:48:00.000Z" class="post-list__meta--date date">2019-04-17</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">Modbus协议应用的不足讨论</h1>
+  </header>
+
+  <section class="post">
+    <p>Modbus是工业设备的标准通信协议了，一般通过串口进行通信，为了适应现在互联网也支持通过网络传输的TCP版本，我司现在一般要求设备方提供TCP版本，毕竟部署方便，不过在现行的主从模式下，也并非能支持所有场景</p>
+<h3 id="基本能力的不足"><a href="#基本能力的不足" class="headerlink" title="基本能力的不足"></a>基本能力的不足</h3><p>Modbus/TCP 协议本身并不复杂，这里就不详解解释了，另开一篇讨论。这里要说的是其通信模型，在正常的场景下，其包含2个角色，即设备端为Modbus从机，控制端(开发的程序)为Modbus主机。一般情况下的通信场景如下：</p>
+<ol>
+<li>Master连接Slave，发送读请求，Slave实时返回读取结果</li>
+<li>Master连接Slave，发送写请求，Slave实时返回写结果</li>
+</ol>
+<p>基本的模式就是请求响应模式，而且必须是Master请求，这就限制了现在很多设备的功能，特别是很多设备希望在内部敏感数据变化时候进行通知，也就是进行反向通知，在这些场景下Modbus除了定期刷数据之外就没其他办法了。所以一般的厂商也就会定制自定义的协议，并且这些自定义协议质量参差不齐，而且各家不一，对于系统集成也是不小的工作量。</p>
+<h3 id="网络模型的不足"><a href="#网络模型的不足" class="headerlink" title="网络模型的不足"></a>网络模型的不足</h3><p>一般设备，都会在部署地搭建局域网，本地进行操作。然后还是有一些设备无法实现局域网打通，比如在草原上使用4G的物联网模块，这种没有公网能力的模式，Modbus也没有办法支持，另外现在一些采用太阳能设备为了节省能量，只希望进行定期的数据上报，上报成功后进行休眠，定期被自动唤醒进行数据上报。</p>
+<p>基于这样的模型，采用Modbus协议，主机是没有办法访问从机的，因此可以考虑让从机访问主机，这种模式下，让从机主动连接主机，主机按协议请求数据即可，当然了在多个从机使用一个主机的情况下，要通过从机ID进行区分，也就支持两百多个吧，也还是可以的。</p>
+<blockquote>
+<p>这种模式下，从机连接后，主机并不能知晓从机的ID，只能依靠广播地址去请求，各个从机均支持广播消息的返回，主机从而可以区分出各个从机，如果在连接没有断开的情况下，主机后续可以准确的请求到从机</p>
+</blockquote>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>在能使用上网络的地方，其实就多了很多选择，比如物联网协议MQTT、CoAP等等，不过目前很多设备在提供网络功能之前都是串口通信，然后加了网络转接模块实现了网络，并且Modbus协议也是足够的简单，因此Modbus还有很多的应用场地。</p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2019/04/18/about-user-agent-in-broswer/" title="浏览器迷之UA">浏览器迷之UA</a></h2>
+                <p class="excerpt">
+                
+                不光是网页前台，网页后台经常也会出于统计等目的进行用户信息进行统计，而用户的信息一般只可能标记在浏览器的身份信息里面，也就是User-Agent，但是当你仔细的查看各个浏览器的UA(User-Agent)时候，你会惊奇的发现其如此的混乱，这要从浏览器的发展历史说起。
+浏览器UA起源在万维网兴起之后，
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2019-04-18T02:02:00.000Z" class="post-list__meta--date date">2019-04-18</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/闲言/">闲言</a>
+</span><a class="btn-border-small" href="/2019/04/18/about-user-agent-in-broswer/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2019/04/15/ffmpeg-and-sdl-win32-video-player-plugin/" title="FFMPEG和SDL实现流媒体播放控件">FFMPEG和SDL实现流媒体播放控件</a></h2>
+                <p class="excerpt">
+                
+                之前为项目中使用ffmpeg与SDL封装了一个视频播放控件，用起来挺简单的，在此分享下大概的实现方法和效果。
+基本需求原本项目中被C#调用了一个第三方的播放RTMP的控件，但是呢问题特别多，而且不能再定制功能，因为我接手给实现了一个，大致的需求如下
+
+提供DLL供其他语言调用，主要是C#
+
+支持多窗
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2019-04-15T13:27:00.000Z" class="post-list__meta--date date">2019-04-15</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2019/04/15/ffmpeg-and-sdl-win32-video-player-plugin/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

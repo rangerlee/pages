@@ -1,0 +1,585 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>xilixili.net/2023/10/31/win10-clean/</loc>
+    
+    <lastmod>2023-10-31T03:30:03.614Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2022/11/23/cmake-build-x86-for-windows/</loc>
+    
+    <lastmod>2022-11-23T12:51:21.337Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2022/11/10/fix-vscode-tab-format/</loc>
+    
+    <lastmod>2022-11-10T01:57:09.431Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2022/11/07/flv-with-speex/</loc>
+    
+    <lastmod>2022-11-07T09:34:59.899Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2022/02/22/sip-options-heartbeat/</loc>
+    
+    <lastmod>2022-02-22T12:39:53.451Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2021/12/10/pack-h264-with-b-frame-to-rtp/</loc>
+    
+    <lastmod>2021-12-10T09:27:14.005Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2021/08/16/github-use-ssh/</loc>
+    
+    <lastmod>2021-08-16T11:55:58.210Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2021/08/12/aac-in-flv/</loc>
+    
+    <lastmod>2021-08-12T03:43:02.498Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2021/07/12/about-callee-in-sip/</loc>
+    
+    <lastmod>2021-07-12T11:12:38.864Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2021/04/14/extra-h264-from-pcap/</loc>
+    
+    <lastmod>2021-04-14T02:39:37.165Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2021/03/25/rtp-out-of-order/</loc>
+    
+    <lastmod>2021-03-25T07:36:43.851Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2021/02/08/h264-get-width-height-from-sps/</loc>
+    
+    <lastmod>2021-02-08T11:11:55.319Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2020/12/14/centos-6-config-vault-yum-repo/</loc>
+    
+    <lastmod>2020-12-14T09:47:17.778Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2020/11/09/boost-property-tree-not-support-non-string-in-json/</loc>
+    
+    <lastmod>2020-11-09T08:04:43.840Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2020/09/28/boost-property-ptree-json-write-chinese/</loc>
+    
+    <lastmod>2020-11-09T08:04:30.956Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2020/05/18/yuv420p-merge/</loc>
+    
+    <lastmod>2020-05-18T13:56:21.221Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2020/05/14/blockchain-fisco-bcos-dynamic-group/</loc>
+    
+    <lastmod>2020-05-14T03:21:55.187Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2020/05/12/hik-camera-ptz-rotation/</loc>
+    
+    <lastmod>2020-05-12T10:05:21.293Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2020/04/30/blockchain-fisco-bcos-deploy/</loc>
+    
+    <lastmod>2020-04-30T06:12:51.428Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2020/04/27/blockchain-fisco-bcos-ca/</loc>
+    
+    <lastmod>2020-04-28T07:35:02.206Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2020/02/13/python-disable-pip-install-user-site-package/</loc>
+    
+    <lastmod>2020-02-13T06:03:59.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2020/01/02/win32-nginx-autoindex-support-chinese/</loc>
+    
+    <lastmod>2020-01-02T02:34:10.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2019/11/29/install-soci-development-for-visual-studio/</loc>
+    
+    <lastmod>2019-11-29T06:28:51.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2019/11/29/install-sqlite3-development-for-visual-studio/</loc>
+    
+    <lastmod>2019-11-29T06:00:58.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2019/11/14/build-webrtc/</loc>
+    
+    <lastmod>2019-11-18T01:14:17.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2019/10/30/fmp4-unsupport-live/</loc>
+    
+    <lastmod>2019-10-30T12:14:30.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2017/02/23/weixinalarm/</loc>
+    
+    <lastmod>2019-10-23T05:55:42.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2019/10/23/parse-hikvision-camera-ps-stream-supplement/</loc>
+    
+    <lastmod>2019-10-23T05:54:35.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2019/10/21/dev-linux-with-visual-studio/</loc>
+    
+    <lastmod>2019-10-21T10:15:33.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2019/09/17/linux-config-vsftpd/</loc>
+    
+    <lastmod>2019-09-17T01:51:54.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2019/09/10/bat-request-admin-rights-and-others/</loc>
+    
+    <lastmod>2019-09-10T07:38:59.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2019/08/23/run-command-with-output-and-exit-code/</loc>
+    
+    <lastmod>2019-08-23T06:01:34.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2019/07/18/android-studio-failed-connect-phone/</loc>
+    
+    <lastmod>2019-07-19T08:58:00.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2019/06/20/jar-use-jna-with-dll/</loc>
+    
+    <lastmod>2019-06-20T07:23:43.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2019/06/18/android-studio-build-jni/</loc>
+    
+    <lastmod>2019-06-18T07:55:03.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2019/05/24/deploy-apprtc/</loc>
+    
+    <lastmod>2019-05-24T07:13:57.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2019/05/06/tensorflow-errors/</loc>
+    
+    <lastmod>2019-05-07T01:04:06.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2019/04/19/modbus-analysis/</loc>
+    
+    <lastmod>2019-04-23T08:56:11.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2019/04/18/about-user-agent-in-broswer/</loc>
+    
+    <lastmod>2019-04-18T03:32:00.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2019/04/17/modbus-application/</loc>
+    
+    <lastmod>2019-04-17T08:23:14.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2019/04/15/ffmpeg-and-sdl-win32-video-player-plugin/</loc>
+    
+    <lastmod>2019-04-16T01:18:32.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2019/04/11/insert-big-data-into-database-with-poco/</loc>
+    
+    <lastmod>2019-04-11T06:07:30.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2019/04/04/about-float-number/</loc>
+    
+    <lastmod>2019-04-04T09:50:17.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2018/08/20/ffmpeg-got-raw-h264/</loc>
+    
+    <lastmod>2019-03-28T13:15:38.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2019/03/26/hexo-markdown-use-images/</loc>
+    
+    <lastmod>2019-03-26T09:58:12.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2017/02/07/webp/</loc>
+    
+    <lastmod>2019-03-26T09:12:37.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2017/01/18/blog/</loc>
+    
+    <lastmod>2019-03-26T08:18:41.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2017/11/30/webrtc-live/</loc>
+    
+    <lastmod>2019-03-26T07:45:42.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2017/11/01/nginx-live-stream/</loc>
+    
+    <lastmod>2019-03-26T07:44:41.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2019/03/20/more-effective-sqlite-skills/</loc>
+    
+    <lastmod>2019-03-26T07:43:29.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2018/12/13/systemd-with-path-permission-denied/</loc>
+    
+    <lastmod>2019-03-26T07:39:24.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2019/03/19/about-md-and-mt-in-visual-studio/</loc>
+    
+    <lastmod>2019-03-19T14:22:46.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2019/03/18/compile-soci-with-sqlite3-by-visualstudio/</loc>
+    
+    <lastmod>2019-03-18T03:17:35.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2019/03/06/install-scrapy-with-python3/</loc>
+    
+    <lastmod>2019-03-07T02:15:13.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2019/01/30/nginx-listen-multi-port-and-proxy/</loc>
+    
+    <lastmod>2019-01-30T14:11:20.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2017/03/16/htmlparser/</loc>
+    
+    <lastmod>2019-01-25T09:09:44.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2018/12/05/tornado-crossdomain-static-files-setting/</loc>
+    
+    <lastmod>2018-12-05T11:03:55.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2018/05/30/use-mmap-as-cache/</loc>
+    
+    <lastmod>2018-11-14T08:46:47.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2018/11/14/gcc4.8-with-regex-problem/</loc>
+    
+    <lastmod>2018-11-14T08:08:48.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2018/10/17/tensorflow-optimization/</loc>
+    
+    <lastmod>2018-10-17T08:08:44.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2018/09/04/centos-update-gcc/</loc>
+    
+    <lastmod>2018-09-04T10:11:45.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2018/07/02/srs-systemd-config/</loc>
+    
+    <lastmod>2018-07-02T09:07:52.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2018/06/19/ffmpeg-push-rtmp-for-camera/</loc>
+    
+    <lastmod>2018-06-19T08:55:29.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2018/03/07/cpp-format-library/</loc>
+    
+    <lastmod>2018-05-11T08:55:41.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2018/04/13/28181-ptz-code/</loc>
+    
+    <lastmod>2018-05-11T08:55:01.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2018/05/11/parse-hikvision-camera-ps-stream/</loc>
+    
+    <lastmod>2018-05-11T08:54:38.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2018/03/05/parse-protocol-with-regex/</loc>
+    
+    <lastmod>2018-03-05T09:59:41.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2018/02/26/webrtc-with-28181-live/</loc>
+    
+    <lastmod>2018-02-26T09:35:11.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2018/01/04/winsw-with-nginx/</loc>
+    
+    <lastmod>2018-01-05T03:42:47.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2017/12/25/release-without-library-reference-on-visualstudio/</loc>
+    
+    <lastmod>2017-12-26T10:16:48.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2017/12/26/resource-release-with-setconsolectrlhandler/</loc>
+    
+    <lastmod>2017-12-26T08:45:44.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2017/12/19/ffmpeg-decode-video-frame-lost/</loc>
+    
+    <lastmod>2017-12-19T03:52:29.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2017/11/16/about-webrtc-on-browser/</loc>
+    
+    <lastmod>2017-11-23T13:36:20.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2017/10/26/build-nginx-rtmp-module-with-vistualstudio/</loc>
+    
+    <lastmod>2017-11-10T09:46:01.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2017/10/17/about-new-operator/</loc>
+    
+    <lastmod>2017-10-17T12:20:28.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2017/09/13/function-call-once/</loc>
+    
+    <lastmod>2017-09-30T09:26:21.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2017/04/01/parse-pcap/</loc>
+    
+    <lastmod>2017-04-01T07:25:38.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2017/02/22/zookeeper/</loc>
+    
+    <lastmod>2017-02-22T03:59:43.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2016/10/10/plog/</loc>
+    
+    <lastmod>2017-01-18T13:20:02.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2016/09/23/linux-api-hook/</loc>
+    
+    <lastmod>2017-01-18T13:18:38.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2016/06/13/ffmpeg-decode-audio/</loc>
+    
+    <lastmod>2017-01-18T13:17:56.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2016/11/23/resiprocate-add-history-info/</loc>
+    
+    <lastmod>2017-01-18T13:10:16.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>xilixili.net/2016/04/27/run-linux-program-in-background/</loc>
+    
+    <lastmod>2017-01-18T12:42:46.000Z</lastmod>
+    
+  </url>
+  
+</urlset>

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>VisualStudio编译Nginx的RTMP扩展 | xilixili.net</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="AMS做RTMP服务还是存在各种问题，比如服务器压力过高会断流等，决定采用nginx架构。网上说Win10编译不了，亲测可以正常编译，另外OpenSSL高版本在VS2010下确实编译失败，网上有解决办法，比较麻烦且没有测试成功，直接采用较低可用的版本，请注意。">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="VisualStudio编译Nginx的RTMP扩展 | xilixili.net">
+    <meta name="twitter:description" content="AMS做RTMP服务还是存在各种问题，比如服务器压力过高会断流等，决定采用nginx架构。网上说Win10编译不了，亲测可以正常编译，另外OpenSSL高版本在VS2010下确实编译失败，网上有解决办法，比较麻烦且没有测试成功，直接采用较低可用的版本，请注意。">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="VisualStudio编译Nginx的RTMP扩展 | xilixili.net">
+    <meta property="og:description" content="AMS做RTMP服务还是存在各种问题，比如服务器压力过高会断流等，决定采用nginx架构。网上说Win10编译不了，亲测可以正常编译，另外OpenSSL高版本在VS2010下确实编译失败，网上有解决办法，比较麻烦且没有测试成功，直接采用较低可用的版本，请注意。">
+
+    
+    <meta name="author" content="rangerlee">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="xilixili.net" href="/atom.xml">
+    
+
+    <link rel="canonical" href="xilixili.net/2017/10/26/build-nginx-rtmp-module-with-vistualstudio/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="访问首页 xilixili.net">xilixili.net</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle"><!-- 生活と技术の杂记 --></span>
+        
+        <hr class="panel-cover__divider">
+        
+        <p class="panel-cover__description">生活と技术の杂记</p>
+        
+	<hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/rangerlee" title="查看我的GitHub主页" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+  <li class="navigation__item">
+    <a href="mailto:http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=RzUmKSAiNSsiIgchKD8qJi4raSQoKg" title="邮件联系我" target="_blank">
+      <i class="social fa fa-envelope"></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-alpha"></div>
+  </div> 
+</header>
+<script type="text/javascript">
+var side = document.getElementsByClassName("panel-cover")[0];
+function checkWebp() {
+	try{
+		return(document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0);
+	}catch(err) {
+		return false;
+	}
+};
+
+if(checkWebp()) {
+	side.style.backgroundImage = "url('/images/background-cover.jpg.webp')";
+} else {
+	side.style.backgroundImage = "url('/images/background-cover.jpg')";
+}
+</script>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2017-10-26T03:10:00.000Z" class="post-list__meta--date date">2017-10-26</time> &#8226; <span class="post-meta__tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+ </span>
+      <span class="page-pv">
+       阅读 <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">VisualStudio编译Nginx的RTMP扩展</h1>
+  </header>
+
+  <section class="post">
+    <p>AMS做RTMP服务还是存在各种问题，比如服务器压力过高会断流等，决定采用nginx架构。网上说Win10编译不了，亲测可以正常编译，另外OpenSSL高版本在VS2010下确实编译失败，网上有解决办法，比较麻烦且没有测试成功，直接采用较低可用的版本，请注意。</p>
+<a id="more"></a>
+<h3 id="依赖下载"><a href="#依赖下载" class="headerlink" title="依赖下载"></a>依赖下载</h3><p>第三方工具</p>
+<ul>
+<li>Mercurial <a href="https://www.mercurial-scm.org/downloads" target="_blank" rel="noopener">mercurial-4.3.3-x86.msi</a> </li>
+</ul>
+<ul>
+<li>MSYS <a href="http://xhmikosr.1f0.de/tools/msys/" target="_blank" rel="noopener">MSYS_MinGW-w64_GCC_710_x86-x64_Full.7z</a></li>
+<li>Perl <a href="https://www.activestate.com/activeperl/downloads" target="_blank" rel="noopener">ActivePerl-5.26.0.2600-MSWin32-x86-64int-403866.exe</a></li>
+</ul>
+<p>第三方源码</p>
+<ul>
+<li>PCRE <a href="https://ftp.pcre.org/pub/pcre/" target="_blank" rel="noopener">pcre-8.41.zip</a></li>
+<li>zlib  <a href="http://zlib.net/" target="_blank" rel="noopener">zlib1211.zip</a></li>
+<li>OpenSSL<a href="https://www.openssl.org/source/openssl-1.0.1p.tar.gz" target="_blank" rel="noopener">openssl-1.0.1p.tar.gz</a> 不用这个版本编译通不过</li>
+<li>nginx-rtmp-module <a href="https://github.com/arut/nginx-rtmp-module" target="_blank" rel="noopener">nginx-rtmp-module-v1.2.0.zip</a></li>
+</ul>
+<h3 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h3><h4 id="依赖安装"><a href="#依赖安装" class="headerlink" title="依赖安装"></a>依赖安装</h4><ul>
+<li>解压安装MSYS，比如安装到 <code>C:\MSYS</code> 。</li>
+<li>安装包安装Mercurial和Perl。</li>
+</ul>
+<h4 id="签出源码"><a href="#签出源码" class="headerlink" title="签出源码"></a>签出源码</h4><p>nginx源码建议采用release版本的，因此首先签出源码</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hg clone http://hg.nginx.org/nginx</span><br></pre></td></tr></table></figure>
+<p>然后查看tags</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hg tags</span><br></pre></td></tr></table></figure>
+<p>会显示出类似以下的内容</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tip                             7151:9ef704d8563a</span><br><span class="line">release-1.12.2                  7149:c0c5f8b806fe</span><br><span class="line">release-1.13.6                  7127:f87da7d9ca02</span><br><span class="line">release-1.13.5                  7095:0d45b4cf7c2e</span><br><span class="line">release-1.13.4                  7083:bbc642c813c8</span><br><span class="line">release-1.12.1                  7061:08b443b6b59d</span><br><span class="line">release-1.13.3                  7056:8457ce87640f</span><br><span class="line">release-1.13.2                  7044:5be2b25bdc65</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>比如采用最新的release-1.13.6</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hg co release-1.13.6</span><br></pre></td></tr></table></figure>
+<p>在nginx源码目录中创建libs</p>
+<p>将第三方库全部解压到libs目录，最终的目录结果大概如下<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">| nginx</span><br><span class="line">  |-- libs</span><br><span class="line">    |-- nginx-rtmp-module</span><br><span class="line">    |-- openssl-1.0.1p</span><br><span class="line">    |-- pcre-8.41</span><br><span class="line">    |-- zlib-1.2.11</span><br><span class="line">  ...</span><br></pre></td></tr></table></figure></p>
+<h4 id="配置编译"><a href="#配置编译" class="headerlink" title="配置编译"></a>配置编译</h4><p>打开CMD，进入到nginx源码目录，运行VS变量，本机为VS2010</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\vcvars32.bat</span><br></pre></td></tr></table></figure>
+<p>创建编译目录</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdir build</span><br></pre></td></tr></table></figure>
+<p>然后运行MSYS，如</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">C:\MSYS\msys.bat</span><br></pre></td></tr></table></figure>
+<p>会单独启动MSYS的窗口（原来的CMD窗口先别关），在MSYS窗口运行</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">auto/configure --with-cc=cl --builddir=build --prefix= \</span><br><span class="line">--conf-path=conf/nginx.conf --pid-path=logs/nginx.pid \</span><br><span class="line">--http-log-path=logs/access.log --error-log-path=logs/error.log \</span><br><span class="line">--sbin-path=nginx.exe --http-client-body-temp-path=temp/client_body_temp \</span><br><span class="line">--http-proxy-temp-path=temp/proxy_temp \</span><br><span class="line">--http-fastcgi-temp-path=temp/fastcgi_temp \</span><br><span class="line">--http-scgi-temp-path=temp/scgi_temp \</span><br><span class="line">--http-uwsgi-temp-path=temp/uwsgi_temp \</span><br><span class="line">--with-cc-opt=-DFD_SETSIZE=1024 --with-pcre=libs/pcre-8.41 \</span><br><span class="line">--with-zlib=libs/zlib-1.2.11 --with-openssl=libs/openssl-1.0.1p \</span><br><span class="line">--with-select_module --with-http_ssl_module --with-ipv6 \</span><br><span class="line">--with-http_sub_module \</span><br><span class="line">--add-module=libs/nginx-rtmp-module</span><br></pre></td></tr></table></figure>
+<p>成功之后，在原来的CMD里面运行</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmake -f build/Makefile</span><br></pre></td></tr></table></figure>
+<p>编译完成的时候如果有如下报错，忽略(MSYS环境没配置好，找不到sed，不影响)</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sed -e &quot;s|%PREFIX%||&quot;  -e &quot;s|%PID_PATH%|/logs/nginx.pid|&quot;  </span><br><span class="line"> -e &quot;s|%CONF_PATH%|/conf/nginx.conf|&quot;  -e &quot;s|%ERROR_LOG_PATH%|/logs/error.log|&quot; </span><br><span class="line"> &lt; docs/man/nginx.8 &gt; build/nginx.8</span><br><span class="line">&apos;sed&apos; 不是内部或外部命令，也不是可运行的程序或批处理文件。</span><br></pre></td></tr></table></figure>
+<h3 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h3><p>在build目录建一个nginx目录</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdir nginx</span><br><span class="line">cd nginx</span><br><span class="line">mkdir logs</span><br><span class="line">mkdir conf</span><br><span class="line">mkdir temp</span><br><span class="line">cp ../nginx.exe .</span><br><span class="line">cp ../../libs/nginx-rtmp-module/stat.xsl .</span><br><span class="line">cp ../../libs/nginx-rtmp-module/test/nginx.conf conf/</span><br></pre></td></tr></table></figure>
+<p>修改<code>conf/nginx.conf</code></p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="attribute">worker_processes</span>  <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="attribute">error_log</span>  logs/error.log <span class="literal">debug</span>;</span><br><span class="line"></span><br><span class="line"><span class="section">events</span> &#123;</span><br><span class="line">    <span class="attribute">worker_connections</span>  <span class="number">1024</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">rtmp</span> &#123;</span><br><span class="line">    <span class="section">server</span> &#123;</span><br><span class="line">        <span class="attribute">listen</span> <span class="number">1935</span>;</span><br><span class="line"></span><br><span class="line">        <span class="attribute">application</span> live &#123;</span><br><span class="line">            <span class="attribute">live</span> <span class="literal">on</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">http</span> &#123;</span><br><span class="line">    <span class="section">server</span> &#123;</span><br><span class="line">        <span class="attribute">listen</span>      <span class="number">8080</span>;</span><br><span class="line"></span><br><span class="line">        <span class="attribute">location</span> /stat &#123;</span><br><span class="line">            <span class="attribute">rtmp_stat</span> all;</span><br><span class="line">            <span class="attribute">rtmp_stat_stylesheet</span> stat.xsl;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="attribute">location</span> /stat.xsl &#123;</span><br><span class="line">            <span class="attribute">root</span> .;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="attribute">location</span> /control &#123;</span><br><span class="line">            <span class="attribute">rtmp_control</span> all;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>根据需要可以自己改，剩下的就剩打包了。运行的话直接双击<code>nginx.exe</code>即可。</p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2017/11/01/nginx-live-stream/" title="Nginx架构下的直播">Nginx架构下的直播</a></h2>
+                <p class="excerpt">
+                
+                之前已经编译好了nginx的RTMP扩展，其实在这个扩展中已经默认增加支持了HLS和DASH功能，在使用RTMP功能的同时，也可以输出HLS和DASH。更关键的是RTMP只能在PC端播放，刚好采用HLS的方式可以在移动端播放。
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-11-01T08:41:00.000Z" class="post-list__meta--date date">2017-11-01</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2017/11/01/nginx-live-stream/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2017/10/17/about-new-operator/" title="深入C++的new">深入C++的new</a></h2>
+                <p class="excerpt">
+                
+                无事便来扯扯C++中的new，基本上都知晓C++的new和C的malloc的区别用伪码实现大概就是这么个意思
+T *p = (T*)malloc(sizeof(T));p-&amp;gt;T::T(...);return p;
+效果上好像就是这么个区别，但事实上new的内存分配失败后会调用new_handl
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-10-17T09:17:00.000Z" class="post-list__meta--date date">2017-10-17</time> &#8226; <span class="post-list__meta--tags tags">
+  <a class="tag-link" href="/tags/技术/">技术</a>
+</span><a class="btn-border-small" href="/2017/10/17/about-new-operator/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+
+
+	<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+	</script>
+
+
+
+<script>
+(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1":"https://jspassport.ssl.qhimg.com/11.0.1.js?8612a7fa26d7ba4562be733ae33649b1";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2023 rangerlee - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 本站基于开源 <a href="http://hexo.io">Hexo</a> 搭建，采用 <a href="https://github.com/rangerlee/hexo-theme-new-vno">hexo-theme-new-vno</a> 主题，修改自 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题  <a href="http://www.beian.miit.gov.cn">皖ICP备16009457号</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?bab4f71524319c10819bcae280021624";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>
